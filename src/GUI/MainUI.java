@@ -109,11 +109,11 @@ public class MainUI {
 		Resource_panel.add(btnDeleteResource);
 		
 		btnViewResource = new JButton("View Resource");
-		btnViewResource.setBounds(162, 326, 115, 23);
+		btnViewResource.setBounds(149, 326, 128, 23);
 		Resource_panel.add(btnViewResource);
 		
 		btnEditResource = new JButton("Edit Resource");
-		btnEditResource.setBounds(162, 360, 115, 23);
+		btnEditResource.setBounds(149, 360, 128, 23);
 		Resource_panel.add(btnEditResource);
 		
 		JPanel Task_panel = new JPanel();
