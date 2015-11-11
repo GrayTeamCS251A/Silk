@@ -19,7 +19,7 @@ public class AddResourceController implements Controller {
 	@Override
 	public void execute(String command, Oracle oracle) {
 		// TODO Auto-generated method stub
-		project.addResource();
+		//project.addResource();
 	}
 
 }

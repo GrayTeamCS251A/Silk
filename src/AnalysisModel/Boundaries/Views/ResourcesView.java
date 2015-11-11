@@ -1,6 +1,8 @@
 package AnalysisModel.Boundaries.Views;
 import Controllers.*;
 import Controllers.Resources.AddResourceController;
+import Controllers.Resources.DeleteResourceController;
+import Controllers.Resources.EditResourceController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,17 +36,17 @@ public class ResourcesView implements View, ActionListener {
     }
     
     public void actionPerformed(ActionEvent e) {
-    	if (e.getActionCommand() == "addResource")
-    	{
-        	arc.execute();
-    	}
-    	elif{
-    		edit.execute();
-    	}
-    	elif 
-    	{
-    		delete.execute();
-    	}
+//    	if (e.getActionCommand() == "addResource")
+//    	{
+//        	arc.execute();
+//    	}
+//    	elif{
+//    		edit.execute();
+//    	}
+//    	elif 
+//    	{
+//    		delete.execute();
+//    	}
 
     }
 
