@@ -5,12 +5,12 @@ import java.util.*;
 /**
  * 
  */
-public class Deiverable {
+public class Deliverable {
 
     /**
      * 
      */
-    public Deiverable() {
+    public Deliverable() {
     }
 
     /**
