@@ -20,6 +20,8 @@ public class Resource extends Observable {
     public Resource() {
            }
 
+
+
     public int getResourceID(){
          return resourceID;
      }
@@ -58,15 +60,15 @@ public class Resource extends Observable {
         this.type = type;
     }
     
-     public void updateResourceInfo(resourceID,name,DailyCost,resourceType){
-        if (resourceID !=null)
+     public void updateResourceInfo(int resourceID,String name,double DailyCost,ResourceType type){
+        
         	setResourceID(resourceID);
         if (name != null)
         	setname
         	(name);
-        if (DailyCost != null)
+        
         	setDailyCost(dailyCost);
-        if (resourceType != null)
+        if (type != null)
         	setResourceType(type);
     }
 
