@@ -10,20 +10,19 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class AddResUI extends JDialog {
+public class TaskUI extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textName;
 	private JTextField textID;
-	private JTextField textCost;
-	private JTextField textType;
+	private JTextField textParent;
 
 	/**
 	 * Launch the application.
 	 */
 //	public static void main(String[] args) {
 //		try {
-//			AddResUI dialog = new AddResUI();
+//			TaskUI dialog = new TaskUI("");
 //			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 //			dialog.setVisible(true);
 //		} catch (Exception e) {
@@ -34,55 +33,52 @@ public class AddResUI extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public AddResUI() {
-		setTitle("Add Resource");
-		setBounds(100, 100, 270, 210);
+	public TaskUI(String x) {
+		setTitle(x);
+		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Name");
-		lblNewLabel.setBounds(27, 26, 46, 14);
-		contentPanel.add(lblNewLabel);
+		JLabel lblTaskName = new JLabel("Task Name");
+		lblTaskName.setBounds(23, 27, 57, 14);
+		contentPanel.add(lblTaskName);
 		
-		JLabel lblResourceId = new JLabel("Resource ID");
-		lblResourceId.setBounds(27, 50, 69, 14);
-		contentPanel.add(lblResourceId);
-		{
-			JLabel lblCost = new JLabel("Cost");
-			lblCost.setBounds(27, 75, 46, 14);
-			contentPanel.add(lblCost);
-		}
-		{
-			JLabel lblType = new JLabel("Type");
-			lblType.setBounds(27, 100, 46, 14);
-			contentPanel.add(lblType);
-		}
-		{
-			textName = new JTextField();
-			textName.setBounds(103, 23, 86, 20);
-			contentPanel.add(textName);
-			textName.setColumns(10);
-		}
-		{
-			textID = new JTextField();
-			textID.setBounds(103, 47, 86, 20);
-			contentPanel.add(textID);
-			textID.setColumns(10);
-		}
-		{
-			textCost = new JTextField();
-			textCost.setBounds(103, 72, 86, 20);
-			contentPanel.add(textCost);
-			textCost.setColumns(10);
-		}
-		{
-			textType = new JTextField();
-			textType.setBounds(103, 97, 86, 20);
-			contentPanel.add(textType);
-			textType.setColumns(10);
-		}
+		JLabel lblTaskId = new JLabel("Task ID");
+		lblTaskId.setBounds(23, 52, 46, 14);
+		contentPanel.add(lblTaskId);
+		
+		JLabel lblChildren = new JLabel("Children");
+		lblChildren.setBounds(23, 77, 46, 14);
+		contentPanel.add(lblChildren);
+		
+		JLabel lblParent = new JLabel("Parent");
+		lblParent.setBounds(23, 102, 46, 14);
+		contentPanel.add(lblParent);
+		
+		JLabel lblSucessor = new JLabel("Sucessor");
+		lblSucessor.setBounds(23, 127, 46, 14);
+		contentPanel.add(lblSucessor);
+		
+		JLabel lblPredecessor = new JLabel("Predecessor");
+		lblPredecessor.setBounds(23, 152, 71, 14);
+		contentPanel.add(lblPredecessor);
+		
+		textName = new JTextField();
+		textName.setBounds(100, 24, 86, 20);
+		contentPanel.add(textName);
+		textName.setColumns(10);
+		
+		textID = new JTextField();
+		textID.setBounds(100, 49, 86, 20);
+		contentPanel.add(textID);
+		textID.setColumns(10);
+		
+		textParent = new JTextField();
+		textParent.setBounds(100, 99, 86, 20);
+		contentPanel.add(textParent);
+		textParent.setColumns(10);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
