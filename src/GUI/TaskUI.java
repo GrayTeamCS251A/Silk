@@ -9,13 +9,16 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.JList;
 
 public class TaskUI extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textName;
 	private JTextField textID;
-	private JTextField textParent;
 
 	/**
 	 * Launch the application.
@@ -75,10 +78,33 @@ public class TaskUI extends JDialog {
 		contentPanel.add(textID);
 		textID.setColumns(10);
 		
-		textParent = new JTextField();
-		textParent.setBounds(100, 99, 86, 20);
-		contentPanel.add(textParent);
-		textParent.setColumns(10);
+		JComboBox comboBoxChildren = new JComboBox();
+		comboBoxChildren.setBounds(100, 74, 28, 20);
+		contentPanel.add(comboBoxChildren);
+		
+		JComboBox comboBoxParent = new JComboBox();
+		comboBoxParent.setBounds(100, 99, 28, 20);
+		contentPanel.add(comboBoxParent);
+		
+		JComboBox comboBoxSuc = new JComboBox();
+		comboBoxSuc.setBounds(100, 124, 28, 20);
+		contentPanel.add(comboBoxSuc);
+		
+		JComboBox comboBoxPred = new JComboBox();
+		comboBoxPred.setBounds(100, 149, 28, 20);
+		contentPanel.add(comboBoxPred);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBounds(236, 50, 176, 162);
+		contentPanel.add(scrollPane);
+		
+		JList list = new JList();
+		scrollPane.setViewportView(list);
+		
+		JLabel lblResource = new JLabel("Resource");
+		lblResource.setBounds(236, 27, 46, 14);
+		contentPanel.add(lblResource);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
