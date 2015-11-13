@@ -22,4 +22,8 @@ public class AddResourceController implements Controller {
 		//project.addResource();
 	}
 
+	
+	public void execute(String command) {
+		System.out.println("Resouce Name:"+ command);
+	}
 }

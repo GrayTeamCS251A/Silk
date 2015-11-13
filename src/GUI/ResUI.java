@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -17,6 +18,8 @@ public class ResUI extends JDialog {
 	private JTextField textID;
 	private JTextField textCost;
 	private JTextField textType;
+	private JButton okButton;
+	private JButton cancelButton;
 
 	/**
 	 * Launch the application.
@@ -88,16 +91,24 @@ public class ResUI extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
+				okButton = new JButton("OK");
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				cancelButton = new JButton("Cancel");
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
 	}
+	
+	   public void addConfirmListener(ActionListener listener) {
+		   		okButton.addActionListener(listener);
+		   }
+	   
+	   public String getTextName(){
+		   return textName.getText();		   
+	   }
 }

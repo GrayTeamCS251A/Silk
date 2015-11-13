@@ -11,8 +11,13 @@ import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JList;
 import java.awt.ScrollPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+
+import Controllers.Resources.AddResourceController;
 
 public class MainUI {
 
@@ -33,7 +38,8 @@ public class MainUI {
 	private JMenuItem save;
 	private JMenuItem load;
 	private JMenuItem Edit;
-
+	private ResUI addRes = new ResUI("Add Resource");
+	private AddResourceController addResourceController = new AddResourceController();
 	/**
 	 * Launch the application.
 	 */
@@ -55,6 +61,27 @@ public class MainUI {
 	 */
 	public MainUI() {
 		initialize();
+		addRes.addConfirmListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String s=addRes.getTextName();
+				addResourceController.execute(s);
+				addRes.setVisible(false);
+			}
+						
+		});
+		
+		btnAddResource.addActionListener(new ActionListener() {
+	         public void actionPerformed(ActionEvent arg0) {
+	            if (!addRes.isVisible()) {
+	            	addRes.setVisible(true);
+	            }
+	         }
+	      });
+
+		
+		
 	}
 
 	/**
@@ -175,4 +202,5 @@ public class MainUI {
 		btnTable.setBounds(186, 360, 84, 23);
 		Schedule_panel.add(btnTable);
 	}
+	
 }
