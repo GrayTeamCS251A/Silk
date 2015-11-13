@@ -25,6 +25,9 @@ import javax.swing.WindowConstants;
 import Controllers.Resources.AddResourceController;
 import Controllers.Resources.DeleteResourceController;
 import Controllers.Resources.EditResourceController;
+import Controllers.Tasks.AddTaskController;
+import Controllers.Tasks.DeleteTaskController;
+import Controllers.Tasks.EditTaskController;
 
 public class MainUI {
 
@@ -46,10 +49,19 @@ public class MainUI {
 	private JMenuItem load;
 	private JMenuItem Edit;
 	private ResUI addRes = new ResUI("Add Resource");
-	private ResUI editRes = new ResUI("Add Resource");
+	private ResUI editRes = new ResUI("Edit Resource");
+	
+	private TaskUI addTask = new TaskUI("Add Task");
+	private TaskUI editTask = new TaskUI("Edit Task");
+	
 	private AddResourceController addResourceController = new AddResourceController();
 	private EditResourceController editResourceController = new EditResourceController();
 	private DeleteResourceController deleteResourceController = new DeleteResourceController();
+	
+	private AddTaskController addTaskController = new AddTaskController();
+	private EditTaskController editTaskController = new EditTaskController();
+	private DeleteTaskController deleteTaskController = new DeleteTaskController();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -74,6 +86,11 @@ public class MainUI {
 		initAddResAction();
 		initEditResAction();
 		initDeleteResAction();
+		
+		initAddTaskAction();
+		initEditTaskAction();
+		initDeleteTaskAction();
+		
 	}
 
 	/**
@@ -195,6 +212,7 @@ public class MainUI {
 		Schedule_panel.add(btnTable);
 	}
 	
+	
 	private void initAddResAction(){
 
 		addRes.addConfirmListener(new ActionListener(){
@@ -228,6 +246,7 @@ public class MainUI {
         });
 	}
 
+	
 	private void initEditResAction(){
 		addRes.addConfirmListener(new ActionListener(){
 			@Override
@@ -255,19 +274,94 @@ public class MainUI {
         });
 	}
 
+	
 	private void initDeleteResAction(){
 		btnDeleteResource.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				int x = JOptionPane.showConfirmDialog(null, "Delete this task?","Alert",JOptionPane.YES_NO_OPTION);
-				if(x==0){
+				int x = JOptionPane.showConfirmDialog(null, "Delete this Resource?","Alert",JOptionPane.YES_NO_OPTION);
+				if(x==1){
 					System.out.println("Aborted");
 				}else{
 					//you code here
 				}
 			}});
 	}
+
+	private void initEditTaskAction(){
+		
+		editTask.addConfirmListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub      
+				editTask.setVisible(false);
+			}
+						
+		});
+		
+		btnEditTask.addActionListener(new ActionListener() {
+	         public void actionPerformed(ActionEvent arg0) {
+	            if (!editTask.isVisible()) {
+	            	editTask.setVisible(true);
+	            }
+	         }
+	      });
+		
+		editTask.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {     	
+            }
+        });
+		
+	}
+	
+	
+	private void initAddTaskAction(){
+		
+		addTask.addConfirmListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub      
+				addTask.setVisible(false);
+			}
+						
+		});
+		
+		btnAddTask.addActionListener(new ActionListener() {
+	         public void actionPerformed(ActionEvent arg0) {
+	            if (!addTask.isVisible()) {
+	            	addTask.setVisible(true);
+	            }
+	         }
+	      });
+		
+		addTask.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {     	
+            }
+        });
+		
+	}
+	
+	
+	private void initDeleteTaskAction(){
+		btnDeleteTask.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int x = JOptionPane.showConfirmDialog(null, "Delete this task?","Alert",JOptionPane.YES_NO_OPTION);
+				if(x==1){
+					System.out.println("Aborted");
+				}else{
+					//you code here
+				}
+			}});
+	}
+
+
+
 }
 
