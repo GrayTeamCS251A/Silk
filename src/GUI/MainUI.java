@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JTree;
 import javax.swing.JPanel;
@@ -22,6 +23,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 
 import Controllers.Resources.AddResourceController;
+import Controllers.Resources.DeleteResourceController;
+import Controllers.Resources.EditResourceController;
 
 public class MainUI {
 
@@ -43,7 +46,10 @@ public class MainUI {
 	private JMenuItem load;
 	private JMenuItem Edit;
 	private ResUI addRes = new ResUI("Add Resource");
+	private ResUI editRes = new ResUI("Add Resource");
 	private AddResourceController addResourceController = new AddResourceController();
+	private EditResourceController editResourceController = new EditResourceController();
+	private DeleteResourceController deleteResourceController = new DeleteResourceController();
 	/**
 	 * Launch the application.
 	 */
@@ -66,8 +72,8 @@ public class MainUI {
 	public MainUI() {
 		initialize();
 		initAddResAction();
-		
-		
+		initEditResAction();
+		initDeleteResAction();
 	}
 
 	/**
@@ -190,6 +196,7 @@ public class MainUI {
 	}
 	
 	private void initAddResAction(){
+
 		addRes.addConfirmListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -220,4 +227,47 @@ public class MainUI {
             }
         });
 	}
+
+	private void initEditResAction(){
+		addRes.addConfirmListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//PreEdit value  
+				editRes.setVisible(false);
+			}
+						
+		});
+		
+		btnEditResource.addActionListener(new ActionListener() {
+	         public void actionPerformed(ActionEvent arg0) {
+	            if (!editRes.isVisible()) {
+	            	editRes.setVisible(true);
+	            }
+	         }
+	      });
+		
+		editRes.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+            	//PreEdit value        	
+            }
+        });
+	}
+
+	private void initDeleteResAction(){
+		btnDeleteResource.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				int x = JOptionPane.showConfirmDialog(null, "Delete this task?","Alert",JOptionPane.YES_NO_OPTION);
+				if(x==0){
+					System.out.println("Aborted");
+				}else{
+					//you code here
+				}
+			}});
+	}
 }
+
