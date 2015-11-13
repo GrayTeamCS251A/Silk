@@ -54,6 +54,9 @@ public class MainUI {
 	private TaskUI addTask = new TaskUI("Add Task");
 	private TaskUI editTask = new TaskUI("Edit Task");
 	
+	private ProjectUI newProject = new ProjectUI("New Project");
+	private ProjectUI editProject = new ProjectUI("Edit Project");
+	
 	private AddResourceController addResourceController = new AddResourceController();
 	private EditResourceController editResourceController = new EditResourceController();
 	private DeleteResourceController deleteResourceController = new DeleteResourceController();
@@ -91,6 +94,11 @@ public class MainUI {
 		initEditTaskAction();
 		initDeleteTaskAction();
 		
+		initScheduleAction();
+		
+		initNewProjectAction();
+		initEditProjectAction();
+		initSaveAndLoad();
 	}
 
 	/**
@@ -246,7 +254,6 @@ public class MainUI {
         });
 	}
 
-	
 	private void initEditResAction(){
 		addRes.addConfirmListener(new ActionListener(){
 			@Override
@@ -273,7 +280,6 @@ public class MainUI {
             }
         });
 	}
-
 	
 	private void initDeleteResAction(){
 		btnDeleteResource.addActionListener(new ActionListener(){
@@ -316,8 +322,7 @@ public class MainUI {
         });
 		
 	}
-	
-	
+		
 	private void initAddTaskAction(){
 		
 		addTask.addConfirmListener(new ActionListener(){
@@ -344,8 +349,7 @@ public class MainUI {
         });
 		
 	}
-	
-	
+		
 	private void initDeleteTaskAction(){
 		btnDeleteTask.addActionListener(new ActionListener(){
 
@@ -361,7 +365,112 @@ public class MainUI {
 			}});
 	}
 
+	private void initScheduleAction(){
+		btnGenerateSchedule.addActionListener(new ActionListener(){
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}});
+		
+		btnSaveSchedule.addActionListener(new ActionListener(){
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}});
+		
+		btnGraph.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}});
+		
+		btnTable.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}});
+	}
+
+	private void initNewProjectAction(){
+		newProject.addConfirmListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				newProject.Reset();      
+				newProject.setVisible(false);
+			}
+						
+		});
+		
+		New.addActionListener(new ActionListener() {
+	         public void actionPerformed(ActionEvent arg0) {
+	            if (!newProject.isVisible()) {
+	            	newProject.setVisible(true);
+	            }
+	         }
+	      });
+		
+		newProject.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+            	newProject.Reset();        	
+            }
+        });
+	}
+	
+	private void initEditProjectAction(){
+		
+		editProject.addConfirmListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//editProject.Reset();      
+				editProject.setVisible(false);
+			}
+						
+		});
+		
+		Edit.addActionListener(new ActionListener() {
+	         public void actionPerformed(ActionEvent arg0) {
+	            if (!editProject.isVisible()) {
+	            	editProject.setVisible(true);
+	            }
+	         }
+	      });
+		
+		editProject.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+            	     	
+            }
+        });
+	}
+
+	private void initSaveAndLoad(){
+		save.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+			}					
+		});
+		
+		load.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+
+			}					
+		});
+				
+	}
 }
 
