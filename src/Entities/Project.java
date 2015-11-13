@@ -7,32 +7,18 @@ import java.util.*;
  * 
  */
 public class Project {
-
-    /**
-     * 
-     */
-    public Project() {
+    private Time startTime;
+    private Set<Resource> resources;
+    private Set<Task> tasks;
+    private Schedule schedule;
+    
+    public Project() 
+    {
+    	resources = new HashSet<Resource>();
+    	tasks = new HashSet<Task>();
+    	schedule = new Schedule();
     }
 
-    /**
-     * 
-     */
-    private Time startTime;
-
-    /**
-     * 
-     */
-    private Set<Resource> resources;
-
-    /**
-     * 
-     */
-    private Set<Task> tasks;
-
-    /**
-     * 
-     */
-    private Schedule schedule;
 
     /**
      * @param info
@@ -99,30 +85,50 @@ public class Project {
     /**
      * 
      */
-    public void createResource() {
-        // TODO implement here
+    public void createResource(String resourceName, int resourceID, double dailyCost, ResourceType r) {
+        Resource resourceToCreate = new Resource();
+        resourceToCreate.setname(resourceName);
+        resourceToCreate.setResourceID(resourceID);
+        resourceToCreate.setDailyCost(dailyCost);
+        resourceToCreate.setResourceType(r);
+        
+        resources.add(resourceToCreate);
+        //for (Resource resource: resources) {
+        //    System.out.println(resource.getname());
+        //}
     }
 
     /**
      * @return
      */
-    public List<Resource> getResources() {
-        // TODO implement here
-        return null;
+    public Set<Resource> getResources() {
+        return this.resources;
     }
 
     /**
      * @param info
      */
-    public void editResource(Resource info) {
-        // TODO implement here
+    public void editResource(String resourceName, int resourceID, double dailyCost, ResourceType r) {
+        // Search for the Resource to Edit using resource ID,
+    	for (Resource resource: resources) {
+    		if (resource.getResourceID() == resourceID && resource.getname().equals(resourceName)){
+    			resource.setDailyCost(dailyCost);
+    			resource.setResourceType(r);
+    			break;
+    		}
+    	}
     }
 
     /**
      * 
      */
-    public void deleteResource() {
-        // TODO implement here
+    public void deleteResource(int resourceID) {
+    	for (Resource resource: resources) {
+    		if (resource.getResourceID() == resourceID) {
+    			resources.remove(resource);
+    			break;
+    		}
+    	}
     }
 
     /**
