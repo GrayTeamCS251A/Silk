@@ -123,4 +123,12 @@ public class ResUI extends JDialog {
 	   public String getTextType() {
 		   return textType.getText();
 	   }
+	   
+	   public void Reset() {
+		   textName.setText("");
+		   textID.setText("");
+		   textCost.setText("");
+		   textType.setText("");
+	   }
+	   
 }

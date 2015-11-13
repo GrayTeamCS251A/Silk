@@ -9,13 +9,17 @@ import javax.swing.JTree;
 import javax.swing.JPanel;
 import java.awt.Color;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JList;
 import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.WindowConstants;
 
 import Controllers.Resources.AddResourceController;
 
@@ -61,28 +65,7 @@ public class MainUI {
 	 */
 	public MainUI() {
 		initialize();
-		addRes.addConfirmListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				String s=addRes.getTextName();
-				addResourceController.executeAddResource(addRes.getTextName(), 
-						Integer.parseInt(addRes.getTextID()), 
-						Double.parseDouble(addRes.getTextCost()), 
-						addRes.getTextType());
-				addRes.setVisible(false);
-			}
-						
-		});
-		
-		btnAddResource.addActionListener(new ActionListener() {
-	         public void actionPerformed(ActionEvent arg0) {
-	            if (!addRes.isVisible()) {
-	            	addRes.setVisible(true);
-	            }
-	         }
-	      });
-
+		initAddResAction();
 		
 		
 	}
@@ -206,4 +189,35 @@ public class MainUI {
 		Schedule_panel.add(btnTable);
 	}
 	
+	private void initAddResAction(){
+		addRes.addConfirmListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String s=addRes.getTextName();
+				addResourceController.executeAddResource(addRes.getTextName(), 
+						Integer.parseInt(addRes.getTextID()), 
+						Double.parseDouble(addRes.getTextCost()), 
+						addRes.getTextType());
+				addRes.Reset();      
+				addRes.setVisible(false);
+			}
+						
+		});
+		
+		btnAddResource.addActionListener(new ActionListener() {
+	         public void actionPerformed(ActionEvent arg0) {
+	            if (!addRes.isVisible()) {
+	            	addRes.setVisible(true);
+	            }
+	         }
+	      });
+		
+		addRes.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                addRes.Reset();        	
+            }
+        });
+	}
 }
