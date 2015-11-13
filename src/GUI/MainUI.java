@@ -11,12 +11,15 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JList;
 import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -459,7 +462,16 @@ public class MainUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-
+				String sb = "saved or...";
+                JFileChooser saveFile = new JFileChooser();
+                int returnVal = saveFile.showSaveDialog(null);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    try {
+                    	//...................
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
 			}					
 		});
 		
@@ -467,7 +479,15 @@ public class MainUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-
+			      JFileChooser openFile = new JFileChooser();
+			      int returnVal = openFile.showOpenDialog(null);
+	                if (returnVal == JFileChooser.APPROVE_OPTION) {
+	                    try {
+	                    	//....................
+	                    } catch (Exception ex) {
+	                        ex.printStackTrace();
+	                    }
+	                }
 			}					
 		});
 				
