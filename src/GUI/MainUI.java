@@ -66,7 +66,10 @@ public class MainUI {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				String s=addRes.getTextName();
-				addResourceController.execute(s);
+				addResourceController.executeAddResource(addRes.getTextName(), 
+						Integer.parseInt(addRes.getTextID()), 
+						Double.parseDouble(addRes.getTextCost()), 
+						addRes.getTextType());
 				addRes.setVisible(false);
 			}
 						

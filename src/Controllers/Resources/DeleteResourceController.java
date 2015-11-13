@@ -19,7 +19,11 @@ public class DeleteResourceController implements Controller {
 	@Override
 	public void execute(String command, Oracle oracle) {
 		// TODO Auto-generated method stub
-		
+	}
+	
+	public void executeDeleteResource(int resourceID)
+	{
+		project.deleteResource(resourceID);
 	}
 
 }

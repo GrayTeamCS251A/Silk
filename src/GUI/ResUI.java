@@ -111,4 +111,16 @@ public class ResUI extends JDialog {
 	   public String getTextName(){
 		   return textName.getText();		   
 	   }
+	   
+	   public String getTextID() {
+		   return textID.getText();
+	   }
+	   
+	   public String getTextCost() {
+		   return textCost.getText();
+	   }
+	   
+	   public String getTextType() {
+		   return textType.getText();
+	   }
 }
