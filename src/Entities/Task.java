@@ -51,7 +51,7 @@ public class Task extends Observable {
     /**
      * 
      */
-    private Set<Deiverable> deliverables;
+    private Set<Deliverable> deliverables;
 
     /**
      * 
@@ -61,7 +61,7 @@ public class Task extends Observable {
     /**
      * 
      */
-    private Set<Task> predicessors;
+    private Set<Task> predecessors;
 
     /**
      * 
