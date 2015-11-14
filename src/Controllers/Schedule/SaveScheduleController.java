@@ -19,7 +19,10 @@ public class SaveScheduleController implements Controller {
 	@Override
 	public void execute(String command, Oracle oracle) {
 		// TODO Auto-generated method stub
-		
+	}
+	
+	public void executeSaveSchedule() {
+		project.saveSchedule();
 	}
 
 }

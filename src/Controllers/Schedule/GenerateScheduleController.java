@@ -20,7 +20,7 @@ public class GenerateScheduleController implements Controller {
      * 
      */
     public void generateSchedule() {
-        // TODO implement here
+        project.generateSchedule();
     }
 
 	@Override
