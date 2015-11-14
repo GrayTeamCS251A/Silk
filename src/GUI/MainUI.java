@@ -42,6 +42,7 @@ import javax.swing.tree.TreePath;
 
 //import org.jgraph.JGraph;
 
+
 import Controllers.Project.EditProjectController;
 import Controllers.Project.LoadProjectController;
 import Controllers.Project.NewProjectController;
@@ -49,6 +50,7 @@ import Controllers.Project.SaveProjectController;
 import Controllers.Resources.AddResourceController;
 import Controllers.Resources.DeleteResourceController;
 import Controllers.Resources.EditResourceController;
+import Controllers.Schedule.GenerateScheduleController;
 import Controllers.Schedule.ViewScheduleAsGraphController;
 import Controllers.Schedule.ViewScheduleAsTableController;
 import Controllers.Tasks.AddTaskController;
@@ -104,6 +106,7 @@ public class MainUI{
 	private LoadProjectController loadProjectController = new LoadProjectController();
 	private JScrollPane scheduleScrollPane;
 	
+	private GenerateScheduleController generateScheduleController = new GenerateScheduleController();
 	private ViewScheduleAsGraphController viewScheduleAsGraphController = new  ViewScheduleAsGraphController();
 	private ViewScheduleAsTableController  viewScheduleAsTableController = new ViewScheduleAsTableController();
 	/**
@@ -431,7 +434,7 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				//Black..box??
+				generateScheduleController.generateSchedule();
 			}});
 		
 		btnSaveSchedule.addActionListener(new ActionListener(){
@@ -447,7 +450,7 @@ public class MainUI{
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     try {
                     	String fileName = saveFile.getSelectedFile().getName();
-                    	//saveProjectController.executeSaveProject(fileName);
+                    	saveProjectController.executeSaveProject(fileName);
                	
                     	File src = new File("");  //File returned by execute from saveSchedule    	
                     	File dest = new File(saveFile.getSelectedFile().getAbsolutePath());
