@@ -7,6 +7,7 @@ import java.util.*;
  */
 public class Project extends Observable{
     private Time startTime;
+    private Time endTime;
     private Set<Resource> resources;
     private Set<Task> tasks;
     private Schedule schedule;
@@ -18,6 +19,7 @@ public class Project extends Observable{
     	projectName = "";
     	projectAuthor = "";
     	startTime = new Time(0);
+    	endTime = new Time(0);
     	resources = new HashSet<Resource>();
     	tasks = new HashSet<Task>();
     	schedule = new Schedule();
@@ -76,8 +78,8 @@ public class Project extends Observable{
      * @param tasks 
      * @param schedule
      */
-    public void updateProject(List<Resource> resources, List<Task> tasks, Schedule schedule) {
-        // TODO implement here
+    public void updateProject(Set<Resource> resources, Set<Task> tasks, Schedule schedule) {
+
     }
 
     /**
@@ -90,7 +92,7 @@ public class Project extends Observable{
     /**
      * @param info
      */
-    public void createTask(String taskName, Integer taskID, Integer taskDuration, Task taskPredecessor, Task taskParent) {
+    public void createTaskFromUI(String taskName, Integer taskID, Integer taskDuration, Task taskPredecessor, Task taskParent) {
         Task taskToAdd = new Task();
         taskToAdd.setName(taskName);
         taskToAdd.setTaskID(taskID);
@@ -102,7 +104,16 @@ public class Project extends Observable{
             taskToAdd.setTaskParent(taskParent);
         }
         
-        tasks.add(taskToAdd)
+        tasks.add(taskToAdd);
+    }
+    
+    public void createTaskfromLoadProject(String taskName, Integer taskID, Integer taskDuration) {
+        Task taskToAdd = new Task();
+        taskToAdd.setName(taskName);
+        taskToAdd.setTaskID(taskID);
+        taskToAdd.setTaskDuration(taskDuration);
+        
+        tasks.add(taskToAdd);
     }
 
     /**
@@ -118,9 +129,6 @@ public class Project extends Observable{
         resources.add(resourceToCreate);
         setChanged();
         notifyObservers();
-        //for (Resource resource: resources) {
-        //    System.out.println(resource.getname());
-        //}
     }
 
     /**
@@ -128,6 +136,17 @@ public class Project extends Observable{
      */
     public Set<Resource> getResources() {
         return this.resources;
+    }
+    
+    public Resource getResource(String resourceName) {
+    	for (Resource r: resources)
+    	{
+    		if (r.getname().equals(resourceName))
+    		{
+    			return r;
+    		}
+    	}
+    	return null;
     }
 
     /**
@@ -246,11 +265,49 @@ public class Project extends Observable{
      * @param schedule
      */
     public void saveSchedule() {
-        
+        schedule.toXLS();
     }
     
-    public void saveProject() {
-    	
+    public String getProjectName()
+    {
+    	return this.projectName;
     }
-
+    
+    public String getProjectAuthor()
+    {
+    	return this.projectAuthor;
+    }
+    
+    public Time getStartTime()
+    {
+    	return this.startTime;
+    }
+    
+    public Time getEndTime()
+    {
+    	return this.endTime;
+    }
+    
+    public void setEndTime(Time endtime)
+    {
+    	this.endTime = endtime;
+    }
+    
+    public Deliverable createDeliverable(String deliverableName, String deliverableType)
+    {
+    	Deliverable d = new Deliverable();
+    	DeliverableType dt = null;
+    	
+    	switch (deliverableType){
+    		case "DeliverableType.file": dt = DeliverableType.file;
+    									break;
+    		case "DeliverableType.presentation": dt = DeliverableType.presentation;
+    											break;
+    	}
+    	
+    	d.setDeliverableName(deliverableName);
+    	d.setdeliverableType(dt);
+    	
+    	return d;
+    }
 }
