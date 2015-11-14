@@ -28,9 +28,12 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.tree.TreePath;
+
+//import org.jgraph.JGraph;
 
 import Controllers.Project.EditProjectController;
 import Controllers.Project.LoadProjectController;
@@ -39,6 +42,8 @@ import Controllers.Project.SaveProjectController;
 import Controllers.Resources.AddResourceController;
 import Controllers.Resources.DeleteResourceController;
 import Controllers.Resources.EditResourceController;
+import Controllers.Schedule.ViewScheduleAsGraphController;
+import Controllers.Schedule.ViewScheduleAsTableController;
 import Controllers.Tasks.AddTaskController;
 import Controllers.Tasks.DeleteTaskController;
 import Controllers.Tasks.EditTaskController;
@@ -87,7 +92,10 @@ public class MainUI{
 	private EditProjectController editProjectController = new EditProjectController();
 	private SaveProjectController saveProjectController = new SaveProjectController();
 	private LoadProjectController loadProjectController = new LoadProjectController();
+	private JScrollPane scheduleScrollPane;
 	
+	private ViewScheduleAsGraphController viewScheduleAsGraphController = new  ViewScheduleAsGraphController();
+	private ViewScheduleAsTableController  viewScheduleAsTableController = new ViewScheduleAsTableController();
 	/**
 	 * Launch the application.
 	 */
@@ -218,11 +226,11 @@ public class MainUI{
 		frame.getContentPane().add(Schedule_panel);
 		Schedule_panel.setLayout(null);
 		
-		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane_2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPane_2.setBounds(10, 11, 345, 304);
-		Schedule_panel.add(scrollPane_2);
+		scheduleScrollPane = new JScrollPane();
+		scheduleScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scheduleScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scheduleScrollPane.setBounds(10, 11, 345, 304);
+		Schedule_panel.add(scheduleScrollPane);
 		
 		btnGenerateSchedule = new JButton("Generate Schedule");
 		btnGenerateSchedule.setBounds(10, 326, 166, 23);
@@ -409,7 +417,7 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				//Black..box??
 			}});
 		
 		btnSaveSchedule.addActionListener(new ActionListener(){
@@ -436,6 +444,9 @@ public class MainUI{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				
+				//See JGraph example
+				//JGraph graphView = viewScheduleAsGraphController.execute(??);
+				//scheduleScrollPane.setViewportView(graphView);
 			}});
 		
 		btnTable.addActionListener(new ActionListener(){
@@ -443,7 +454,8 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				//JTable table = viewScheduleAsTableController.execute(?);
+				//scheduleScrollPane.setViewportView(table);
 			}});
 	}
 
