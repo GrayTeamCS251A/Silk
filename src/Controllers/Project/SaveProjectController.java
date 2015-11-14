@@ -22,8 +22,8 @@ public class SaveProjectController implements Controller {
      * @param project 
      * @return
      */
-    private File convert(Project project) {
-        // TODO implement here
+    private File convert(Project project, String fileName) {
+        // Convert to XML format to the specified fileName
         return null;
     }
 
@@ -31,6 +31,10 @@ public class SaveProjectController implements Controller {
 	public void execute(String command, Oracle oracle) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void executeSaveProject(String fileName) {
+		convert(project, fileName);
 	}
 
 }

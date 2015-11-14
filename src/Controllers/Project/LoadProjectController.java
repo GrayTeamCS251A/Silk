@@ -21,13 +21,22 @@ public class LoadProjectController implements Controller {
      * @param file
      */
     private void parse(File file) {
-        // TODO implement here
+		//XML grab the project info
+		//project.updateInfo(projectName, startTime, projectAuthor);
+		
+		//XML grab the project other stuff
+		//project.updateProject(resources, tasks, schedule);
     }
 
 	@Override
 	public void execute(String command, Oracle oracle) {
 		// TODO Auto-generated method stub
-		
+	}
+	
+	public void executeLoadProject(File projectFile) {
+    	project.clear();
+    	
+    	parse(projectFile);
 	}
 
 }

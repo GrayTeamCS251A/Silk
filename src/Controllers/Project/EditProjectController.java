@@ -21,5 +21,9 @@ public class EditProjectController implements Controller {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void executeEditProject(String projectName, String startTime, String projectAuthor) {
+		project.updateInfo(projectName, startTime, projectAuthor);
+	}
 
 }
