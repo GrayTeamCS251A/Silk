@@ -22,7 +22,7 @@ public class EditResourceController implements Controller {
 	public void execute(String command, Oracle oracle) {
 	}
 
-	public void executeAddResource(String resourceName, int resourceID, double dailyCost, String resourceType)
+	public void executeEditResource(String resourceName, int resourceID, double dailyCost, String resourceType)
 	{	
 		//Convert resourceType to a ResourceType Entity
 		ResourceType r = null;

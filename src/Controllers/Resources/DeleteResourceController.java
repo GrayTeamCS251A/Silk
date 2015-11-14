@@ -4,6 +4,7 @@ import java.util.*;
 
 import AnalysisModel.Boundaries.Panels.Oracle;
 import Controllers.Controller;
+import Entities.Resource;
 
 /**
  * 
@@ -21,9 +22,10 @@ public class DeleteResourceController implements Controller {
 		// TODO Auto-generated method stub
 	}
 	
-	public void executeDeleteResource(int resourceID)
+	public void executeDeleteResource(Object resourceToDelete)
 	{
-		project.deleteResource(resourceID);
+		Resource r = (Resource) resourceToDelete;
+		project.deleteResource(r.getResourceID());
 	}
 
 }
