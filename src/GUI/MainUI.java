@@ -21,9 +21,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -31,6 +37,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.TreePath;
 
 //import org.jgraph.JGraph;
@@ -47,7 +54,9 @@ import Controllers.Schedule.ViewScheduleAsTableController;
 import Controllers.Tasks.AddTaskController;
 import Controllers.Tasks.DeleteTaskController;
 import Controllers.Tasks.EditTaskController;
-
+import Entities.Project;
+import Entities.Resource;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public class MainUI{
 
 	private JFrame frame;
@@ -69,6 +78,7 @@ public class MainUI{
 	private JMenuItem Edit;
 	private JList resourceList = new JList();
 	private JTree taskTree = new JTree();
+	private Project project = new Project();
 
 
 	private ResUI addRes = new ResUI("Add Resource");
@@ -283,10 +293,12 @@ public class MainUI{
 	}
 
 	private void initEditResAction(){
-		addRes.addConfirmListener(new ActionListener(){
+		editRes.addConfirmListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				Resource r=(Resource) resourceList.getSelectedValue();
+				editRes.fill(r);
 				editResourceController.executeEditResource(editRes.getTextName(), 
 						Integer.parseInt(editRes.getTextID()), 
 						Double.parseDouble(editRes.getTextCost()), 
@@ -335,6 +347,8 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub  
+				//need to figure out how to extract selected Task from JTree
+				//editTask.fill(t);
 				editTaskController.executeEditTask(editTask.getTaskName(), 
 						Integer.parseInt(editTask.getTaskID()), 
 						Integer.parseInt(editTask.getTaskDuration()),
@@ -425,13 +439,20 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				String sb = "saved or...";
                 JFileChooser saveFile = new JFileChooser();
+                saveFile.setAcceptAllFileFilterUsed(false);
+            	FileNameExtensionFilter filter = new FileNameExtensionFilter("xls file", "xls");
+            	saveFile.addChoosableFileFilter(filter);
                 int returnVal = saveFile.showSaveDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     try {
                     	String fileName = saveFile.getSelectedFile().getName();
-                    	saveProjectController.executeSaveProject(fileName);
+                    	//saveProjectController.executeSaveProject(fileName);
+               	
+                    	File src = new File("");  //File returned by execute from saveSchedule    	
+                    	File dest = new File(saveFile.getSelectedFile().getAbsolutePath());
+                    	Files.copy(src.toPath(),dest.toPath(), REPLACE_EXISTING);
+                    	                    	
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -495,7 +516,7 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				//editProject.Reset(); 
+				editProject.fill(project);
 				editProjectController.executeEditProject(editProject.getNameField(), 
 						editProject.getStartField(), 
 						editProject.getAuthorField());
@@ -525,13 +546,20 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				String sb = "saved or...";
                 JFileChooser saveFile = new JFileChooser();
+                saveFile.setAcceptAllFileFilterUsed(false);
+            	FileNameExtensionFilter filter = new FileNameExtensionFilter("xml file", "xml");
+            	saveFile.addChoosableFileFilter(filter);
                 int returnVal = saveFile.showSaveDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     try {
                     	String fileName = saveFile.getSelectedFile().getName();
                     	saveProjectController.executeSaveProject(fileName);
+               	
+                    	File src = new File("");  //File returned by executeSaveProject      	
+                    	File dest = new File(saveFile.getSelectedFile().getAbsolutePath());
+                    	Files.copy(src.toPath(),dest.toPath(), REPLACE_EXISTING);
+                    	                    	
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -544,6 +572,9 @@ public class MainUI{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 			      JFileChooser openFile = new JFileChooser();
+			      openFile.setAcceptAllFileFilterUsed(false);
+              	  FileNameExtensionFilter filter = new FileNameExtensionFilter("xml file", "xml");
+              	  openFile.addChoosableFileFilter(filter);
 			      int returnVal = openFile.showOpenDialog(null);
 	                if (returnVal == JFileChooser.APPROVE_OPTION) {
 	                    try {
