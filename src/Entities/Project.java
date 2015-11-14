@@ -2,23 +2,26 @@ package Entities;
 
 import java.sql.Time;
 import java.util.*;
-
 /**
  * 
  */
-public class Project {
+public class Project extends Observable{
     private Time startTime;
     private Set<Resource> resources;
     private Set<Task> tasks;
     private Schedule schedule;
+    private String projectName;
+    private String projectAuthor;
     
     public Project() 
     {
+    	projectName = "";
+    	projectAuthor = "";
+    	startTime = new Time(0);
     	resources = new HashSet<Resource>();
     	tasks = new HashSet<Task>();
     	schedule = new Schedule();
     }
-
 
     /**
      * @param info
@@ -41,22 +44,31 @@ public class Project {
      * 
      */
     public void clear() {
-        // TODO implement here
+    	startTime = new Time(0);
+    	resources = new HashSet<Resource>();
+    	tasks = new HashSet<Task>();
+    	schedule = new Schedule();
     }
 
     /**
      * @return
      */
     public Object getProjectInfo() {
-        // TODO implement here
-        return null;
+    	HashMap<String, String> projectInfo = new HashMap<String, String>();
+    	projectInfo.put("Project Name", this.projectName);
+    	projectInfo.put("Project Author", this.projectAuthor);
+    	projectInfo.put("Project Start Time", this.startTime.toString());
+    	return projectInfo;
     }
 
     /**
      * @param info
      */
-    public void updateInfo(Object info) {
-        // TODO implement here
+    public void updateInfo(String projectName, String startTime, String projectAuthor) {
+        this.projectName = projectName;
+        this.projectAuthor = projectAuthor;
+        
+        this.startTime = new Time (Integer.parseInt(startTime));
     }
 
     /**
@@ -71,15 +83,26 @@ public class Project {
     /**
      * 
      */
-    public void getWholeProject() {
-        // TODO implement here
+    public Project getWholeProject() {
+        return this;
     }
 
     /**
      * @param info
      */
-    public void createTask(Object info) {
-        // TODO implement here
+    public void createTask(String taskName, Integer taskID, Integer taskDuration, Task taskPredecessor, Task taskParent) {
+        Task taskToAdd = new Task();
+        taskToAdd.setName(taskName);
+        taskToAdd.setTaskID(taskID);
+        taskToAdd.setTaskDuration(taskDuration);
+        if (taskPredecessor != null){
+            taskToAdd.setTaskPredecessor(taskPredecessor);
+        }
+        if (taskParent != null) {
+            taskToAdd.setTaskParent(taskParent);
+        }
+        
+        tasks.add(taskToAdd)
     }
 
     /**
@@ -93,6 +116,8 @@ public class Project {
         resourceToCreate.setResourceType(r);
         
         resources.add(resourceToCreate);
+        setChanged();
+        notifyObservers();
         //for (Resource resource: resources) {
         //    System.out.println(resource.getname());
         //}
@@ -114,6 +139,8 @@ public class Project {
     		if (resource.getResourceID() == resourceID && resource.getname().equals(resourceName)){
     			resource.setDailyCost(dailyCost);
     			resource.setResourceType(r);
+    	        setChanged();
+    	        notifyObservers();
     			break;
     		}
     	}
@@ -126,6 +153,8 @@ public class Project {
     	for (Resource resource: resources) {
     		if (resource.getResourceID() == resourceID) {
     			resources.remove(resource);
+    	        setChanged();
+    	        notifyObservers();
     			break;
     		}
     	}
@@ -136,7 +165,13 @@ public class Project {
      * @return
      */
     public Task getTask(String taskName) {
-        // TODO implement here
+        for (Task task: tasks) {
+        	if (task.getTaskName.equals(taskName))
+        	{
+        		return task;
+        	}
+        }
+        
         return null;
     }
 
@@ -144,36 +179,59 @@ public class Project {
      * @param taskID 
      * @param info
      */
-    public void editTask(Integer taskID, String info) {
+    public void editTask(String taskName, Integer taskID, Integer taskDuration, Task predecessorTask, Task parentTask) {
         // TODO implement here
+    	for (Task taskToEdit: tasks) {
+    		if (taskToEdit.getTaskName().equals(taskName) && taskToEdit.getTaskID() == taskID)
+    		{
+    			taskToEdit.setTaskDuration(taskDuration);
+    			if (predecessorTask != null){
+        			taskToEdit.setPredecessorTask(predecessorTask);
+    			}
+    			if (parentTask != null) {
+        			taskToEdit.setParentTask(parentTask);
+    			}
+    			
+    			setChanged();
+    			notifyObservers();
+    			break;
+    		}
+    	}
     }
 
     /**
      * 
      */
-    public void getTasks() {
-        // TODO implement here
+    public Set<Task> getTasks() {
+        return this.tasks;
     }
 
     /**
      * 
      */
-    public void deleteTask() {
-        // TODO implement here
+    public void deleteTask(int taskID) {
+    	for (Task taskToDelete: tasks) {
+    		if (taskToDelete.getTaskID() == taskID) {
+    			resources.remove(taskToDelete);
+    	        setChanged();
+    	        notifyObservers();
+    			break;
+    		}
+    	}
     }
 
     /**
      * 
      */
-    public void getSchedule() {
-        // TODO implement here
+    public Schedule getSchedule() {
+        return this.schedule;
     }
 
     /**
      * 
      */
     public void generateSchedule() {
-        // TODO implement here
+    	schedule.generateSchedule(tasks);
     }
 
     /**
@@ -187,8 +245,12 @@ public class Project {
     /**
      * @param schedule
      */
-    public void saveSchedule(Schedule schedule) {
-        // TODO implement here
+    public void saveSchedule() {
+        
+    }
+    
+    public void saveProject() {
+    	
     }
 
 }
