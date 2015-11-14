@@ -474,7 +474,7 @@ public class MainUI{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				//editProject.Reset(); 
-				editProjectController.executeNewProject(editProject.getNameField(), 
+				editProjectController.executeEditProject(editProject.getNameField(), 
 						editProject.getStartField(), 
 						editProject.getAuthorField());
 				editProject.setVisible(false);

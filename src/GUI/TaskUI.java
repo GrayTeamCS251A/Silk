@@ -26,6 +26,7 @@ public class TaskUI extends JDialog {
 	private JComboBox comboBoxPred = new JComboBox();
 	private JButton okButton;
 	private JButton cancelButton;
+	private JTextField textDuration;
 
 	/**
 	 * Launch the application.
@@ -60,19 +61,19 @@ public class TaskUI extends JDialog {
 		contentPanel.add(lblTaskId);
 		
 		JLabel lblChildren = new JLabel("Children");
-		lblChildren.setBounds(23, 77, 46, 14);
+		lblChildren.setBounds(23, 123, 46, 14);
 		contentPanel.add(lblChildren);
 		
 		JLabel lblParent = new JLabel("Parent");
-		lblParent.setBounds(23, 102, 46, 14);
+		lblParent.setBounds(23, 148, 46, 14);
 		contentPanel.add(lblParent);
 		
 		JLabel lblSucessor = new JLabel("Sucessor");
-		lblSucessor.setBounds(23, 127, 46, 14);
+		lblSucessor.setBounds(23, 173, 46, 14);
 		contentPanel.add(lblSucessor);
 		
 		JLabel lblPredecessor = new JLabel("Predecessor");
-		lblPredecessor.setBounds(23, 152, 71, 14);
+		lblPredecessor.setBounds(23, 198, 71, 14);
 		contentPanel.add(lblPredecessor);
 		
 		textName = new JTextField();
@@ -86,17 +87,17 @@ public class TaskUI extends JDialog {
 		textID.setColumns(10);
 		
 		JComboBox comboBoxChildren = new JComboBox();
-		comboBoxChildren.setBounds(100, 74, 28, 20);
+		comboBoxChildren.setBounds(100, 120, 28, 20);
 		contentPanel.add(comboBoxChildren);
 		
-		comboBoxParent.setBounds(100, 99, 28, 20);
+		comboBoxParent.setBounds(100, 145, 28, 20);
 		contentPanel.add(comboBoxParent);
 		
 		JComboBox comboBoxSuc = new JComboBox();
-		comboBoxSuc.setBounds(100, 124, 28, 20);
+		comboBoxSuc.setBounds(100, 170, 28, 20);
 		contentPanel.add(comboBoxSuc);
 		
-		comboBoxPred.setBounds(100, 149, 28, 20);
+		comboBoxPred.setBounds(100, 195, 28, 20);
 		contentPanel.add(comboBoxPred);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -110,6 +111,15 @@ public class TaskUI extends JDialog {
 		JLabel lblResource = new JLabel("Resource");
 		lblResource.setBounds(236, 27, 46, 14);
 		contentPanel.add(lblResource);
+		
+		JLabel lblDuration = new JLabel("Duration");
+		lblDuration.setBounds(23, 77, 46, 14);
+		contentPanel.add(lblDuration);
+		
+		textDuration = new JTextField();
+		textDuration.setBounds(100, 74, 86, 20);
+		contentPanel.add(textDuration);
+		textDuration.setColumns(10);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -151,6 +161,4 @@ public class TaskUI extends JDialog {
 	   public Task getPredecessorTask() {
 		   return (Task) comboBoxPred.getSelectedItem();
 	   }
-	   
-	
 }

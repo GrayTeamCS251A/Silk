@@ -15,7 +15,7 @@ public class ProjectUI extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField nameField;
-	private JTextField idField;
+	private JTextField authorField;
 	private JTextField startField;
 	private JTextField endField;
 	private JButton okButton;
@@ -66,10 +66,10 @@ public class ProjectUI extends JDialog {
 		contentPanel.add(nameField);
 		nameField.setColumns(10);
 		
-		idField = new JTextField();
-		idField.setBounds(113, 43, 131, 20);
-		contentPanel.add(idField);
-		idField.setColumns(10);
+		authorField = new JTextField();
+		authorField.setBounds(113, 43, 131, 20);
+		contentPanel.add(authorField);
+		authorField.setColumns(10);
 		
 		startField = new JTextField();
 		startField.setBounds(113, 68, 131, 20);
@@ -114,13 +114,13 @@ public class ProjectUI extends JDialog {
 		   return nameField.getText();   
 	   }
 	   
-	   public String getIDField(){
-		   return idField.getText();   
+	   public String getAuthorField(){
+		   return authorField.getText();   
 	   }
 	   
 	   public void Reset(){
 		   nameField.setText("");
-		   idField.setText("");
+		   authorField.setText("");
 		   startField.setText("");
 		   endField.setText("");
 	   }
