@@ -417,7 +417,17 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
+				String sb = "saved or...";
+                JFileChooser saveFile = new JFileChooser();
+                int returnVal = saveFile.showSaveDialog(null);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    try {
+                    	String fileName = saveFile.getSelectedFile().getName();
+                    	saveProjectController.executeSaveProject(fileName);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
 			}});
 		
 		btnGraph.addActionListener(new ActionListener(){
