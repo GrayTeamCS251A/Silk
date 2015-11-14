@@ -8,23 +8,34 @@ import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JTree;
 import javax.swing.JPanel;
+
 import java.awt.Color;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
+
 import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
+import javax.swing.tree.TreePath;
 
+import Controllers.Project.EditProjectController;
+import Controllers.Project.LoadProjectController;
+import Controllers.Project.NewProjectController;
+import Controllers.Project.SaveProjectController;
 import Controllers.Resources.AddResourceController;
 import Controllers.Resources.DeleteResourceController;
 import Controllers.Resources.EditResourceController;
@@ -32,7 +43,7 @@ import Controllers.Tasks.AddTaskController;
 import Controllers.Tasks.DeleteTaskController;
 import Controllers.Tasks.EditTaskController;
 
-public class MainUI {
+public class MainUI{
 
 	private JFrame frame;
 	private JButton btnAddResource;
@@ -51,6 +62,10 @@ public class MainUI {
 	private JMenuItem save;
 	private JMenuItem load;
 	private JMenuItem Edit;
+	private JList resourceList = new JList();
+	private JTree taskTree = new JTree();
+
+
 	private ResUI addRes = new ResUI("Add Resource");
 	private ResUI editRes = new ResUI("Edit Resource");
 	
@@ -67,6 +82,11 @@ public class MainUI {
 	private AddTaskController addTaskController = new AddTaskController();
 	private EditTaskController editTaskController = new EditTaskController();
 	private DeleteTaskController deleteTaskController = new DeleteTaskController();
+	
+	private NewProjectController newProjectController = new NewProjectController();
+	private EditProjectController editProjectController = new EditProjectController();
+	private SaveProjectController saveProjectController = new SaveProjectController();
+	private LoadProjectController loadProjectController = new LoadProjectController();
 	
 	/**
 	 * Launch the application.
@@ -148,8 +168,7 @@ public class MainUI {
 		scrollPane.setBounds(10, 11, 267, 304);
 		Resource_panel.add(scrollPane);
 		
-		JList list = new JList();
-		scrollPane.setViewportView(list);
+		scrollPane.setViewportView(resourceList);
 		
 		btnDeleteResource = new JButton("Delete Resource");
 		btnDeleteResource.setBounds(10, 360, 115, 23);
@@ -175,8 +194,7 @@ public class MainUI {
 		scrollPane_1.setBounds(10, 11, 267, 304);
 		Task_panel.add(scrollPane_1);
 		
-		JTree tree = new JTree();
-		scrollPane_1.setViewportView(tree);
+		scrollPane_1.setViewportView(taskTree);
 		
 		btnAddTask = new JButton("Add Task");
 		btnAddTask.setBounds(10, 326, 105, 23);
@@ -230,7 +248,6 @@ public class MainUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				String s=addRes.getTextName();
 				addResourceController.executeAddResource(addRes.getTextName(), 
 						Integer.parseInt(addRes.getTextID()), 
 						Double.parseDouble(addRes.getTextCost()), 
@@ -262,7 +279,10 @@ public class MainUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				//PreEdit value  
+				editResourceController.executeEditResource(editRes.getTextName(), 
+						Integer.parseInt(editRes.getTextID()), 
+						Double.parseDouble(editRes.getTextCost()), 
+						editRes.getTextType());
 				editRes.setVisible(false);
 			}
 						
@@ -279,7 +299,7 @@ public class MainUI {
 		editRes.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-            	//PreEdit value        	
+            	editRes.Reset();       	
             }
         });
 	}
@@ -294,7 +314,9 @@ public class MainUI {
 				if(x==1){
 					System.out.println("Aborted");
 				}else{
-					//you code here
+					int selectedIndex = resourceList.getSelectedIndex();
+					deleteResourceController.executeDeleteResource(resourceList.getSelectedValue());
+					resourceList.remove(selectedIndex);
 				}
 			}});
 	}
@@ -304,7 +326,12 @@ public class MainUI {
 		editTask.addConfirmListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub      
+				// TODO Auto-generated method stub  
+				editTaskController.executeEditTask(editTask.getTaskName(), 
+						Integer.parseInt(editTask.getTaskID()), 
+						Integer.parseInt(editTask.getTaskDuration()),
+						editTask.getPredecessorTask(),
+						editTask.getParentTask());
 				editTask.setVisible(false);
 			}
 						
@@ -331,7 +358,12 @@ public class MainUI {
 		addTask.addConfirmListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub      
+				// TODO Auto-generated method stub 
+				addTaskController.executeAddTask(addTask.getTaskName(), 
+						Integer.parseInt(addTask.getTaskID()), 
+						Integer.parseInt(addTask.getTaskDuration()),
+						addTask.getPredecessorTask(),
+						addTask.getParentTask());
 				addTask.setVisible(false);
 			}
 						
@@ -364,6 +396,9 @@ public class MainUI {
 					System.out.println("Aborted");
 				}else{
 					//you code here
+					TreePath tp = taskTree.getSelectionPath();
+					deleteTaskController.executeDeleteTask(tp.getLastPathComponent());
+					taskTree.removeSelectionPath(tp);
 				}
 			}});
 	}
@@ -407,6 +442,9 @@ public class MainUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				newProjectController.executeNewProject(newProject.getNameField(), 
+						newProject.getStartField(), 
+						newProject.getAuthorField());
 				newProject.Reset();      
 				newProject.setVisible(false);
 			}
@@ -435,7 +473,10 @@ public class MainUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				//editProject.Reset();      
+				//editProject.Reset(); 
+				editProjectController.executeNewProject(editProject.getNameField(), 
+						editProject.getStartField(), 
+						editProject.getAuthorField());
 				editProject.setVisible(false);
 			}
 						
@@ -467,7 +508,8 @@ public class MainUI {
                 int returnVal = saveFile.showSaveDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     try {
-                    	//...................
+                    	String fileName = saveFile.getSelectedFile().getName();
+                    	saveProjectController.executeSaveProject(fileName);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -483,7 +525,8 @@ public class MainUI {
 			      int returnVal = openFile.showOpenDialog(null);
 	                if (returnVal == JFileChooser.APPROVE_OPTION) {
 	                    try {
-	                    	//....................
+	                    	File projectFile = openFile.getSelectedFile();
+	                    	loadProjectController.executeLoadProject(projectFile);
 	                    } catch (Exception ex) {
 	                        ex.printStackTrace();
 	                    }
@@ -492,5 +535,6 @@ public class MainUI {
 		});
 				
 	}
+
 }
 

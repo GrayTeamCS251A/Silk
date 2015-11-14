@@ -15,11 +15,15 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JList;
 
+import Entities.Task;
+
 public class TaskUI extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textName;
 	private JTextField textID;
+	private JComboBox comboBoxParent = new JComboBox();
+	private JComboBox comboBoxPred = new JComboBox();
 	private JButton okButton;
 	private JButton cancelButton;
 
@@ -85,7 +89,6 @@ public class TaskUI extends JDialog {
 		comboBoxChildren.setBounds(100, 74, 28, 20);
 		contentPanel.add(comboBoxChildren);
 		
-		JComboBox comboBoxParent = new JComboBox();
 		comboBoxParent.setBounds(100, 99, 28, 20);
 		contentPanel.add(comboBoxParent);
 		
@@ -93,7 +96,6 @@ public class TaskUI extends JDialog {
 		comboBoxSuc.setBounds(100, 124, 28, 20);
 		contentPanel.add(comboBoxSuc);
 		
-		JComboBox comboBoxPred = new JComboBox();
 		comboBoxPred.setBounds(100, 149, 28, 20);
 		contentPanel.add(comboBoxPred);
 		
@@ -130,7 +132,25 @@ public class TaskUI extends JDialog {
 	   		okButton.addActionListener(listener);
 	   }
 	   
+	   public String getTaskName() {
+		   return textName.getText();
+	   }
 	   
+	   public String getTaskID() {
+		   return textID.getText();
+	   }
+	   
+	   public String getTaskDuration() {
+		   return textDuration.getText();
+	   }
+	   
+	   public Task getParentTask() {
+		   return (Task) comboBoxParent.getSelectedItem();
+	   }
+	   
+	   public Task getPredecessorTask() {
+		   return (Task) comboBoxPred.getSelectedItem();
+	   }
 	   
 	
 }
