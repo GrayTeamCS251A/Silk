@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JList;
 
+import Entities.Project;
 import Entities.Task;
 
 public class TaskUI extends JDialog {
@@ -160,5 +161,18 @@ public class TaskUI extends JDialog {
 	   
 	   public Task getPredecessorTask() {
 		   return (Task) comboBoxPred.getSelectedItem();
+	   }
+	   
+	   public void Reset(){
+		   textName.setText("");
+		   textID.setText("");
+		   textDuration.setText("");
+	   }
+	   
+	   
+	   public void fill(Task t){
+		   textName.setText("");
+		   textID.setText("");
+		   textDuration.setText("");
 	   }
 }

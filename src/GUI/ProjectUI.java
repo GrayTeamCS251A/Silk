@@ -3,11 +3,16 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+import java.sql.Time;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Entities.Project;
+import Entities.Resource;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -124,4 +129,13 @@ public class ProjectUI extends JDialog {
 		   startField.setText("");
 		   endField.setText("");
 	   }
+	   
+	   public void fill(Project p){
+		   nameField.setText("");
+		   authorField.setText("");
+		   startField.setText("");
+		   endField.setText("");
+	   }
+	   
+	   
 }

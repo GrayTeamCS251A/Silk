@@ -8,6 +8,10 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Entities.Project;
+import Entities.Resource;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
@@ -130,5 +134,13 @@ public class ResUI extends JDialog {
 		   textCost.setText("");
 		   textType.setText("");
 	   }
+	   
+	   public void fill(Resource r){
+		   textName.setText(r.getname());
+		   textID.setText(Integer.toString(r.getResourceID()));
+		   textCost.setText(Double.toString(r.getDailyCost()));
+		   textType.setText(r.getResourceType().toString());
+	   }
+	   
 	   
 }
