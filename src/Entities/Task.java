@@ -119,7 +119,7 @@ public class Task extends Observable {
     public void updateTask(int taskID, String name, String description, int duration, double startTime, double endTime, double percentCompleted, Set<Resource> requiredResources, Set<Task> predecessors, Task parent) {
         // TODO implement here
     	setTaskID(taskID);
-    	setTaskName(name);
+    	setName(name);
     	setDescription(description);
     	setTaskDuration(duration);
     	setStartTime(startTime);
@@ -139,5 +139,19 @@ public class Task extends Observable {
         // TODO implement here
         return null;
     }
-
+    
+    public void addPredecessor(Task predTask)
+    {
+    	this.predecessors.add(predTask);
+    }
+    
+    public void addDeliverable(Deliverable d)
+    {
+    	this.deliverables.add(d);
+    }
+    
+    public void addResource(Resource r)
+    {
+    	this.requiredResources.add(r);
+    }
 }

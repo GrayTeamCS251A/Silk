@@ -98,7 +98,7 @@ public class Project extends Observable{
         taskToAdd.setTaskID(taskID);
         taskToAdd.setTaskDuration(taskDuration);
         if (taskPredecessor != null){
-            taskToAdd.setPredecessorTask(taskPredecessor);
+            taskToAdd.addPredecessor(taskPredecessor);
         }
         if (taskParent != null) {
             taskToAdd.setTaskParent(taskParent);
@@ -205,7 +205,7 @@ public class Project extends Observable{
     		{
     			taskToEdit.setTaskDuration(taskDuration);
     			if (predecessorTask != null){
-        			taskToEdit.setPredecessorTask(predecessorTask);
+        			taskToEdit.addPredecessor(predecessorTask);
     			}
     			if (parentTask != null) {
         			taskToEdit.setTaskParent(parentTask);
