@@ -5,12 +5,12 @@ import java.util.*;
 /**
  * 
  */
-public class Deliverable {
+public class Deiverable {
 
     /**
      * 
      */
-    public Deliverable() {
+    public Deiverable() {
     }
 
     /**
@@ -21,6 +21,6 @@ public class Deliverable {
     /**
      * 
      */
-    private DeliverableType type;
+    private DeiverableType type;
 
 }
