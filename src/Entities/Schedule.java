@@ -11,6 +11,7 @@ public class Schedule extends Observable {
      * 
      */
     public Schedule() {
+    	this.isCurrent = false;
     }
 
     /**
@@ -25,6 +26,10 @@ public class Schedule extends Observable {
     public Schedule generateSchedule(List<Task> tasks) {
         // TODO implement here
         return null;
+    }
+    
+    public boolean getIsCurrent() {
+    	return isCurrent;
     }
 
 }
