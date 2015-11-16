@@ -116,10 +116,10 @@ public class SaveProjectController implements Controller {
     			prTaskName.appendChild(doc.createTextNode(t.getTaskName()));
     			
     			Element prTaskDescription = doc.createElement("TaskDescription");
-    			prTaskDescription.appendChild(doc.createTextNode(t.getTaskDescription()));
+    			prTaskDescription.appendChild(doc.createTextNode(t.getDescription()));
     			
     			Element prTaskDuration = doc.createElement("TaskDuration");
-    			prTaskDuration.appendChild(doc.createTextNode(String.valueOf(t.getTaskDuration())));
+    			prTaskDuration.appendChild(doc.createTextNode(String.valueOf(t.getDuration())));
     			
     			Element prStartTime = doc.createElement("TaskStartTime");
     			prStartTime.appendChild(doc.createTextNode(String.valueOf(t.getStartTime())));
@@ -131,12 +131,12 @@ public class SaveProjectController implements Controller {
     			prPercentCompleted.appendChild(doc.createTextNode(String.valueOf(t.getPercentCompleted())));
     			
     			Element prParentTask = doc.createElement("TaskParentTask");
-    			prParentTask.appendChild(doc.createTextNode(t.getParentTask().getTaskName()));
+    			prParentTask.appendChild(doc.createTextNode(t.getParent().getTaskName()));
     			
     			Element prTaskPredRoot = doc.createElement("TaskPredecessors");
     			int index = 1;
     			//Create an Element for each Predecessor
-    			for (Task pred: t.getTaskPredecessors())
+    			for (Task pred: t.getPredecessors())
     			{
     				Element prTaskPred = doc.createElement("TaskPredecessor");
     				prTaskPred.setAttribute("id", String.valueOf(index));
@@ -169,7 +169,7 @@ public class SaveProjectController implements Controller {
     			
     			Element prTaskResourcesRoot = doc.createElement("TaskResources");
     			index = 1;
-    			for (Resource r: t.getTaskResources())
+    			for (Resource r: t.getRequiredResources())
     			{
     				Element prTaskResource = doc.createElement("TaskResource");
     				prTaskResource.setAttribute("id", String.valueOf(index));
