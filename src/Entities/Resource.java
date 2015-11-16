@@ -5,7 +5,8 @@ import java.util.*;
 
 public class Resource extends Observable {
 	
-    private String name;
+	
+	private String name;
     private double dailyCost;
     private int resourceID;
     private ResourceType type;
