@@ -98,7 +98,7 @@ public class Project extends Observable{
         taskToAdd.setTaskID(taskID);
         taskToAdd.setTaskDuration(taskDuration);
         if (taskPredecessor != null){
-            taskToAdd.setTaskPredecessor(taskPredecessor);
+            taskToAdd.setPredecessorTask(taskPredecessor);
         }
         if (taskParent != null) {
             taskToAdd.setTaskParent(taskParent);
@@ -185,7 +185,7 @@ public class Project extends Observable{
      */
     public Task getTask(String taskName) {
         for (Task task: tasks) {
-        	if (task.getTaskName.equals(taskName))
+        	if (task.getTaskName().equals(taskName))
         	{
         		return task;
         	}
@@ -208,7 +208,7 @@ public class Project extends Observable{
         			taskToEdit.setPredecessorTask(predecessorTask);
     			}
     			if (parentTask != null) {
-        			taskToEdit.setParentTask(parentTask);
+        			taskToEdit.setTaskParent(parentTask);
     			}
     			
     			setChanged();
@@ -306,7 +306,7 @@ public class Project extends Observable{
     	}
     	
     	d.setDeliverableName(deliverableName);
-    	d.setdeliverableType(dt);
+    	d.setDeliverableType(dt);
     	
     	return d;
     }
