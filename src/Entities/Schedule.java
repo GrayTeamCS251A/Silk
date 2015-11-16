@@ -23,7 +23,7 @@ public class Schedule extends Observable {
      * @param tasks 
      * @return
      */
-    public Schedule generateSchedule(List<Task> tasks) {
+    public Schedule generateSchedule(Set<Task> tasks) {
         // TODO implement here
         return null;
     }
