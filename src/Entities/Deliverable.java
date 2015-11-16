@@ -7,29 +7,30 @@ import java.util.*;
  */
 public class Deliverable {
 
-	public enum DeliverableType {
-	    file,
-	    presentation
-	}
+	
 	private String name;
     private DeliverableType type;
+    
+    public Deliverable(){
+    	
+    }
 
     public Deliverable(String name, DeliverableType type) {
     	this.name = name;
     	this.type = type;
     }
-    public String getName(){
+    public String getDeliverableName(){
     	return this.name;
     }
-    public DeliverableType getType(){
+    public DeliverableType getDeliverableType(){
     	return this.type;
     }
     
-    public void setName(String name){
+    public void setDeliverableName(String name){
     	this.name = name;
     	
     }
-    public void setType(DeliverableType type){
+    public void setDeliverableType(DeliverableType type){
     	this.type = type;
     }
     
