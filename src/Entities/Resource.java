@@ -5,7 +5,12 @@ import java.util.*;
 
 public class Resource extends Observable {
 	
-    private String name;
+	public enum ResourceType {
+	    labor,
+	    equipment,
+	    material
+	}
+	private String name;
     private double dailyCost;
     private int resourceID;
     private ResourceType type;
