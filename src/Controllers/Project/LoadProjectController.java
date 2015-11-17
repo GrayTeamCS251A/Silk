@@ -279,11 +279,11 @@ public class LoadProjectController implements Controller {
 					
 					
 					project.createTaskfromLoadProject(taskName, taskID, taskDuration);
-					project.getTask(taskName).setParentTask(project.getTask(parentTaskName));
-					project.getTask(taskName).setTaskDescription(taskDescription);
+					project.getTask(taskName).setTaskParent(project.getTask(parentTaskName));
+					project.getTask(taskName).setDescription(taskDescription);
 					project.getTask(taskName).setPercentCompleted(percentCompleted);
-					project.getTask(taskName).setStartTime(taskStartTime);
-					project.getTask(taskName).setEndTime(taskEndTime);
+					project.getTask(taskName).setStartTime(Double.parseDouble(taskStartTime));
+					project.getTask(taskName).setEndTime(Double.parseDouble(taskEndTime));
 					
 					//Set the list of predecessor tasks
 					for (int l = 0; l < listOfTaskPredecessorNames.size(); l++)
