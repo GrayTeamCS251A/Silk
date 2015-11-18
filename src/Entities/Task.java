@@ -26,6 +26,7 @@ public class Task extends Observable {
     	this.name = name;
     	this.description = description;
     	this.duration = duration;
+    	children=new ArrayList<Task>();
     }
 
     //Second Constructor
