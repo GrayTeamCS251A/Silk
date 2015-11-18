@@ -45,6 +45,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import org.jgraph.JGraph;
+
 //import org.jgraph.JGraph;
 
 
@@ -65,6 +67,11 @@ import Entities.Project;
 import Entities.Resource;
 import Entities.ResourceType;
 import Entities.Task;
+import graph.Arrow;
+import graph.Graph;
+import graph.GraphUtils;
+import graph.Link;
+import graph.Node;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public class MainUI{
@@ -86,6 +93,7 @@ public class MainUI{
 	private JMenuItem save;
 	private JMenuItem load;
 	private JMenuItem Edit;
+	private JTable table = new JTable();
 	private JList resourceList = new JList();
 	private JTree taskTree = new JTree();
 	private Project project = new Project();
@@ -154,6 +162,8 @@ public class MainUI{
 		
 		treeTest();
 		resouceTest();
+		tableTest();
+		graphTest();
 	}
 
 	/**
@@ -617,8 +627,7 @@ public class MainUI{
 		tree.setModel(treeModel);
 		
 	}
-	
-	
+		
 	private void helper(DefaultMutableTreeNode root,List<Task> listTask){
 		if(listTask.isEmpty()){
 			return;
@@ -644,8 +653,7 @@ public class MainUI{
 		}
 		}	
 	}
-	
-	
+		
 	private void treeTest(){
 		List<Task> x= new ArrayList<Task>();				
 		Task y0=new Task(2,"T21","C",2);
@@ -675,8 +683,7 @@ public class MainUI{
 			model.addElement(r);
 		}		
 	}
-	
-	
+		
 	private void resouceTest(){
 		ArrayList<Resource> x =new ArrayList<Resource>();
 		x.add(new Resource(1,"a",3.3,ResourceType.equipment));
@@ -684,6 +691,43 @@ public class MainUI{
 		x.add(new Resource(3,"af",3.3,ResourceType.equipment));
 		x.add(new Resource(4,"d",3.3,ResourceType.equipment));
 		displayRes(resourceList,x);
+	}
+
+	private void displayTable(String columnNames[], String dataValues[][]){
+		table = new JTable( dataValues, columnNames );
+		scheduleScrollPane.setViewportView(table);
+	}
+	
+	private void tableTest(){
+		// Create columns names
+		String columnNames[] = { "Column 1", "Column 2" };
+
+		// Create some data
+		String dataValues[][] =
+		{
+			{ "12", "234" },
+			{ "-123", "43" },
+			{ "93", "89.2"},
+			{ "279", "9033"}
+		};
+		displayTable(columnNames,dataValues);
+	}
+
+	private void displayGraph(Graph graph){
+		JGraph graphView=GraphUtils.makeJGraph(graph);
+		scheduleScrollPane.setViewportView(graphView);
+	}
+	
+	private void graphTest(){
+        Graph simpsons = new Graph();
+
+        Node homer = new Node("Homer");
+        Node marge = new Node("Marge");
+
+        simpsons.add(homer, 200, 100);
+        simpsons.add(marge, 400, 100);
+
+        displayGraph(simpsons);
 	}
 }
 
