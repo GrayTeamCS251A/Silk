@@ -17,19 +17,22 @@ public class Task extends Observable {
 	    private Set<Deliverable> deliverables;
 	    private Set<Resource> requiredResources;
 	    private Set<Task> predecessors;
-	    private List<Task> children=new ArrayList<Task>() ;
+	    private List<Task> children;
 	    private Task parent;
+
 	//Make constructor only take 4 arguments - ID, name, description, duration
     public Task(int taskID, String name, String description, int duration) {
     	this.taskID = taskID;
     	this.name = name;
-    	this.description= description;
+    	this.description = description;
     	this.duration = duration;
     }
+
     //Second Constructor
-   public Task(){
-	   
-   }
+    public Task(){
+    	this(-1, "", "", 0);
+    }
+
    //getters
    public int getTaskID(){
 	   return taskID;
@@ -133,11 +136,11 @@ public class Task extends Observable {
     }
 
     /**
-     * @return
+     * Calculates the start time of this Task and any subtasks (and their subtasks). startTimes should be integer values
+     * @param startTime the start time of this Task
      */
-    public List<Task> calculateCriticalPath() {
-        // TODO implement here
-        return null;
+    public void calculateStartTimes(int startTime) {
+    	// TODO
     }
     
     public void addPredecessor(Task predTask)
