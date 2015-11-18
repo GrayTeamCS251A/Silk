@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 import java.awt.Color;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -62,6 +63,7 @@ import Controllers.Tasks.DeleteTaskController;
 import Controllers.Tasks.EditTaskController;
 import Entities.Project;
 import Entities.Resource;
+import Entities.ResourceType;
 import Entities.Task;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
@@ -151,6 +153,7 @@ public class MainUI{
 		initSaveAndLoad();
 		
 		treeTest();
+		resouceTest();
 	}
 
 	/**
@@ -664,6 +667,23 @@ public class MainUI{
 	
 	}
 	
+	private void displayRes(JList resourceList, List<Resource> resouces){
+		
+		DefaultListModel model = new DefaultListModel();
+		resourceList.setModel(model);
+		for (Resource r:resouces){
+			model.addElement(r);
+		}		
+	}
 	
+	
+	private void resouceTest(){
+		ArrayList<Resource> x =new ArrayList<Resource>();
+		x.add(new Resource(1,"a",3.3,ResourceType.equipment));
+		x.add(new Resource(2,"ad",3.3,ResourceType.equipment));
+		x.add(new Resource(3,"af",3.3,ResourceType.equipment));
+		x.add(new Resource(4,"d",3.3,ResourceType.equipment));
+		displayRes(resourceList,x);
+	}
 }
 

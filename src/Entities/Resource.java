@@ -72,5 +72,9 @@ public class Resource extends Observable {
         if (type != null)
         	setResourceType(type);
     }
+     
+    public String toString(){
+    	return name;
+    }
 
 }
