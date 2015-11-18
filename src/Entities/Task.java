@@ -17,7 +17,7 @@ public class Task extends Observable {
 	    private Set<Deliverable> deliverables;
 	    private Set<Resource> requiredResources;
 	    private Set<Task> predecessors;
-
+	    private List<Task> children=new ArrayList<Task>() ;
 	    private Task parent;
 	//Make constructor only take 4 arguments - ID, name, description, duration
     public Task(int taskID, String name, String description, int duration) {
@@ -154,4 +154,14 @@ public class Task extends Observable {
     {
     	this.requiredResources.add(r);
     }
+	public List<Task> getChildren() {
+		return children;
+	}
+	public void setChildren(List<Task> children) {
+		this.children = children;
+	}
+	
+	public String toString(){
+		return name;
+	}
 }

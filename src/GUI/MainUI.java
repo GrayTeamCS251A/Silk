@@ -30,6 +30,8 @@ import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -38,6 +40,8 @@ import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 //import org.jgraph.JGraph;
@@ -58,6 +62,8 @@ import Controllers.Tasks.DeleteTaskController;
 import Controllers.Tasks.EditTaskController;
 import Entities.Project;
 import Entities.Resource;
+import Entities.Task;
+
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public class MainUI{
 
@@ -143,6 +149,8 @@ public class MainUI{
 		initNewProjectAction();
 		initEditProjectAction();
 		initSaveAndLoad();
+		
+		treeTest();
 	}
 
 	/**
@@ -260,6 +268,8 @@ public class MainUI{
 		btnTable = new JButton("Table");
 		btnTable.setBounds(186, 360, 84, 23);
 		Schedule_panel.add(btnTable);
+		
+		
 	}
 	
 	
@@ -592,5 +602,68 @@ public class MainUI{
 				
 	}
 
+	
+	
+	private void displayTree(JTree tree, List<Task> listTask){
+		
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Tasks");
+		
+		helper(root,listTask);
+					
+		DefaultTreeModel treeModel = new DefaultTreeModel(root);
+		tree.setModel(treeModel);
+		
+	}
+	
+	
+	private void helper(DefaultMutableTreeNode root,List<Task> listTask){
+		if(listTask.isEmpty()){
+			return;
+		}
+		
+		for (Task t : listTask)
+		{			
+		  DefaultMutableTreeNode aTask = new DefaultMutableTreeNode(t);	  	  
+		  root.add(aTask);
+		  aTask.add(new DefaultMutableTreeNode("ID:"+t.getTaskID()));
+		  aTask.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
+		  aTask.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));	
+		  
+		  
+		for (Task innerTask : t.getChildren())
+		{
+		  DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(innerTask);
+		  aTask.add(newRoot);	
+		  newRoot.add(new DefaultMutableTreeNode("ID:"+t.getTaskID()));
+		  newRoot.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
+		  newRoot.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));	
+		  helper(newRoot,innerTask.getChildren());							
+		}
+		}	
+	}
+	
+	
+	private void treeTest(){
+		List<Task> x= new ArrayList<Task>();				
+		Task y0=new Task(2,"T21","C",2);
+		Task y1=new Task(2,"T22","C",2);
+		Task y2=new Task(2,"T22","C",2);			
+		x.add(new Task(1,"T1","A",1));
+		x.add(new Task(2,"T2","B",2));
+		x.get(1).getChildren().add(y0);
+		x.get(1).getChildren().add(y1);
+		x.get(1).getChildren().add(y2);
+		x.add(new Task(2,"T3","C",3));
+		x.add(new Task(2,"T4","D",4));		
+		y2.getChildren().add(new Task(3,"dd","sf",3));
+		y2.getChildren().add(new Task(2,"ddasd","sfdsf",3));					
+		x.get(3).getChildren().add(y0);
+		x.get(3).getChildren().add(y1);
+		x.get(3).getChildren().add(y2);	
+		displayTree(taskTree,x);
+	
+	}
+	
+	
 }
 
