@@ -59,6 +59,7 @@ public class Schedule extends Observable {
     		/** export the schedule **/
     	} else {
     		/** don't **/
+    		/* comment */
     	}
 
     	return null;    	
