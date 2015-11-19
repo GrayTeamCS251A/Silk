@@ -10,8 +10,6 @@ import Entities.Project;
 import Entities.Resource;
 import Entities.Task;
 
-import java.io.File;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -223,11 +221,6 @@ public class SaveProjectController implements Controller {
         return null;
     }
 
-	@Override
-	public void execute(String command, Oracle oracle) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public void executeSaveProject(String fileName) {
 		convert(project, fileName);

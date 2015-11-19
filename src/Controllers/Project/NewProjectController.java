@@ -1,8 +1,5 @@
 package Controllers.Project;
 
-import java.util.*;
-
-import AnalysisModel.Boundaries.Panels.Oracle;
 import Controllers.Controller;
 
 /**
@@ -16,14 +13,8 @@ public class NewProjectController implements Controller {
     public NewProjectController() {
     }
 
-	@Override
-	public void execute(String command, Oracle oracle) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public void executeNewProject(String projectName, String startTime, String projectAuthor){
-		project.updateInfo(projectName, startTime, projectAuthor);
+	public void executeNewProject(String projectName, Integer year, Integer month, Integer day, String projectAuthor){
+		project.updateInfo(projectName, year, month, day, projectAuthor);
 	}
 
 }

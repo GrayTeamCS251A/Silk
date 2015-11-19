@@ -1,10 +1,6 @@
 package Controllers.Resources;
 
-import java.util.*;
-
-import AnalysisModel.Boundaries.Panels.Oracle;
 import Controllers.Controller;
-import Entities.Resource;
 import Entities.ResourceType;
 
 /**
@@ -18,11 +14,8 @@ public class EditResourceController implements Controller {
     public EditResourceController() {
     }
 
-	@Override
-	public void execute(String command, Oracle oracle) {
-	}
 
-	public void executeEditResource(String resourceName, int resourceID, double dailyCost, String resourceType)
+	public void executeEditResource(String resourceID, double dailyCost, String resourceType)
 	{	
 		//Convert resourceType to a ResourceType Entity
 		ResourceType r = null;
@@ -36,6 +29,6 @@ public class EditResourceController implements Controller {
 				break;
 		}
 		
-		project.editResource(resourceName, resourceID, dailyCost, r);
+		project.editResource(resourceID, dailyCost, r);
 	}
 }
