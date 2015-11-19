@@ -738,18 +738,18 @@ public class MainUI{
 
 	private void treeTest(){
 		List<Task> x= new ArrayList<Task>();				
-		Task y0=new Task(2,"T21","C",2);
-		Task y1=new Task(2,"T22","C",2);
-		Task y2=new Task(2,"T22","C",2);			
-		x.add(new Task(1,"T1","A",1));
-		x.add(new Task(2,"T2","B",2));
+		Task y0=new Task("2","T21","C",2);
+		Task y1=new Task("2","T22","C",2);
+		Task y2=new Task("2","T22","C",2);			
+		x.add(new Task("1","T1","A",1));
+		x.add(new Task("2","T2","B",2));
 		x.get(1).getChildren().add(y0);
 		x.get(1).getChildren().add(y1);
 		x.get(1).getChildren().add(y2);
-		x.add(new Task(2,"T3","C",3));
-		x.add(new Task(2,"T4","D",4));		
-		y2.getChildren().add(new Task(3,"dd","sf",3));
-		y2.getChildren().add(new Task(2,"ddasd","sfdsf",3));					
+		x.add(new Task("2","T3","C",3));
+		x.add(new Task("2","T4","D",4));		
+		y2.getChildren().add(new Task("3","dd","sf",3));
+		y2.getChildren().add(new Task("2","ddasd","sfdsf",3));					
 		x.get(3).getChildren().add(y0);
 		x.get(3).getChildren().add(y1);
 		x.get(3).getChildren().add(y2);	
@@ -759,10 +759,10 @@ public class MainUI{
 
 	private void resouceTest(){
 		ArrayList<Resource> x =new ArrayList<Resource>();
-		x.add(new Resource(1,"a",3.3,ResourceType.equipment));
-		x.add(new Resource(2,"ad",3.3,ResourceType.equipment));
-		x.add(new Resource(3,"af",3.3,ResourceType.equipment));
-		x.add(new Resource(4,"d",3.3,ResourceType.equipment));
+		x.add(new Resource("1","a",3.3,ResourceType.equipment));
+		x.add(new Resource("2","ad",3.3,ResourceType.equipment));
+		x.add(new Resource("3","af",3.3,ResourceType.equipment));
+		x.add(new Resource("4","d",3.3,ResourceType.equipment));
 		displayRes(resourceList,x);
 	}
 	

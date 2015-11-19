@@ -25,8 +25,9 @@ public abstract class TasksView implements View {
     }
 
     public void update(Observable o, Object arg){
-    	Collection<Task> list =project.getTasks();
-    	MainUI.displayTree(tree,list);	
+    	HashMap<String,Task> list =project.getTasks();
+    	List<Task> tasks = new ArrayList<Task>(list.values());
+    	MainUI.displayTree(tree,tasks);	
     }
 		
 }
