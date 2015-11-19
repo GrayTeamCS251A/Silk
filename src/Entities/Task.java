@@ -120,7 +120,7 @@ public class Task extends Observable {
     /**
      * @param info
      */
-    public void updateTask(int taskID, String name, String description, int duration, double startTime, double endTime, double percentCompleted, Set<Resource> requiredResources, Set<Task> predecessors, Task parent) {
+    public void updateTask(String taskID, String name, String description, int duration, double startTime, double endTime, double percentCompleted, Set<Resource> requiredResources, Set<Task> predecessors, Task parent) {
         // TODO implement here
     	setTaskID(taskID);
     	setName(name);
