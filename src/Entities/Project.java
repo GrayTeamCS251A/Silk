@@ -141,6 +141,20 @@ public class Project extends Observable{
         setChanged();
         notifyObservers();
     }
+    
+    public void createResourcefromLoadProject(String resourceName, String resourceID, double dailyCost, ResourceType r) {
+        Resource resourceToCreate = new Resource();
+        resourceToCreate.setname(resourceName);
+
+        resourceToCreate.setResourceID(resourceID);
+        resourceToCreate.setDailyCost(dailyCost);
+        resourceToCreate.setResourceType(r);
+        
+        resources.put(resourceID, resourceToCreate);
+        setChanged();
+        notifyObservers();
+    }
+
 
     /**
      * @return
@@ -299,9 +313,9 @@ public class Project extends Observable{
     	return this.endTime;
     }
     
-    public void setEndTime(Calendar endtime)
+    public void setEndTime(Integer year, Integer month, Integer day)
     {
-    	this.endTime = endtime;
+    	this.endTime = new GregorianCalendar(year, month, day);
     }
     
     public Deliverable createDeliverable(String deliverableName, String deliverableType)
