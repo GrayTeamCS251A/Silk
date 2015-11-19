@@ -138,7 +138,7 @@ public class SaveProjectController implements Controller {
     			Element prTaskPredRoot = doc.createElement("TaskPredecessors");
     			int index = 1;
     			//Create an Element for each Predecessor
-    			for (Task pred: t.getPredecessors())
+    			for (Task pred: t.getPredecessors().values())
     			{
     				Element prTaskPred = doc.createElement("TaskPredecessor");
     				prTaskPred.setAttribute("id", pred.getTaskID());
@@ -171,7 +171,7 @@ public class SaveProjectController implements Controller {
     			
     			Element prTaskResourcesRoot = doc.createElement("TaskResources");
     			index = 1;
-    			for (Resource r: t.getRequiredResources())
+    			for (Resource r: t.getRequiredResources().values())
     			{
     				Element prTaskResource = doc.createElement("TaskResource");
     				prTaskResource.setAttribute("id", r.getResourceID());

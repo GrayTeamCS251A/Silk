@@ -2,7 +2,9 @@ import static org.junit.Assert.*;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
@@ -30,7 +32,7 @@ public class ScheduleUnitTests {
 		Schedule tester = new Schedule();
 
 		// create various Task objects
-		Set<Task> tasks = null;
+		HashMap<String, Task> tasks = null;
 
 		// assert statements
 		assertEquals("Schedule should start as not current", false, tester.isCurrent());
@@ -48,7 +50,7 @@ public class ScheduleUnitTests {
 		Schedule tester = new Schedule();
 
 		// create various Task objects
-		Set<Task> tasks = null;
+		HashMap<String, Task> tasks = null;
 
 		// assert statements
 		assertEquals("generateSchedule should return null if given no values", null, tester.generateSchedule(tasks));
@@ -61,8 +63,8 @@ public class ScheduleUnitTests {
 		Schedule tester = new Schedule();
 
 		// create various Task objects
-		Set<Task> tasks = new HashSet<Task>();
-		tasks.add(new Task(1,"Task1", "description", 10));
+		HashMap<String, Task> tasks = new HashMap<String,Task>();
+		tasks.put("1", new Task("1","Task1", "description", 10));
 
 		// assert statements
 		assertEquals("generateSchedule should return null if given no startDate", null, tester.generateSchedule(tasks));
@@ -75,9 +77,9 @@ public class ScheduleUnitTests {
 		Schedule tester = new Schedule();
 
 		// create a single Task object
-		Set<Task> tasks = new HashSet<Task>();
-		Task task1 = new Task(1,"Task1", "description", 10);
-		tasks.add(task1);
+		HashMap<String, Task> tasks = new HashMap<String,Task>();
+		Task task1 = new Task("1","Task1", "description", 10);
+		tasks.put("1", task1);
 		
 		// create startDate
 		Calendar startDate = new GregorianCalendar(2011, Calendar.JULY, 3);
@@ -95,12 +97,12 @@ public class ScheduleUnitTests {
 		Schedule tester = new Schedule();
 
 		// create various Task objects
-		Set<Task> tasks = new HashSet<Task>();
-		Task task1 = new Task(1,"Task1", "description", 10);
-		tasks.add(task1);
-		Task task2 = new Task(2,"Task2", "description", 10);
+		HashMap<String, Task> tasks = new HashMap<String,Task>();
+		Task task1 = new Task("1a","Task1", "description", 10);
+		tasks.put("1", task1);
+		Task task2 = new Task("1","Task2", "description", 10);
 		task2.addPredecessor(task1);
-		tasks.add(task2);
+		tasks.put("2", task2);
 		
 		// create startDate
 		Calendar startDate = new GregorianCalendar(2011, Calendar.JULY, 3);

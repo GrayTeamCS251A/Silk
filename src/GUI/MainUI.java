@@ -33,7 +33,10 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -679,29 +682,28 @@ public class MainUI{
 		
 	}
 		
-	public static void helper(DefaultMutableTreeNode root,Collection<Task> listTask){
-		if(listTask.isEmpty()){
+	public static void helper(DefaultMutableTreeNode root, Map<String, Task> mapTask){
+		if(mapTask.isEmpty()){
 			return;
 		}
 		
-		for (Task t : listTask)
+		for (Task t : mapTask.values())
 		{			
-		  DefaultMutableTreeNode aTask = new DefaultMutableTreeNode(t);	  	  
-		  root.add(aTask);
-		  aTask.add(new DefaultMutableTreeNode("ID:"+t.getTaskID()));
-		  aTask.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
-		  aTask.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));	
-		  
-		  
-		for (Task innerTask : t.getChildren())
-		{
-		  DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(innerTask);
-		  aTask.add(newRoot);	
-		  newRoot.add(new DefaultMutableTreeNode("ID:"+t.getTaskID()));
-		  newRoot.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
-		  newRoot.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));	
-		  helper(newRoot,innerTask.getChildren());							
-		}
+			DefaultMutableTreeNode aTask = new DefaultMutableTreeNode(t);	  	  
+			root.add(aTask);
+			aTask.add(new DefaultMutableTreeNode("ID:"+t.getTaskID()));
+			aTask.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
+			aTask.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));	
+			
+			for (Task innerTask : t.getChildren().values())
+			{
+				DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(innerTask);
+				aTask.add(newRoot);	
+				newRoot.add(new DefaultMutableTreeNode("ID:"+t.getTaskID()));
+				newRoot.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
+				newRoot.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));	
+				helper(newRoot,innerTask.getChildren());							
+			}
 		}	
 	}
 		
@@ -743,16 +745,16 @@ public class MainUI{
 		Task y2=new Task("2","T22","C",2);			
 		x.add(new Task("1","T1","A",1));
 		x.add(new Task("2","T2","B",2));
-		x.get(1).getChildren().add(y0);
-		x.get(1).getChildren().add(y1);
-		x.get(1).getChildren().add(y2);
+		x.get(1).getChildren().put("y0",y0);
+		x.get(1).getChildren().put("y1",y1);
+		x.get(1).getChildren().put("y2",y2);
 		x.add(new Task("2","T3","C",3));
 		x.add(new Task("2","T4","D",4));		
-		y2.getChildren().add(new Task("3","dd","sf",3));
-		y2.getChildren().add(new Task("2","ddasd","sfdsf",3));					
-		x.get(3).getChildren().add(y0);
-		x.get(3).getChildren().add(y1);
-		x.get(3).getChildren().add(y2);	
+		y2.getChildren().put("3",new Task("3","dd","sf",3));
+		y2.getChildren().put("2",new Task("2","ddasd","sfdsf",3));					
+		x.get(3).getChildren().put("y0",y0);
+		x.get(3).getChildren().put("y1",y1);
+		x.get(3).getChildren().put("y2",y2);	
 		displayTree(taskTree,x);
 	
 	}

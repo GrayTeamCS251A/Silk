@@ -28,7 +28,7 @@ public class Schedule extends Observable {
     /**
      * References to all the tasks used to make the schedule 
      */
-    private Set<Task> tasks;
+    private HashMap<String,Task> tasks;
 
     /**
      * The start date of the project, used to calculate days for the schedule
@@ -41,7 +41,7 @@ public class Schedule extends Observable {
      * @param tasks the collection of Task references, in no particular order
      * @return a reference to this schedule. The tasks will have been assigned startTimes
      */
-    public Schedule generateSchedule(Calendar startDate, Set<Task> tasks) {
+    public Schedule generateSchedule(Calendar startDate, HashMap<String,Task> tasks) {
         // TODO implement here
     	this.startDate = startDate;
     	
@@ -52,7 +52,7 @@ public class Schedule extends Observable {
      * @param tasks the collection of Task references, in no particular order
      * @return a reference to this schedule. The tasks will have been assigned startTimes
      */
-    public Schedule generateSchedule(Set<Task> tasks) {
+    public Schedule generateSchedule(HashMap<String,Task> tasks) {
     	this.tasks = tasks;
     	this.current = true;
 
@@ -61,12 +61,8 @@ public class Schedule extends Observable {
     		// create a super task
     		Task superTask = new Task();
     		
-    		// convert tasks to List
-    		ArrayList<Task> taskList = new ArrayList<Task>();
-    		taskList.addAll(tasks);
-    		
     		// assign the tasks as the children of our super task
-    		superTask.setChildren(taskList);
+    		superTask.setChildren(tasks);
 
     		// calculate the start times
     		superTask.calculateStartTimes(0);
