@@ -89,8 +89,18 @@ public class LoadProjectController implements Controller {
 					projectEndTime = el.getFirstChild().getNodeValue();
 				}
 				
-				project.updateInfo(projectName, projectStartTime, projectAuthor);
-				project.setEndTime(new Time(Integer.parseInt(projectEndTime)));
+				Integer year = Integer.parseInt(projectStartTime.substring(projectStartTime.indexOf("YEAR=") + 5, projectStartTime.indexOf(",MONTH=")));
+				Integer month = Integer.parseInt(projectStartTime.substring(projectStartTime.indexOf("MONTH=") + 6, projectStartTime.indexOf(",WEEK_OF_YEAR=")));
+				Integer dayOfMonth = Integer.parseInt(projectStartTime.substring(projectStartTime.indexOf("DAY_OF_MONTH=") + 13, projectStartTime.indexOf(",DAY_OF_YEAR=")));
+				project.updateInfo(projectName, year, month, dayOfMonth, projectAuthor);
+				
+				if (!projectEndTime.equals(""))
+				{
+					Integer endyear = Integer.parseInt(projectStartTime.substring(projectStartTime.indexOf("YEAR=") + 5, projectStartTime.indexOf(",MONTH=")));
+					Integer endmonth = Integer.parseInt(projectStartTime.substring(projectStartTime.indexOf("MONTH=") + 6, projectStartTime.indexOf(",WEEK_OF_YEAR=")));
+					Integer enddayOfMonth = Integer.parseInt(projectStartTime.substring(projectStartTime.indexOf("DAY_OF_MONTH=") + 13, projectStartTime.indexOf(",DAY_OF_YEAR=")));
+					project.setEndTime(endyear, endmonth, enddayOfMonth);
+				}
 			}
 			
 			//**************************
@@ -105,7 +115,7 @@ public class LoadProjectController implements Controller {
 				NodeList projectResourceNodeList = resourceInfoList.getElementsByTagName("Resource");
 				for(int i = 0 ; i < projectResourceNodeList.getLength(); i++) {
 					String resourceName = "";
-					Integer resourceID = 0;
+					String resourceID = "";
 					double dailyCost = 0.0;
 					ResourceType r = null; 
 					
@@ -117,7 +127,7 @@ public class LoadProjectController implements Controller {
 						resourceName = el.getFirstChild().getNodeValue();
 					}
 					
-					resourceID = Integer.parseInt(resourceInfo.getAttribute("id"));
+					resourceID = resourceInfo.getAttribute("id");
 					
 					NodeList resourceDailyCostInfoList = resourceInfo.getElementsByTagName("ResourceDailyCost");
 					if(resourceDailyCostInfoList != null && resourceDailyCostInfoList.getLength() > 0) {
@@ -140,7 +150,7 @@ public class LoadProjectController implements Controller {
 						}
 					}
 					
-					project.createResource(resourceName, resourceID, dailyCost, r);
+					project.createResourcefromLoadProject(resourceName, resourceID, dailyCost, r);
 				}
 			}
 			
@@ -155,18 +165,13 @@ public class LoadProjectController implements Controller {
 					
 				NodeList projectTaskNodeList = taskInfoList.getElementsByTagName("Task");
 				
+				//First Create the basic task info (name, id, duration, description, percentcompleted)
 				for(int i = 0 ; i < projectTaskNodeList.getLength(); i++) {
 					String taskName = "";
-					Integer taskID = 0;
+					String taskID = "";
 					String taskDescription = "";
 					Integer taskDuration = 0;
 					double percentCompleted = 0.0;
-					String taskStartTime = "";
-					String taskEndTime = "";
-					String parentTaskName = "";
-					List<String> listOfTaskPredecessorNames = new LinkedList<String>();
-					List<Deliverable> listOfTaskDeliverables = new LinkedList<Deliverable>();
-					List<String> listOfTaskResourceNames = new LinkedList<String>();
 					
 					Element taskInfo = (Element) projectTaskNodeList.item(i);
 					
@@ -176,7 +181,7 @@ public class LoadProjectController implements Controller {
 						taskName = el.getFirstChild().getNodeValue();
 					}
 					
-					taskID = Integer.parseInt(taskInfo.getAttribute("id"));
+					taskID = taskInfo.getAttribute("id");
 					
 					NodeList taskDescriptionInfoList = taskInfo.getElementsByTagName("TaskDescription");
 					if(taskDescriptionInfoList != null && taskDescriptionInfoList.getLength() > 0) {
@@ -196,6 +201,24 @@ public class LoadProjectController implements Controller {
 						percentCompleted = Double.parseDouble(el.getFirstChild().getNodeValue());
 					}
 					
+					project.createTaskfromLoadProject(taskName, taskID, taskDuration);
+					project.getTask(taskName).setDescription(taskDescription);
+					project.getTask(taskName).setPercentCompleted(percentCompleted);
+				}
+				
+				for(int i = 0 ; i < projectTaskNodeList.getLength(); i++) {
+					String taskID = "";
+					String taskStartTime = "";
+					String taskEndTime = "";
+					String parentTaskID = "";
+					List<String> listOfTaskPredecessorIDs = new LinkedList<String>();
+					List<Deliverable> listOfTaskDeliverables = new LinkedList<Deliverable>();
+					List<String> listOfTaskResourceIDs = new LinkedList<String>();
+					
+					Element taskInfo = (Element) projectTaskNodeList.item(i);
+					
+					taskID = taskInfo.getAttribute("id");
+					
 					NodeList taskStarTimeInfoList = taskInfo.getElementsByTagName("TaskStartTime");
 					if(taskStarTimeInfoList != null && taskStarTimeInfoList.getLength() > 0) {
 						Element el = (Element)taskStarTimeInfoList.item(0);
@@ -211,7 +234,7 @@ public class LoadProjectController implements Controller {
 					NodeList taskParentTaskInfoList = taskInfo.getElementsByTagName("TaskParentTask");
 					if(taskParentTaskInfoList != null && taskParentTaskInfoList.getLength() > 0) {
 						Element el = (Element)taskParentTaskInfoList.item(0);
-						parentTaskName = el.getFirstChild().getNodeValue();
+						parentTaskID = el.getFirstChild().getNodeValue();
 					}
 					
 					NodeList taskPredecessorsInfoList = taskInfo.getElementsByTagName("TaskPredecessors");
@@ -221,11 +244,11 @@ public class LoadProjectController implements Controller {
 						NodeList taskPredInfoList = taskPredInfo.getElementsByTagName("TaskPredecessor");
 						for (int y = 0; y < taskPredInfoList.getLength(); y++)
 						{
-							String predTaskName = "";
+							String predTaskID = "";
 							Element el = (Element)taskPredInfoList.item(0);
-							predTaskName = el.getFirstChild().getNodeValue();
+							predTaskID = el.getAttribute("id");
 							
-							listOfTaskPredecessorNames.add(predTaskName);
+							listOfTaskPredecessorIDs.add(predTaskID);
 						}
 					}
 					
@@ -266,41 +289,37 @@ public class LoadProjectController implements Controller {
 						{
 							Element resElement = (Element) taskResInfoList.item(y);
 							
-							String taskResName = "";
+							String taskResID = "";
 							NodeList taskResNameInfo = resElement.getElementsByTagName("TaskResource");
 							if(taskParentTaskInfoList != null && taskResNameInfo.getLength() > 0) {
 								Element el = (Element)taskResNameInfo.item(0);
-								taskResName = el.getFirstChild().getNodeValue();
+								taskResID = el.getAttribute("id");
 							}
 							
-							listOfTaskResourceNames.add(taskResName);	
+							listOfTaskResourceIDs.add(taskResID);	
 						}
 					}
-					
-					
-					project.createTaskfromLoadProject(taskName, taskID, taskDuration);
-					project.getTask(taskName).setTaskParent(project.getTask(parentTaskName));
-					project.getTask(taskName).setDescription(taskDescription);
-					project.getTask(taskName).setPercentCompleted(percentCompleted);
-					project.getTask(taskName).setStartTime(Double.parseDouble(taskStartTime));
-					project.getTask(taskName).setEndTime(Double.parseDouble(taskEndTime));
+										
+					project.getTask(taskID).setTaskParent(project.getTask(parentTaskID));
+					project.getTask(taskID).setStartTime(Double.parseDouble(taskStartTime));
+					project.getTask(taskID).setEndTime(Double.parseDouble(taskEndTime));
 					
 					//Set the list of predecessor tasks
-					for (int l = 0; l < listOfTaskPredecessorNames.size(); l++)
+					for (int l = 0; l < listOfTaskPredecessorIDs.size(); l++)
 					{
-						project.getTask(taskName).addPredecessor(project.getTask(listOfTaskPredecessorNames.get(l)));
+						project.getTask(taskID).addPredecessor(project.getTask(listOfTaskPredecessorIDs.get(l)));
 					}
 					
 					//Set the list of deliverables for the task
 					for (int d = 0; d < listOfTaskDeliverables.size(); d++)
 					{
-						project.getTask(taskName).addDeliverable(listOfTaskDeliverables.get(d));
+						project.getTask(taskID).addDeliverable(listOfTaskDeliverables.get(d));
 					}
 					
 					//Set the list of resources for the task
-					for (int r = 0; r < listOfTaskResourceNames.size(); r++)
+					for (int r = 0; r < listOfTaskResourceIDs.size(); r++)
 					{
-						project.getTask(taskName).addResource(project.getResource(listOfTaskResourceNames.get(r)));
+						project.getTask(taskID).addResource(project.getResource(listOfTaskResourceIDs.get(r)));
 					}
 				}
 			}

@@ -133,7 +133,7 @@ public class SaveProjectController implements Controller {
     			prPercentCompleted.appendChild(doc.createTextNode(String.valueOf(t.getPercentCompleted())));
     			
     			Element prParentTask = doc.createElement("TaskParentTask");
-    			prParentTask.appendChild(doc.createTextNode(t.getParent().getTaskName()));
+    			prParentTask.appendChild(doc.createTextNode(t.getParent().getTaskID()));
     			
     			Element prTaskPredRoot = doc.createElement("TaskPredecessors");
     			int index = 1;
