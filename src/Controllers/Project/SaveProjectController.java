@@ -195,12 +195,11 @@ public class SaveProjectController implements Controller {
     			projectTaskElementRoot.appendChild(prTaskRoot);
     		}
 
-    		
-    		
-    		
     		mainRootProject.appendChild(projectInfoElementRoot);
     		mainRootProject.appendChild(projectResourceElementsRoot);
     		mainRootProject.appendChild(projectTaskElementRoot);
+    		
+    		doc.appendChild(mainRootProject);
     		
     		// write the content into xml file
     		TransformerFactory transformerFactory = TransformerFactory.newInstance();
