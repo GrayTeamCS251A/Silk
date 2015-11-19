@@ -13,7 +13,7 @@ public class Task extends Observable {
 	    private double startTime;
 	    private double endTime;
 	    private double percentCompleted;
-	    private int taskID;
+	    private String taskID;
 	    private Set<Deliverable> deliverables;
 	    private Set<Resource> requiredResources;
 	    private Set<Task> predecessors;
@@ -21,7 +21,7 @@ public class Task extends Observable {
 	    private Task parent;
 
 	//Make constructor only take 4 arguments - ID, name, description, duration
-    public Task(int taskID, String name, String description, int duration) {
+    public Task(String taskID, String name, String description, int duration) {
     	this.taskID = taskID;
     	this.name = name;
     	this.description = description;
@@ -31,11 +31,11 @@ public class Task extends Observable {
 
     //Second Constructor
     public Task(){
-    	this(-1, "", "", 0);
+    	this("-1", "", "", 0);
     }
 
    //getters
-   public int getTaskID(){
+   public String getTaskID(){
 	   return taskID;
    }
    public String getTaskName(){
@@ -83,7 +83,7 @@ public class Task extends Observable {
 	   getParent();
    }
    
-   public void setTaskID(int taskID){
+   public void setTaskID(String taskID){
 	   this.taskID = taskID;
    }
    public void setName(String name){
@@ -158,6 +158,7 @@ public class Task extends Observable {
     {
     	this.requiredResources.add(r);
     }
+	
 	public List<Task> getChildren() {
 		return children;
 	}
