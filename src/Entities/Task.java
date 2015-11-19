@@ -15,9 +15,9 @@ public class Task extends Observable {
 	    private double percentCompleted;
 	    private String taskID;
 	    private Set<Deliverable> deliverables;
-	    private Set<Resource> requiredResources;
-	    private Set<Task> predecessors;
-	    private List<Task> children;
+	    private HashMap<String, Resource> requiredResources;
+	    private HashMap<String, Task> predecessors;
+	    private HashMap<String, Task> children;
 	    private Task parent;
 
 	//Make constructor only take 4 arguments - ID, name, description, duration
@@ -26,7 +26,7 @@ public class Task extends Observable {
     	this.name = name;
     	this.description = description;
     	this.duration = duration;
-    	children=new ArrayList<Task>();
+    	children = new HashMap<String, Task>();
     }
 
     //Second Constructor
@@ -60,10 +60,10 @@ public class Task extends Observable {
    public Set<Deliverable> getDeliverables(){
 	  return deliverables;
    }
-   public Set<Resource> getRequiredResources(){
+   public HashMap<String, Resource> getRequiredResources(){
 	   return requiredResources;
    }
-   public Set<Task> getPredecessors(){
+   public HashMap<String, Task> getPredecessors(){
 	   return predecessors;
    }
    public Task getParent(){
@@ -108,10 +108,10 @@ public class Task extends Observable {
    public void setDeliverables(Set<Deliverable> deliverables){
 	  this.deliverables = deliverables;
    }
-   public void setRequiredResources(Set<Resource> requiredResources){
+   public void setRequiredResources(HashMap<String, Resource> requiredResources){
 	   this.requiredResources = requiredResources;
    }
-   public void setPredecessorTask(Set<Task> predecessors){
+   public void setPredecessorTask(HashMap<String, Task> predecessors){
 	   this.predecessors = predecessors;
    }
    public void setTaskParent(Task parent){
@@ -120,7 +120,7 @@ public class Task extends Observable {
     /**
      * @param info
      */
-    public void updateTask(String taskID, String name, String description, int duration, double startTime, double endTime, double percentCompleted, Set<Resource> requiredResources, Set<Task> predecessors, Task parent) {
+    public void updateTask(String taskID, String name, String description, int duration, double startTime, double endTime, double percentCompleted, HashMap<String, Resource> requiredResources, HashMap<String, Task> predecessors, Task parent) {
         // TODO implement here
     	setTaskID(taskID);
     	setName(name);
@@ -144,9 +144,9 @@ public class Task extends Observable {
     	// TODO
     }
     
-    public void addPredecessor(Task predTask)
+    public void addPredecessor(Task predecessor)
     {
-    	this.predecessors.add(predTask);
+    	this.predecessors.put(predecessor.getTaskID(), predecessor);
     }
     
     public void addDeliverable(Deliverable d)
@@ -156,13 +156,13 @@ public class Task extends Observable {
     
     public void addResource(Resource r)
     {
-    	this.requiredResources.add(r);
+    	this.requiredResources.put(r.getResourceID(), r);
     }
 	
-	public List<Task> getChildren() {
+	public HashMap<String, Task> getChildren() {
 		return children;
 	}
-	public void setChildren(List<Task> children) {
+	public void setChildren(HashMap<String, Task> children) {
 		this.children = children;
 	}
 	

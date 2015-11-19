@@ -141,7 +141,7 @@ public class ResUI extends JDialog {
 	   
 	   public void fill(Resource r){
 		   textName.setText(r.getname());
-		   textID.setText(Integer.toString(r.getResourceID()));
+		   textID.setText(r.getResourceID());
 		   textCost.setText(Double.toString(r.getDailyCost()));
 		   textType.setText(r.getResourceType().toString());
 	   }
