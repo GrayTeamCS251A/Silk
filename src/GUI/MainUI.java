@@ -742,19 +742,19 @@ public class MainUI{
 		HashMap<String, Task> x= new HashMap<String, Task>();				
 		Task y0=new Task("2","T21","C",2);
 		Task y1=new Task("2","T22","C",2);
-		Task y2=new Task("2","T22","C",2);			
+		Task y2=new Task("2","T23","C",2);			
 		x.put("1",new Task("1","T1","A",1));
 		x.put("2",new Task("2","T2","B",2));
-		x.get(1).getChildren().put("y0",y0);
-		x.get(1).getChildren().put("y1",y1);
-		x.get(1).getChildren().put("y2",y2);
-		x.put("2",new Task("2","T3","C",3));
-		x.put("2",new Task("2","T4","D",4));		
+		x.get("1").getChildren().put("y0",y0);
+		x.get("1").getChildren().put("y1",y1);
+		x.get("1").getChildren().put("y2",y2);
+		x.put("3",new Task("2","T3","C",3));
+		x.put("4",new Task("3","T4","D",4));		
 		y2.getChildren().put("3",new Task("3","dd","sf",3));
 		y2.getChildren().put("2",new Task("2","ddasd","sfdsf",3));					
-		x.get(3).getChildren().put("y0",y0);
-		x.get(3).getChildren().put("y1",y1);
-		x.get(3).getChildren().put("y2",y2);	
+		x.get("3").getChildren().put("y0",y0);
+		x.get("3").getChildren().put("y1",y1);
+		x.get("3").getChildren().put("y2",y2);	
 		displayTree(taskTree,x);
 	
 	}
