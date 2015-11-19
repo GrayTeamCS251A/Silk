@@ -333,13 +333,13 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				Resource r=(Resource) resourceList.getSelectedValue();
-				editRes.fill(r);
-				editResourceController.executeEditResource(editRes.getTextName(), 
-						Integer.parseInt(editRes.getTextID()), 
-						Double.parseDouble(editRes.getTextCost()), 
-						editRes.getTextType());
-				editRes.setVisible(false);
+//				Resource r=(Resource) resourceList.getSelectedValue();
+//				editRes.fill(r);
+//				editResourceController.executeEditResource(editRes.getTextName(), 
+//						Integer.parseInt(editRes.getTextID()), 
+//						Double.parseDouble(editRes.getTextCost()), 
+//						editRes.getTextType());
+//				editRes.setVisible(false);
 			}
 						
 		});
@@ -379,9 +379,9 @@ public class MainUI{
 				if(x==1){
 					System.out.println("Aborted");
 				}else{
-					int selectedIndex = resourceList.getSelectedIndex();
-					deleteResourceController.executeDeleteResource(resourceList.getSelectedValue());
-					resourceList.remove(selectedIndex);
+//					int selectedIndex = resourceList.getSelectedIndex();
+//					deleteResourceController.executeDeleteResource(resourceList.getSelectedValue());
+//					resourceList.remove(selectedIndex);
 				}
 			}});
 	}
@@ -393,13 +393,13 @@ public class MainUI{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub  
 				//need to figure out how to extract selected Task from JTree
-				//editTask.fill(t);
-				editTaskController.executeEditTask(editTask.getTaskName(), 
-						Integer.parseInt(editTask.getTaskID()), 
-						Integer.parseInt(editTask.getTaskDuration()),
-						editTask.getPredecessorTask(),
-						editTask.getParentTask());
-				editTask.setVisible(false);
+
+//				editTaskController.executeEditTask(editTask.getTaskName(), 
+//						Integer.parseInt(editTask.getTaskID()), 
+//						Integer.parseInt(editTask.getTaskDuration()),
+//						editTask.getPredecessorTask(),
+//						editTask.getParentTask());
+//				editTask.setVisible(false);
 			}
 						
 		});
@@ -434,12 +434,12 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub 
-				addTaskController.executeAddTask(addTask.getTaskName(), 
-						Integer.parseInt(addTask.getTaskID()), 
-						Integer.parseInt(addTask.getTaskDuration()),
-						addTask.getPredecessorTask(),
-						addTask.getParentTask());
-				addTask.setVisible(false);
+//				addTaskController.executeAddTask(addTask.getTaskName(), 
+//						Integer.parseInt(addTask.getTaskID()), 
+//						Integer.parseInt(addTask.getTaskDuration()),
+//						addTask.getPredecessorTask(),
+//						addTask.getParentTask());
+//				addTask.setVisible(false);
 			}
 						
 		});
@@ -478,10 +478,10 @@ public class MainUI{
 				if(x==1){
 					System.out.println("Aborted");
 				}else{
-					//you code here
-					TreePath tp = taskTree.getSelectionPath();
-					deleteTaskController.executeDeleteTask(tp.getLastPathComponent());
-					taskTree.removeSelectionPath(tp);
+				
+//					TreePath tp = taskTree.getSelectionPath();
+//					deleteTaskController.executeDeleteTask(tp.getLastPathComponent());
+//					taskTree.removeSelectionPath(tp);
 				}
 			}});
 	}
@@ -546,11 +546,11 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				newProjectController.executeNewProject(newProject.getNameField(), 
-						newProject.getStartField(), 
-						newProject.getAuthorField());
-				newProject.Reset();      
-				newProject.setVisible(false);
+//				newProjectController.executeNewProject(newProject.getNameField(), 
+//						newProject.getStartField(), 
+//						newProject.getAuthorField());
+//				newProject.Reset();      
+//				newProject.setVisible(false);
 			}
 						
 		});
@@ -585,11 +585,11 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				editProject.fill(project);
-				editProjectController.executeEditProject(editProject.getNameField(), 
-						editProject.getStartField(), 
-						editProject.getAuthorField());
-				editProject.setVisible(false);
+//				editProject.fill(project);
+//				editProjectController.executeEditProject(editProject.getNameField(), 
+//						editProject.getStartField(), 
+//						editProject.getAuthorField());
+//				editProject.setVisible(false);
 			}
 						
 		});
@@ -705,6 +705,37 @@ public class MainUI{
 		}	
 	}
 		
+	public static void displayRes(JList resourceList, Collection<Resource> resouces){
+		
+		DefaultListModel model = new DefaultListModel();
+		resourceList.setModel(model);
+		for (Resource r:resouces){
+			model.addElement(r);
+		}		
+	}
+		
+	public static void displayTable(String columnNames[], String dataValues[][],JScrollPane scheduleScrollPane){
+		JTable table = new JTable( dataValues, columnNames );
+		scheduleScrollPane.setViewportView(table);
+	}
+	
+	public static void displayGraph(Graph graph,JScrollPane scheduleScrollPane){
+		JGraph graphView=GraphUtils.makeJGraph(graph);
+		scheduleScrollPane.setViewportView(graphView);
+	}
+	
+	private void graphTest(){
+        Graph simpsons = new Graph();
+
+        Node homer = new Node("Homer");
+        Node marge = new Node("Marge");
+
+        simpsons.add(homer, 200, 100);
+        simpsons.add(marge, 400, 100);
+
+        displayGraph(simpsons,scheduleScrollPane);
+	}
+
 	private void treeTest(){
 		List<Task> x= new ArrayList<Task>();				
 		Task y0=new Task(2,"T21","C",2);
@@ -725,16 +756,7 @@ public class MainUI{
 		displayTree(taskTree,x);
 	
 	}
-	
-	public static void displayRes(JList resourceList, Collection<Resource> resouces){
-		
-		DefaultListModel model = new DefaultListModel();
-		resourceList.setModel(model);
-		for (Resource r:resouces){
-			model.addElement(r);
-		}		
-	}
-		
+
 	private void resouceTest(){
 		ArrayList<Resource> x =new ArrayList<Resource>();
 		x.add(new Resource(1,"a",3.3,ResourceType.equipment));
@@ -742,11 +764,6 @@ public class MainUI{
 		x.add(new Resource(3,"af",3.3,ResourceType.equipment));
 		x.add(new Resource(4,"d",3.3,ResourceType.equipment));
 		displayRes(resourceList,x);
-	}
-
-	public static void displayTable(String columnNames[], String dataValues[][],JScrollPane scheduleScrollPane){
-		JTable table = new JTable( dataValues, columnNames );
-		scheduleScrollPane.setViewportView(table);
 	}
 	
 	private void tableTest(){
@@ -763,22 +780,7 @@ public class MainUI{
 		};
 		displayTable(columnNames,dataValues,scheduleScrollPane);
 	}
-
-	public static void displayGraph(Graph graph,JScrollPane scheduleScrollPane){
-		JGraph graphView=GraphUtils.makeJGraph(graph);
-		scheduleScrollPane.setViewportView(graphView);
-	}
 	
-	private void graphTest(){
-        Graph simpsons = new Graph();
-
-        Node homer = new Node("Homer");
-        Node marge = new Node("Marge");
-
-        simpsons.add(homer, 200, 100);
-        simpsons.add(marge, 400, 100);
-
-        displayGraph(simpsons,scheduleScrollPane);
-	}
+	
 }
 
