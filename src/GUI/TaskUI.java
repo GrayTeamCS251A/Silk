@@ -54,51 +54,51 @@ public class TaskUI extends JDialog {
 		contentPanel.setLayout(null);
 		
 		JLabel lblTaskName = new JLabel("Task Name");
-		lblTaskName.setBounds(23, 27, 57, 14);
+		lblTaskName.setBounds(23, 27, 84, 14);
 		contentPanel.add(lblTaskName);
 		
 		JLabel lblTaskId = new JLabel("Task ID");
-		lblTaskId.setBounds(23, 52, 46, 14);
+		lblTaskId.setBounds(23, 52, 84, 14);
 		contentPanel.add(lblTaskId);
 		
 		JLabel lblChildren = new JLabel("Children");
-		lblChildren.setBounds(23, 123, 46, 14);
+		lblChildren.setBounds(23, 123, 84, 14);
 		contentPanel.add(lblChildren);
 		
 		JLabel lblParent = new JLabel("Parent");
-		lblParent.setBounds(23, 148, 46, 14);
+		lblParent.setBounds(23, 148, 84, 14);
 		contentPanel.add(lblParent);
 		
 		JLabel lblSucessor = new JLabel("Sucessor");
-		lblSucessor.setBounds(23, 173, 46, 14);
+		lblSucessor.setBounds(23, 173, 84, 14);
 		contentPanel.add(lblSucessor);
 		
 		JLabel lblPredecessor = new JLabel("Predecessor");
-		lblPredecessor.setBounds(23, 198, 71, 14);
+		lblPredecessor.setBounds(23, 198, 84, 14);
 		contentPanel.add(lblPredecessor);
 		
 		textName = new JTextField();
-		textName.setBounds(100, 24, 86, 20);
+		textName.setBounds(117, 24, 86, 20);
 		contentPanel.add(textName);
 		textName.setColumns(10);
 		
 		textID = new JTextField();
-		textID.setBounds(100, 49, 86, 20);
+		textID.setBounds(117, 49, 86, 20);
 		contentPanel.add(textID);
 		textID.setColumns(10);
 		
 		JComboBox comboBoxChildren = new JComboBox();
-		comboBoxChildren.setBounds(100, 120, 28, 20);
+		comboBoxChildren.setBounds(135, 120, 28, 20);
 		contentPanel.add(comboBoxChildren);
 		
-		comboBoxParent.setBounds(100, 145, 28, 20);
+		comboBoxParent.setBounds(135, 145, 28, 20);
 		contentPanel.add(comboBoxParent);
 		
 		JComboBox comboBoxSuc = new JComboBox();
-		comboBoxSuc.setBounds(100, 170, 28, 20);
+		comboBoxSuc.setBounds(135, 170, 28, 20);
 		contentPanel.add(comboBoxSuc);
 		
-		comboBoxPred.setBounds(100, 195, 28, 20);
+		comboBoxPred.setBounds(135, 195, 28, 20);
 		contentPanel.add(comboBoxPred);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -110,15 +110,15 @@ public class TaskUI extends JDialog {
 		scrollPane.setViewportView(list);
 		
 		JLabel lblResource = new JLabel("Resource");
-		lblResource.setBounds(236, 27, 46, 14);
+		lblResource.setBounds(236, 27, 94, 14);
 		contentPanel.add(lblResource);
 		
 		JLabel lblDuration = new JLabel("Duration");
-		lblDuration.setBounds(23, 77, 46, 14);
+		lblDuration.setBounds(23, 77, 84, 14);
 		contentPanel.add(lblDuration);
 		
 		textDuration = new JTextField();
-		textDuration.setBounds(100, 74, 86, 20);
+		textDuration.setBounds(117, 74, 86, 20);
 		contentPanel.add(textDuration);
 		textDuration.setColumns(10);
 		{

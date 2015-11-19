@@ -107,6 +107,10 @@ public class ProjectUI extends JDialog {
 	   		okButton.addActionListener(listener);
 	   }
 	   
+	   public void addCancelListener(ActionListener listener) {
+		   cancelButton.addActionListener(listener);
+	   }
+	   
 	   public String getEndField(){
 		   return endField.getText();   
 	   }

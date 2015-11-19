@@ -32,6 +32,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -163,7 +164,7 @@ public class MainUI{
 		treeTest();
 		resouceTest();
 		tableTest();
-		graphTest();
+		//graphTest();
 	}
 
 	/**
@@ -568,6 +569,14 @@ public class MainUI{
             	newProject.Reset();        	
             }
         });
+	
+		newProject.addCancelListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				newProject.setVisible(false);
+			}					
+		});
 	}
 	
 	private void initEditProjectAction(){
@@ -599,6 +608,14 @@ public class MainUI{
             	     	
             }
         });
+		
+		editProject.addCancelListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				editProject.setVisible(false);
+			}					
+		});
 	}
 
 	private void initSaveAndLoad(){
@@ -651,7 +668,7 @@ public class MainUI{
 
 	
 	
-	private void displayTree(JTree tree, List<Task> listTask){
+	public static void displayTree(JTree tree, Collection<Task> listTask){
 		
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Tasks");
 		
@@ -662,7 +679,7 @@ public class MainUI{
 		
 	}
 		
-	private void helper(DefaultMutableTreeNode root,List<Task> listTask){
+	public static void helper(DefaultMutableTreeNode root,Collection<Task> listTask){
 		if(listTask.isEmpty()){
 			return;
 		}
@@ -709,7 +726,7 @@ public class MainUI{
 	
 	}
 	
-	private void displayRes(JList resourceList, List<Resource> resouces){
+	public static void displayRes(JList resourceList, Collection<Resource> resouces){
 		
 		DefaultListModel model = new DefaultListModel();
 		resourceList.setModel(model);
@@ -727,8 +744,8 @@ public class MainUI{
 		displayRes(resourceList,x);
 	}
 
-	private void displayTable(String columnNames[], String dataValues[][]){
-		table = new JTable( dataValues, columnNames );
+	public static void displayTable(String columnNames[], String dataValues[][],JScrollPane scheduleScrollPane){
+		JTable table = new JTable( dataValues, columnNames );
 		scheduleScrollPane.setViewportView(table);
 	}
 	
@@ -744,10 +761,10 @@ public class MainUI{
 			{ "93", "89.2"},
 			{ "279", "9033"}
 		};
-		displayTable(columnNames,dataValues);
+		displayTable(columnNames,dataValues,scheduleScrollPane);
 	}
 
-	private void displayGraph(Graph graph){
+	public static void displayGraph(Graph graph,JScrollPane scheduleScrollPane){
 		JGraph graphView=GraphUtils.makeJGraph(graph);
 		scheduleScrollPane.setViewportView(graphView);
 	}
@@ -761,7 +778,7 @@ public class MainUI{
         simpsons.add(homer, 200, 100);
         simpsons.add(marge, 400, 100);
 
-        displayGraph(simpsons);
+        displayGraph(simpsons,scheduleScrollPane);
 	}
 }
 
