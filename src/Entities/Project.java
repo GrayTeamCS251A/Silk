@@ -1,15 +1,14 @@
 package Entities;
 
-import java.sql.Time;
 import java.util.*;
 /**
  * 
  */
 public class Project extends Observable{
-    private Time startTime;
-    private Time endTime;
-    private Set<Resource> resources;
-    private Set<Task> tasks;
+    private Calendar startTime;
+    private Calendar endTime;
+    private HashMap<String, Resource> resources;
+    private HashMap<String, Task> tasks;
     private Schedule schedule;
     private String projectName;
     private String projectAuthor;
@@ -18,10 +17,10 @@ public class Project extends Observable{
     {
     	projectName = "";
     	projectAuthor = "";
-    	startTime = new Time(0);
-    	endTime = new Time(0);
-    	resources = new HashSet<Resource>();
-    	tasks = new HashSet<Task>();
+    	startTime = new GregorianCalendar();
+    	endTime = new GregorianCalendar();
+    	resources = new HashMap<String, Resource>();
+    	tasks = new HashMap<String, Task>();
     	schedule = new Schedule();
     }
 
@@ -46,9 +45,9 @@ public class Project extends Observable{
      * 
      */
     public void clear() {
-    	startTime = new Time(0);
-    	resources = new HashSet<Resource>();
-    	tasks = new HashSet<Task>();
+    	startTime = new GregorianCalendar();
+    	resources = new HashMap<String, Resource>();
+    	tasks = new HashMap<String, Task>();
     	schedule = new Schedule();
     }
 
@@ -56,21 +55,23 @@ public class Project extends Observable{
      * @return
      */
     public Object getProjectInfo() {
-    	HashMap<String, String> projectInfo = new HashMap<String, String>();
+    	HashMap<String, Object> projectInfo = new HashMap<String, Object>();
     	projectInfo.put("Project Name", this.projectName);
     	projectInfo.put("Project Author", this.projectAuthor);
-    	projectInfo.put("Project Start Time", this.startTime.toString());
+    	projectInfo.put("Project Start Time", this.startTime);
     	return projectInfo;
     }
 
     /**
      * @param info
      */
-    public void updateInfo(String projectName, String startTime, String projectAuthor) {
+    public void updateInfo(String projectName, Integer year, Integer month, Integer day, String projectAuthor) {
         this.projectName = projectName;
         this.projectAuthor = projectAuthor;
         
-        this.startTime = new Time (Integer.parseInt(startTime));
+        this.startTime = new GregorianCalendar(year, month, day);
+        setChanged();
+        notifyObservers();
     }
 
     /**
@@ -92,10 +93,14 @@ public class Project extends Observable{
     /**
      * @param info
      */
-    public void createTaskFromUI(String taskName, Integer taskID, Integer taskDuration, Task taskPredecessor, Task taskParent) {
+    public void createTaskFromUI(String taskName, Integer taskDuration, Task taskPredecessor, Task taskParent) {
         Task taskToAdd = new Task();
         taskToAdd.setName(taskName);
-        taskToAdd.setTaskID(taskID);
+        
+        //Generate Task ID
+        String uniqueID = UUID.randomUUID().toString();
+        
+        taskToAdd.setTaskID(uniqueID);
         taskToAdd.setTaskDuration(taskDuration);
         if (taskPredecessor != null){
             taskToAdd.addPredecessor(taskPredecessor);
@@ -104,29 +109,35 @@ public class Project extends Observable{
             taskToAdd.setTaskParent(taskParent);
         }
         
-        tasks.add(taskToAdd);
+        tasks.put(uniqueID, taskToAdd);
+        setChanged();
+        notifyObservers();
     }
     
-    public void createTaskfromLoadProject(String taskName, Integer taskID, Integer taskDuration) {
+    public void createTaskfromLoadProject(String taskName, String taskID, Integer taskDuration) {
         Task taskToAdd = new Task();
         taskToAdd.setName(taskName);
         taskToAdd.setTaskID(taskID);
         taskToAdd.setTaskDuration(taskDuration);
         
-        tasks.add(taskToAdd);
+        tasks.put(taskID, taskToAdd);
+        setChanged();
+        notifyObservers();
     }
 
     /**
      * 
      */
-    public void createResource(String resourceName, int resourceID, double dailyCost, ResourceType r) {
+    public void createResource(String resourceName, double dailyCost, ResourceType r) {
         Resource resourceToCreate = new Resource();
         resourceToCreate.setname(resourceName);
-        resourceToCreate.setResourceID(resourceID);
+        String uniqueID = UUID.randomUUID().toString();
+
+        resourceToCreate.setResourceID(uniqueID);
         resourceToCreate.setDailyCost(dailyCost);
         resourceToCreate.setResourceType(r);
         
-        resources.add(resourceToCreate);
+        resources.put(uniqueID, resourceToCreate);
         setChanged();
         notifyObservers();
     }
@@ -134,16 +145,16 @@ public class Project extends Observable{
     /**
      * @return
      */
-    public Set<Resource> getResources() {
+    public HashMap<String, Resource> getResources() {
         return this.resources;
     }
     
-    public Resource getResource(String resourceName) {
-    	for (Resource r: resources)
+    public Resource getResource(String rID) {
+    	for (String resourceID: resources.keySet())
     	{
-    		if (r.getname().equals(resourceName))
+    		if (resourceID.equals(rID))
     		{
-    			return r;
+    			return resources.get(resourceID);
     		}
     	}
     	return null;
@@ -152,12 +163,12 @@ public class Project extends Observable{
     /**
      * @param info
      */
-    public void editResource(String resourceName, int resourceID, double dailyCost, ResourceType r) {
+    public void editResource(String rID, double dailyCost, ResourceType r) {
         // Search for the Resource to Edit using resource ID,
-    	for (Resource resource: resources) {
-    		if (resource.getResourceID() == resourceID && resource.getname().equals(resourceName)){
-    			resource.setDailyCost(dailyCost);
-    			resource.setResourceType(r);
+    	for (String resourceID: resources.keySet()) {
+    		if (resourceID.equals(rID)){
+    			resources.get(resourceID).setDailyCost(dailyCost);
+    			resources.get(resourceID).setResourceType(r);
     	        setChanged();
     	        notifyObservers();
     			break;
@@ -168,10 +179,10 @@ public class Project extends Observable{
     /**
      * 
      */
-    public void deleteResource(int resourceID) {
-    	for (Resource resource: resources) {
-    		if (resource.getResourceID() == resourceID) {
-    			resources.remove(resource);
+    public void deleteResource(String rID) {
+    	for (String resourceID: resources.keySet()) {
+    		if (resourceID.equals(rID)) {
+    			resources.remove(resourceID);
     	        setChanged();
     	        notifyObservers();
     			break;
@@ -183,11 +194,11 @@ public class Project extends Observable{
      * @param taskName 
      * @return
      */
-    public Task getTask(String taskName) {
-        for (Task task: tasks) {
-        	if (task.getTaskName().equals(taskName))
+    public Task getTask(String tID) {
+        for (String taskID: tasks.keySet()) {
+        	if (taskID.equals(tID))
         	{
-        		return task;
+        		return tasks.get(taskID);
         	}
         }
         
@@ -198,17 +209,17 @@ public class Project extends Observable{
      * @param taskID 
      * @param info
      */
-    public void editTask(String taskName, Integer taskID, Integer taskDuration, Task predecessorTask, Task parentTask) {
+    public void editTask(String tID, Integer taskDuration, Task predecessorTask, Task parentTask) {
         // TODO implement here
-    	for (Task taskToEdit: tasks) {
-    		if (taskToEdit.getTaskName().equals(taskName) && taskToEdit.getTaskID() == taskID)
+    	for (String taskID: tasks.keySet()) {
+    		if (taskID.equals(tID))
     		{
-    			taskToEdit.setTaskDuration(taskDuration);
+    			tasks.get(taskID).setTaskDuration(taskDuration);
     			if (predecessorTask != null){
-        			taskToEdit.addPredecessor(predecessorTask);
+    				tasks.get(taskID).addPredecessor(predecessorTask);
     			}
     			if (parentTask != null) {
-        			taskToEdit.setTaskParent(parentTask);
+    				tasks.get(taskID).setTaskParent(parentTask);
     			}
     			
     			setChanged();
@@ -221,17 +232,17 @@ public class Project extends Observable{
     /**
      * 
      */
-    public Set<Task> getTasks() {
+    public HashMap<String, Task> getTasks() {
         return this.tasks;
     }
 
     /**
      * 
      */
-    public void deleteTask(int taskID) {
-    	for (Task taskToDelete: tasks) {
-    		if (taskToDelete.getTaskID() == taskID) {
-    			resources.remove(taskToDelete);
+    public void deleteTask(String tID) {
+    	for (String taskID: tasks.keySet()) {
+    		if (taskID.equals(tID)) {
+    			tasks.remove(taskID);
     	        setChanged();
     	        notifyObservers();
     			break;
@@ -250,7 +261,7 @@ public class Project extends Observable{
      * 
      */
     public void generateSchedule() {
-    	schedule.generateSchedule(tasks);
+    	schedule.generateSchedule(this.startTime, this.tasks);
     }
 
     /**
@@ -278,17 +289,17 @@ public class Project extends Observable{
     	return this.projectAuthor;
     }
     
-    public Time getStartTime()
+    public Calendar getStartTime()
     {
     	return this.startTime;
     }
     
-    public Time getEndTime()
+    public Calendar getEndTime()
     {
     	return this.endTime;
     }
     
-    public void setEndTime(Time endtime)
+    public void setEndTime(Calendar endtime)
     {
     	this.endTime = endtime;
     }
