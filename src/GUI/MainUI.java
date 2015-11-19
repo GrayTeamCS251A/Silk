@@ -316,6 +316,15 @@ public class MainUI{
                 addRes.Reset();        	
             }
         });
+	
+		addRes.addCancelListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub 
+				addRes.setVisible(false);
+			}
+						
+		});
 	}
 
 	private void initEditResAction(){
@@ -348,6 +357,15 @@ public class MainUI{
             	editRes.Reset();       	
             }
         });
+	
+		editRes.addCancelListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub 
+				editRes.setVisible(false);
+			}
+						
+		});
 	}
 	
 	private void initDeleteResAction(){
@@ -399,6 +417,14 @@ public class MainUI{
             }
         });
 		
+		editTask.addCancelListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub 
+				editTask.setVisible(false);
+			}
+						
+		});
 	}
 		
 	private void initAddTaskAction(){
@@ -431,6 +457,14 @@ public class MainUI{
             }
         });
 		
+		addTask.addCancelListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub 
+				addTask.setVisible(false);
+			}
+						
+		});
 	}
 		
 	private void initDeleteTaskAction(){

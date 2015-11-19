@@ -112,6 +112,10 @@ public class ResUI extends JDialog {
 		   		okButton.addActionListener(listener);
 		   }
 	   
+	   public void addCancelListener(ActionListener listener) {
+		   cancelButton.addActionListener(listener);
+	   }
+	   
 	   public String getTextName(){
 		   return textName.getText();		   
 	   }

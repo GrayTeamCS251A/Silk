@@ -143,6 +143,10 @@ public class TaskUI extends JDialog {
 	   		okButton.addActionListener(listener);
 	   }
 	   
+	   public void addCancelListener(ActionListener listener) {
+		   cancelButton.addActionListener(listener);
+	   }
+	   
 	   public String getTaskName() {
 		   return textName.getText();
 	   }
