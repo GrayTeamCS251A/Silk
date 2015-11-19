@@ -75,13 +75,15 @@ public class SaveProjectController implements Controller {
     		//***************************************
     		//*		Project Resource XML Elements   *
     		//***************************************
-    		Set<Resource> projectResources = project.getResources();
+    		HashMap<String, Resource> projectResources = project.getResources();
     		
     		Element projectResourceElementsRoot = doc.createElement("ProjectResources");
     		
-    		for (Resource r: projectResources) {
+    		for (String resourceID: projectResources.keySet()) {
+    			Resource r = projectResources.get(resourceID);
+    			
     			Element prResRoot = doc.createElement("Resource");
-    			prResRoot.setAttribute("id", String.valueOf(r.getResourceID()));
+    			prResRoot.setAttribute("id", resourceID);
     			
     			Element prResName = doc.createElement("ResourceName");
     			prResName.appendChild(doc.createTextNode(r.getname()));
@@ -102,13 +104,15 @@ public class SaveProjectController implements Controller {
     		//***********************************
     		//*		Project Task XML Elements   *
     		//***********************************
-    		Set<Task> projectTasks = project.getTasks();
+    		HashMap<String, Task> projectTasks = project.getTasks();
     		
     		Element projectTaskElementRoot = doc.createElement("ProjectTasks");
     		
-    		for (Task t: projectTasks) {
+    		for (String taskID: projectTasks.keySet()) {
+    			Task t = projectTasks.get(taskID);
+    			
     			Element prTaskRoot = doc.createElement("Task");
-    			prTaskRoot.setAttribute("id", String.valueOf(t.getTaskID()));
+    			prTaskRoot.setAttribute("id", taskID);
     			
     			Element prTaskName = doc.createElement("TaskName");
     			prTaskName.appendChild(doc.createTextNode(t.getTaskName()));
@@ -137,7 +141,7 @@ public class SaveProjectController implements Controller {
     			for (Task pred: t.getPredecessors())
     			{
     				Element prTaskPred = doc.createElement("TaskPredecessor");
-    				prTaskPred.setAttribute("id", String.valueOf(index));
+    				prTaskPred.setAttribute("id", pred.getTaskID());
     				prTaskPred.appendChild(doc.createTextNode(pred.getTaskName()));
     				
     				prTaskPredRoot.appendChild(prTaskPred);
@@ -170,7 +174,7 @@ public class SaveProjectController implements Controller {
     			for (Resource r: t.getRequiredResources())
     			{
     				Element prTaskResource = doc.createElement("TaskResource");
-    				prTaskResource.setAttribute("id", String.valueOf(index));
+    				prTaskResource.setAttribute("id", r.getResourceID());
     				prTaskResource.appendChild(doc.createTextNode(r.getname()));
     				
     				prTaskResourcesRoot.appendChild(prTaskResource);
