@@ -51,6 +51,9 @@ import javax.swing.tree.TreePath;
 
 import org.jgraph.JGraph;
 
+import AnalysisModel.Boundaries.Views.ResourcesView;
+import AnalysisModel.Boundaries.Views.TasksView;
+
 //import org.jgraph.JGraph;
 
 
@@ -129,6 +132,9 @@ public class MainUI{
 	private GenerateScheduleController generateScheduleController = new GenerateScheduleController();
 	private ViewScheduleAsGraphController viewScheduleAsGraphController = new  ViewScheduleAsGraphController();
 	private ViewScheduleAsTableController  viewScheduleAsTableController = new ViewScheduleAsTableController();
+	
+	private ResourcesView resourcesView =new ResourcesView(project,resourceList);
+	private TasksView tasksView = new TasksView(project, taskTree);	
 	/**
 	 * Launch the application.
 	 */
@@ -152,22 +158,24 @@ public class MainUI{
 		initialize();
 		initAddResAction();
 		initEditResAction();
-		initDeleteResAction();
-		
+		initDeleteResAction();		
 		initAddTaskAction();
 		initEditTaskAction();
-		initDeleteTaskAction();
-		
-		initScheduleAction();
-		
+		initDeleteTaskAction();		
+		initScheduleAction();	
 		initNewProjectAction();
 		initEditProjectAction();
 		initSaveAndLoad();
 		
+		
+		project.getResources();
+		project.getResources().put("1", new Resource("1","a",3.3,ResourceType.equipment));
+		displayRes(resourceList,project.getResources());
+		
 		treeTest();
-		resouceTest();
-		tableTest();
-		//graphTest();
+//		resouceTest();
+//		tableTest();
+		graphTest();
 	}
 
 	/**
@@ -709,11 +717,11 @@ public class MainUI{
 		}	
 	}
 		
-	public static void displayRes(JList resourceList, Collection<Resource> resouces){
+	public static void displayRes(JList resourceList, HashMap<String,Resource> resouces){
 		
 		DefaultListModel model = new DefaultListModel();
 		resourceList.setModel(model);
-		for (Resource r:resouces){
+		for (Resource r:resouces.values()){
 			model.addElement(r);
 		}		
 	}
@@ -727,6 +735,25 @@ public class MainUI{
 		JGraph graphView=GraphUtils.makeJGraph(graph);
 		scheduleScrollPane.setViewportView(graphView);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	private void graphTest(){
         Graph simpsons = new Graph();
@@ -762,11 +789,11 @@ public class MainUI{
 	}
 
 	private void resouceTest(){
-		ArrayList<Resource> x =new ArrayList<Resource>();
-		x.add(new Resource("1","a",3.3,ResourceType.equipment));
-		x.add(new Resource("2","ad",3.3,ResourceType.equipment));
-		x.add(new Resource("3","af",3.3,ResourceType.equipment));
-		x.add(new Resource("4","d",3.3,ResourceType.equipment));
+		HashMap<String,Resource> x =new HashMap<String,Resource>();
+		x.put("1",new Resource("1","a",3.3,ResourceType.equipment));
+		x.put("2",new Resource("2","ad",3.3,ResourceType.equipment));
+		x.put("3",new Resource("3","af",3.3,ResourceType.equipment));
+		x.put("4",new Resource("4","d",3.3,ResourceType.equipment));
 		displayRes(resourceList,x);
 	}
 	

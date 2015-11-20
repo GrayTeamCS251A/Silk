@@ -11,54 +11,35 @@ import java.util.*;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
+import javax.swing.JList;
+import javax.swing.JTree;
 
+import Entities.Project;
 import Entities.Resource;
+import Entities.Task;
+import GUI.MainUI;
 
 /**
  * 
  */
-public class ResourcesView implements View, ActionListener {
-
-    /**
-     * 
-     */
-	AddResourceController arc = new AddResourceController();
-	EditResourceController edit = new EditResourceController();
-	DeleteResourceController delete = new DeleteResourceController();
-	
-
-    public ResourcesView()
+public class ResourcesView implements View{
+	private Project project;
+	private JList resourceList =new JList();
+    
+	public ResourcesView(Project project, JList resourceList)
     {
-    	JButton b1 = new JButton("Disable middle button");
-        b1.setVerticalTextPosition(AbstractButton.CENTER);
-        b1.setHorizontalTextPosition(AbstractButton.LEADING); //aka LEFT, for left-to-right locales
-        b1.setMnemonic(KeyEvent.VK_D);
+		this.project=project;
+		this.resourceList=resourceList;
+		project.addObserver(this);   
     }
     
-    public void actionPerformed(ActionEvent e) {
-//    	if (e.getActionCommand() == "addResource")
-//    	{
-//        	arc.execute();
-//    	}
-//    	elif{
-//    		edit.execute();
-//    	}
-//    	elif 
-//    	{
-//    		delete.execute();
-//    	}
-
-    }
-
-    /**
-     * 
-     */
-    private Set<Resource> resources;
-
+  
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
-		
+    	HashMap<String,Resource> list =project.getResources();
+    	MainUI.displayRes(resourceList,list);	
+
 	}
 
 }
