@@ -39,7 +39,7 @@ public class ResourcesView implements View{
 		// TODO Auto-generated method stub
     	HashMap<String,Resource> list =project.getResources();
     	MainUI.displayRes(resourceList,list);	
-
+    	//System.out.println(111);
 	}
 
 }

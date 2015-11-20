@@ -392,7 +392,9 @@ public class MainUI{
 					int selectedIndex = resourceList.getSelectedIndex();
 					Resource r=(Resource) resourceList.getSelectedValue();
 					deleteResourceController.executeDeleteResource(r.getResourceID());
-					resourceList.remove(selectedIndex);
+					DefaultListModel model = (DefaultListModel) resourceList.getModel();			
+					model.remove(selectedIndex);			
+
 				}
 			}});
 	}
@@ -491,7 +493,9 @@ public class MainUI{
 				if(x==1){
 					System.out.println("Aborted");
 				}else{
-				
+				    DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+		                       taskTree.getLastSelectedPathComponent();		
+				    Task t = (Task) node.getUserObject();
 //					TreePath tp = taskTree.getSelectionPath();
 //					deleteTaskController.executeDeleteTask(tp.getLastPathComponent());
 //					taskTree.removeSelectionPath(tp);
