@@ -297,7 +297,6 @@ public class MainUI{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				addResourceController.executeAddResource(addRes.getTextName(), 
-						Integer.parseInt(addRes.getTextID()), 
 						Double.parseDouble(addRes.getTextCost()), 
 						addRes.getTextType());
 				addRes.Reset();      
@@ -317,7 +316,7 @@ public class MainUI{
 		addRes.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                addRes.Reset();        	
+                //addRes.Reset();        	
             }
         });
 	
@@ -336,10 +335,10 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-//				Resource r=(Resource) resourceList.getSelectedValue();
-//				editRes.fill(r);
+				Resource r=(Resource) resourceList.getSelectedValue();
+				editRes.fill(r);
 //				editResourceController.executeEditResource(editRes.getTextName(), 
-//						Integer.parseInt(editRes.getTextID()), 
+//						r.getResourceID(), 
 //						Double.parseDouble(editRes.getTextCost()), 
 //						editRes.getTextType());
 //				editRes.setVisible(false);
@@ -358,7 +357,7 @@ public class MainUI{
 		editRes.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-            	editRes.Reset();       	
+            	//editRes.Reset();       	
             }
         });
 	
@@ -382,9 +381,10 @@ public class MainUI{
 				if(x==1){
 					System.out.println("Aborted");
 				}else{
-//					int selectedIndex = resourceList.getSelectedIndex();
-//					deleteResourceController.executeDeleteResource(resourceList.getSelectedValue());
-//					resourceList.remove(selectedIndex);
+					int selectedIndex = resourceList.getSelectedIndex();
+					Resource r=(Resource) resourceList.getSelectedValue();
+					deleteResourceController.executeDeleteResource(r.getResourceID());
+					resourceList.remove(selectedIndex);
 				}
 			}});
 	}
@@ -396,9 +396,11 @@ public class MainUI{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub  
 				//need to figure out how to extract selected Task from JTree
-
+			    DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+	                       taskTree.getLastSelectedPathComponent();		
+			    Task t = (Task) node.getUserObject();
 //				editTaskController.executeEditTask(editTask.getTaskName(), 
-//						Integer.parseInt(editTask.getTaskID()), 
+//						editTask.getTaskID(), 
 //						Integer.parseInt(editTask.getTaskDuration()),
 //						editTask.getPredecessorTask(),
 //						editTask.getParentTask());
@@ -552,8 +554,8 @@ public class MainUI{
 //				newProjectController.executeNewProject(newProject.getNameField(), 
 //						newProject.getStartField(), 
 //						newProject.getAuthorField());
-//				newProject.Reset();      
-//				newProject.setVisible(false);
+				//newProject.Reset();      
+				newProject.setVisible(false);
 			}
 						
 		});
@@ -569,7 +571,7 @@ public class MainUI{
 		newProject.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-            	newProject.Reset();        	
+            	//newProject.Reset();        	
             }
         });
 	

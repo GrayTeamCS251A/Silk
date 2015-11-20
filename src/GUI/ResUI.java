@@ -14,14 +14,13 @@ import Entities.Resource;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
 
 public class ResUI extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textName;
-	private JTextField textID;
 	private JTextField textCost;
-	private JTextField textType;
 	private JButton okButton;
 	private JButton cancelButton;
 
@@ -52,18 +51,14 @@ public class ResUI extends JDialog {
 		JLabel lblNewLabel = new JLabel("Name");
 		lblNewLabel.setBounds(27, 26, 46, 14);
 		contentPanel.add(lblNewLabel);
-		
-		JLabel lblResourceId = new JLabel("Resource ID");
-		lblResourceId.setBounds(27, 50, 69, 14);
-		contentPanel.add(lblResourceId);
 		{
 			JLabel lblCost = new JLabel("Cost");
-			lblCost.setBounds(27, 75, 46, 14);
+			lblCost.setBounds(27, 51, 46, 14);
 			contentPanel.add(lblCost);
 		}
 		{
 			JLabel lblType = new JLabel("Type");
-			lblType.setBounds(27, 100, 46, 14);
+			lblType.setBounds(27, 76, 46, 14);
 			contentPanel.add(lblType);
 		}
 		{
@@ -73,23 +68,15 @@ public class ResUI extends JDialog {
 			textName.setColumns(10);
 		}
 		{
-			textID = new JTextField();
-			textID.setBounds(103, 47, 86, 20);
-			contentPanel.add(textID);
-			textID.setColumns(10);
-		}
-		{
 			textCost = new JTextField();
-			textCost.setBounds(103, 72, 86, 20);
+			textCost.setBounds(103, 48, 86, 20);
 			contentPanel.add(textCost);
 			textCost.setColumns(10);
 		}
-		{
-			textType = new JTextField();
-			textType.setBounds(103, 97, 86, 20);
-			contentPanel.add(textType);
-			textType.setColumns(10);
-		}
+		
+		JComboBox comboBoxType = new JComboBox();
+		comboBoxType.setBounds(103, 73, 86, 20);
+		contentPanel.add(comboBoxType);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -120,31 +107,25 @@ public class ResUI extends JDialog {
 		   return textName.getText();		   
 	   }
 	   
-	   public String getTextID() {
-		   return textID.getText();
-	   }
-	   
+   
 	   public String getTextCost() {
 		   return textCost.getText();
 	   }
 	   
 	   public String getTextType() {
-		   return textType.getText();
+		   return "";
+		   //return textType.getText();
 	   }
 	   
 	   public void Reset() {
 		   textName.setText("");
-		   textID.setText("");
 		   textCost.setText("");
-		   textType.setText("");
+		   //textType.setText("");
 	   }
 	   
 	   public void fill(Resource r){
 		   textName.setText(r.getname());
-		   textID.setText(r.getResourceID());
 		   textCost.setText(Double.toString(r.getDailyCost()));
-		   textType.setText(r.getResourceType().toString());
+		   //textType.setText(r.getResourceType().toString());
 	   }
-	   
-	   
 }

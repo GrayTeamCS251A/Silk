@@ -22,9 +22,7 @@ public class TaskUI extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textName;
-	private JTextField textID;
 	private JComboBox comboBoxParent = new JComboBox();
-	private JComboBox comboBoxPred = new JComboBox();
 	private JButton okButton;
 	private JButton cancelButton;
 	private JTextField textDuration;
@@ -47,7 +45,7 @@ public class TaskUI extends JDialog {
 	 */
 	public TaskUI(String x) {
 		setTitle(x);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 550, 329);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -57,70 +55,51 @@ public class TaskUI extends JDialog {
 		lblTaskName.setBounds(23, 27, 84, 14);
 		contentPanel.add(lblTaskName);
 		
-		JLabel lblTaskId = new JLabel("Task ID");
-		lblTaskId.setBounds(23, 52, 84, 14);
-		contentPanel.add(lblTaskId);
-		
-		JLabel lblChildren = new JLabel("Children");
-		lblChildren.setBounds(23, 123, 84, 14);
-		contentPanel.add(lblChildren);
-		
 		JLabel lblParent = new JLabel("Parent");
-		lblParent.setBounds(23, 148, 84, 14);
+		lblParent.setBounds(305, 27, 84, 14);
 		contentPanel.add(lblParent);
 		
-		JLabel lblSucessor = new JLabel("Sucessor");
-		lblSucessor.setBounds(23, 173, 84, 14);
-		contentPanel.add(lblSucessor);
-		
 		JLabel lblPredecessor = new JLabel("Predecessor");
-		lblPredecessor.setBounds(23, 198, 84, 14);
+		lblPredecessor.setBounds(291, 60, 84, 14);
 		contentPanel.add(lblPredecessor);
 		
 		textName = new JTextField();
-		textName.setBounds(117, 24, 86, 20);
+		textName.setBounds(90, 24, 78, 20);
 		contentPanel.add(textName);
 		textName.setColumns(10);
 		
-		textID = new JTextField();
-		textID.setBounds(117, 49, 86, 20);
-		contentPanel.add(textID);
-		textID.setColumns(10);
-		
-		JComboBox comboBoxChildren = new JComboBox();
-		comboBoxChildren.setBounds(135, 120, 28, 20);
-		contentPanel.add(comboBoxChildren);
-		
-		comboBoxParent.setBounds(135, 145, 28, 20);
+		comboBoxParent.setBounds(358, 24, 145, 20);
 		contentPanel.add(comboBoxParent);
 		
-		JComboBox comboBoxSuc = new JComboBox();
-		comboBoxSuc.setBounds(135, 170, 28, 20);
-		contentPanel.add(comboBoxSuc);
+		JScrollPane scrollPaneRes = new JScrollPane();
+		scrollPaneRes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPaneRes.setBounds(65, 85, 145, 162);
+		contentPanel.add(scrollPaneRes);
 		
-		comboBoxPred.setBounds(135, 195, 28, 20);
-		contentPanel.add(comboBoxPred);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.setBounds(236, 50, 176, 162);
-		contentPanel.add(scrollPane);
-		
-		JList list = new JList();
-		scrollPane.setViewportView(list);
+		JList listRes = new JList();
+		scrollPaneRes.setViewportView(listRes);
 		
 		JLabel lblResource = new JLabel("Resource");
-		lblResource.setBounds(236, 27, 94, 14);
+		lblResource.setBounds(65, 60, 94, 14);
 		contentPanel.add(lblResource);
 		
 		JLabel lblDuration = new JLabel("Duration");
-		lblDuration.setBounds(23, 77, 84, 14);
+		lblDuration.setBounds(184, 27, 84, 14);
 		contentPanel.add(lblDuration);
 		
 		textDuration = new JTextField();
-		textDuration.setBounds(117, 74, 86, 20);
+		textDuration.setBounds(236, 24, 42, 20);
 		contentPanel.add(textDuration);
 		textDuration.setColumns(10);
+		
+		JScrollPane scrollPanePred = new JScrollPane();
+		scrollPanePred.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPanePred.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPanePred.setBounds(284, 85, 145, 162);
+		contentPanel.add(scrollPanePred);
+		
+		JList list = new JList();
+		scrollPanePred.setViewportView(list);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -151,32 +130,32 @@ public class TaskUI extends JDialog {
 		   return textName.getText();
 	   }
 	   
-	   public String getTaskID() {
-		   return textID.getText();
-	   }
-	   
-	   public String getTaskDuration() {
-		   return textDuration.getText();
-	   }
-	   
-	   public Task getParentTask() {
-		   return (Task) comboBoxParent.getSelectedItem();
-	   }
-	   
-	   public Task getPredecessorTask() {
-		   return (Task) comboBoxPred.getSelectedItem();
-	   }
-	   
-	   public void Reset(){
-		   textName.setText("");
-		   textID.setText("");
-		   textDuration.setText("");
-	   }
-	   
-	   
-	   public void fill(Task t){
-		   textName.setText("");
-		   textID.setText("");
-		   textDuration.setText("");
-	   }
+//	   public String getTaskID() {
+//		   return textID.getText();
+//	   }
+//	   
+//	   public String getTaskDuration() {
+//		   return textDuration.getText();
+//	   }
+//	   
+//	   public Task getParentTask() {
+//		   return (Task) comboBoxParent.getSelectedItem();
+//	   }
+//	   
+//	   public Task getPredecessorTask() {
+//		   return (Task) comboBoxPred.getSelectedItem();
+//	   }
+//	   
+//	   public void Reset(){
+//		   textName.setText("");
+//		   textID.setText("");
+//		   textDuration.setText("");
+//	   }
+//	   
+//	   
+//	   public void fill(Task t){
+//		   textName.setText("");
+//		   textID.setText("");
+//		   textDuration.setText("");
+//	   }
 }
