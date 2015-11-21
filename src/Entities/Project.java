@@ -1,6 +1,10 @@
 package Entities;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
+
 import jxl.*;
 import jxl.write.*;
 /**
@@ -301,9 +305,37 @@ public class Project extends Observable{
     
     /**
      * @param schedule
+     * @throws IOException 
+     * @throws WriteException 
      */
-    public void saveSchedule() {
-        schedule.toXLS();
+    public WritableWorkbook saveSchedule(String dest, String fileName) throws IOException, WriteException {
+        String[][] dataValue = this.getScheduleMatrix();
+        
+        WritableWorkbook workbook = Workbook.createWorkbook(new File(Paths.get(dest) + ".xls"));
+        
+        WritableSheet scheduleSheet = workbook.createSheet("Schedule", 0);
+        
+        for (int i = 0; i < dataValue.length; i++)
+        {
+            Label dateLabel = new Label(i, 0, dataValue[i][0]);
+            
+            String[] s = dataValue[i][1].split(",");
+            String taskNames = "";
+            for (int t = 0; t < s.length; t++)
+            {
+            	taskNames += getTask(s[t]) + ",";
+            }
+                        
+            Label taskLabel = new Label(i, 1, taskNames.substring(0, taskNames.length() - 1));
+            
+            scheduleSheet.addCell(dateLabel);
+            scheduleSheet.addCell(taskLabel);
+        }
+
+        workbook.write(); 
+        workbook.close();
+        
+        return workbook;
     }
     
     public String getProjectName()
@@ -355,5 +387,10 @@ public class Project extends Observable{
     
     public void setResources(HashMap<String, Resource> resources){
     	this.resources=resources;
+    }
+    
+    public String[][] getScheduleMatrix()
+    {
+    	return schedule.generateScheduleMatrix();
     }
 }

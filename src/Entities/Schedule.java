@@ -112,4 +112,11 @@ public class Schedule extends Observable {
 	public void setStartDate(Calendar startDate) {
 		this.startDate = startDate;
 	}
+	
+	public String[][] generateScheduleMatrix()
+	{
+		String[][] datavalues = null;
+		
+		return datavalues;
+	}
 }
