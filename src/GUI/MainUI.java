@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -50,6 +51,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import org.jgraph.JGraph;
+import org.jgraph.graph.Edge;
 
 import AnalysisModel.Boundaries.Views.ResourcesView;
 import AnalysisModel.Boundaries.Views.TasksView;
@@ -79,7 +81,6 @@ import graph.Graph;
 import graph.GraphUtils;
 import graph.Link;
 import graph.Node;
-
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public class MainUI{
 
@@ -541,14 +542,80 @@ public class MainUI{
 				//JGraph graphView = viewScheduleAsGraphController.execute(??);
 				//scheduleScrollPane.setViewportView(graphView);
 				
+				Graph scheduleGraph = new Graph();
+								
 				Project p = viewScheduleAsGraphController.getProject();
 				
-				for (int i = 0; i < p.getTasks().size(); i++)
+				String dataValues[][] = p.getScheduleMatrix();
+				
+				// Get the Starting task(s)
+				String getTasks = dataValues[0][1];
+				String[] taskIDList = getTasks.split(",");
+				
+				//Create the starting node(s)
+				ArrayList<Node> currentNodeList = new ArrayList<Node>();
+				
+				int xindex = 100;
+				int yindex = 100;
+				for (int s = 0; s < taskIDList.length; s++)
 				{
+					Node n = new Node(taskIDList[s]);
+					currentNodeList.add(n);
 					
+					scheduleGraph.add(n, xindex, yindex);
+					yindex += 100;
 				}
 				
+				//convert to ArrayList
+				ArrayList<String> aList = convertToArrayList(taskIDList);
 				
+				//Go through rest of the dataValues
+				for (int i = 1; i < dataValues.length; i++)
+				{
+					getTasks = dataValues[i][1];
+					taskIDList = getTasks.split(",");
+					
+					ArrayList<String> bList = convertToArrayList(taskIDList);
+					ArrayList<String> tempAList = (ArrayList<String>) aList.clone();
+					ArrayList<String> tempBList = (ArrayList<String>) bList.clone();
+					
+					// Remove the Already existing ID in the previous list
+					aList.removeAll(bList);
+					bList.removeAll(tempAList);
+					
+					if (!aList.isEmpty() && !bList.isEmpty())
+					{
+						//Create nodes for the Blist and then hook them with the nodes already created
+						// from the AList
+						xindex += 100;
+						yindex = 100;
+						
+						for (int b = 0; b < bList.size(); b++)
+						{
+							Node n = new Node(bList.get(b));
+							scheduleGraph.add(n, xindex, yindex);
+							
+							for (int y = 0; y < aList.size(); y++)
+							{
+								for (Node checkNode: scheduleGraph.getNodes())
+								{
+									if (aList.get(y).equals(checkNode.getLabel()))
+									{
+										Arrow a = new Arrow(checkNode, n, "");
+										scheduleGraph.add(a);
+										break;
+									}
+								}
+							}
+							
+							yindex += 100;
+						}
+					}
+					
+					aList = tempBList;
+				}
+				
+				displayGraph(scheduleGraph, scheduleScrollPane);				
 			}});
 		
 		btnTable.addActionListener(new ActionListener(){
@@ -559,7 +626,7 @@ public class MainUI{
 				//JTable table = viewScheduleAsTableController.execute(?);
 				//scheduleScrollPane.setViewportView(table);
 				
-				Project p = viewScheduleAsTableController.getProject();
+				
 			}});
 	}
 
@@ -796,7 +863,17 @@ public class MainUI{
 	}
 	
 	
-	
+	public ArrayList<String> convertToArrayList(String[] list)
+	{
+		ArrayList<String> aList = new ArrayList<String>();
+		
+		for (int i = 0; i < list.length; i++)
+		{
+			aList.add(list[i]);
+		}
+		
+		return aList;
+	}
 	
 	
 	
@@ -867,6 +944,7 @@ public class MainUI{
 			{ "93", "89.2"},
 			{ "279", "9033"}
 		};
+				
 		displayTable(columnNames,dataValues,scheduleScrollPane);
 	}
 	
