@@ -18,6 +18,7 @@ public class Task extends Observable {
 	    private HashMap<String, Resource> requiredResources;
 	    private HashMap<String, Task> predecessors;
 	    private HashMap<String, Task> children;
+	    private HashMap<String, Task> successors;
 	    private Task parent;
 
 	//Make constructor only take 4 arguments - ID, name, description, duration
@@ -26,7 +27,10 @@ public class Task extends Observable {
     	this.name = name;
     	this.description = description;
     	this.duration = duration;
+    	predecessors = new HashMap<String, Task>();
+    	successors = new HashMap<String, Task>();
     	children = new HashMap<String, Task>();
+    	this.parent = new Task();
     }
 
     //Second Constructor
@@ -168,5 +172,15 @@ public class Task extends Observable {
 	
 	public String toString(){
 		return name;
+	}
+	
+	public void addSuccessor(Task successor)
+	{
+		this.successors.put(successor.getTaskID(), successor);
+	}
+	
+	public void addChildren(Task child)
+	{
+		this.children.put(child.getTaskID(), child);
 	}
 }

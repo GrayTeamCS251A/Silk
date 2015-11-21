@@ -1,6 +1,8 @@
 package Entities;
 
 import java.util.*;
+import jxl.*;
+import jxl.write.*;
 /**
  * 
  */
@@ -104,9 +106,11 @@ public class Project extends Observable{
         taskToAdd.setTaskDuration(taskDuration);
         if (taskPredecessor != null){
             taskToAdd.addPredecessor(taskPredecessor);
+            taskPredecessor.addSuccessor(taskToAdd);
         }
         if (taskParent != null) {
             taskToAdd.setTaskParent(taskParent);
+            taskParent.addChildren(taskToAdd);
         }
         
         tasks.put(uniqueID, taskToAdd);
