@@ -308,7 +308,7 @@ public class Project extends Observable{
      * @throws IOException 
      * @throws WriteException 
      */
-    public WritableWorkbook saveSchedule(String dest, String fileName) throws IOException, WriteException {
+    public WritableWorkbook saveSchedule(String dest) throws IOException, WriteException {
         String[][] dataValue = this.getScheduleMatrix();
         
         WritableWorkbook workbook = Workbook.createWorkbook(new File(Paths.get(dest) + ".xls"));
