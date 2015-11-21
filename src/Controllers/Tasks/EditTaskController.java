@@ -1,5 +1,7 @@
 package Controllers.Tasks;
 
+import java.util.ArrayList;
+
 import Controllers.Controller;
 import Entities.Task;
 
@@ -14,8 +16,8 @@ public class EditTaskController implements Controller {
     public EditTaskController() {
     }
 	
-	public void executeEditTask(String taskID, Integer taskDuration, Task predecessorTask, Task parentTask) {
-		project.editTask(taskID, taskDuration, predecessorTask, parentTask);
+	public void executeEditTask(String taskName, String taskID, Integer taskDuration, ArrayList<Task> predecessorTask, Task parentTask) {
+		project.editTask(taskName, taskID, taskDuration, predecessorTask, parentTask);
 	}
 
 }
