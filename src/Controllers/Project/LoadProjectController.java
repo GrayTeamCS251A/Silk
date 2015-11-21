@@ -2,7 +2,6 @@ package Controllers.Project;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Time;
 import java.util.*;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -14,11 +13,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import AnalysisModel.Boundaries.Panels.Oracle;
 import Controllers.Controller;
 import Entities.Deliverable;
 import Entities.ResourceType;
-import Entities.Task;
 
 /**
  * 
@@ -214,6 +211,7 @@ public class LoadProjectController implements Controller {
 					List<String> listOfTaskPredecessorIDs = new LinkedList<String>();
 					List<Deliverable> listOfTaskDeliverables = new LinkedList<Deliverable>();
 					List<String> listOfTaskResourceIDs = new LinkedList<String>();
+					List<String> listOfTaskChildIDs = new LinkedList<String>();
 					
 					Element taskInfo = (Element) projectTaskNodeList.item(i);
 					
@@ -245,7 +243,7 @@ public class LoadProjectController implements Controller {
 						for (int y = 0; y < taskPredInfoList.getLength(); y++)
 						{
 							String predTaskID = "";
-							Element el = (Element)taskPredInfoList.item(0);
+							Element el = (Element)taskPredInfoList.item(y);
 							predTaskID = el.getAttribute("id");
 							
 							listOfTaskPredecessorIDs.add(predTaskID);
@@ -284,19 +282,32 @@ public class LoadProjectController implements Controller {
 					if(taskResourcesInfoList != null && taskResourcesInfoList.getLength() > 0) {
 						Element taskResourceInfo = (Element)taskResourcesInfoList.item(0);
 						
-						NodeList taskResInfoList = taskResourceInfo.getElementsByTagName("TaskDeliverable");
+						NodeList taskResInfoList = taskResourceInfo.getElementsByTagName("TaskResource");
 						for (int y = 0; y < taskResInfoList.getLength(); y++)
 						{
 							Element resElement = (Element) taskResInfoList.item(y);
 							
 							String taskResID = "";
-							NodeList taskResNameInfo = resElement.getElementsByTagName("TaskResource");
-							if(taskParentTaskInfoList != null && taskResNameInfo.getLength() > 0) {
-								Element el = (Element)taskResNameInfo.item(0);
-								taskResID = el.getAttribute("id");
-							}
+
+							taskResID = resElement.getAttribute("id");
 							
 							listOfTaskResourceIDs.add(taskResID);	
+						}
+					}
+					
+					NodeList taskChildrenInfoList = taskInfo.getElementsByTagName("TaskChildren");
+					if(taskChildrenInfoList != null && taskChildrenInfoList.getLength() > 0) {
+						Element taskChildInfo = (Element)taskChildrenInfoList.item(0);
+						
+						NodeList taskChildInfoList = taskChildInfo.getElementsByTagName("TaskChild");
+						for (int y = 0; y < taskChildInfoList.getLength(); y++)
+						{
+							Element childElement = (Element) taskChildInfoList.item(y);
+							
+							String taskChildID = "";
+							taskChildID = childElement.getAttribute("id");
+							
+							listOfTaskChildIDs.add(taskChildID);	
 						}
 					}
 										
@@ -320,6 +331,12 @@ public class LoadProjectController implements Controller {
 					for (int r = 0; r < listOfTaskResourceIDs.size(); r++)
 					{
 						project.getTask(taskID).addResource(project.getResource(listOfTaskResourceIDs.get(r)));
+					}
+					
+					//Set the list of Children for the task
+					for (int c = 0; c < listOfTaskChildIDs.size(); c++)
+					{
+						project.getTask(taskID).addChildren(project.getTask(listOfTaskChildIDs.get(c)));
 					}
 				}
 			}
