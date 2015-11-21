@@ -47,7 +47,10 @@ public class Project extends Observable{
      * 
      */
     public void clear() {
+    	projectName = "";
+    	projectAuthor = "";
     	startTime = new GregorianCalendar();
+    	endTime = new GregorianCalendar();
     	resources = new HashMap<String, Resource>();
     	tasks = new HashMap<String, Task>();
     	schedule = new Schedule();
@@ -95,7 +98,7 @@ public class Project extends Observable{
     /**
      * @param info
      */
-    public void createTaskFromUI(String taskName, Integer taskDuration, Task taskPredecessor, Task taskParent) {
+    public void createTaskFromUI(String taskName, Integer taskDuration, ArrayList<Task> taskPredecessor, Task taskParent) {
         Task taskToAdd = new Task();
         taskToAdd.setName(taskName);
         
@@ -104,9 +107,12 @@ public class Project extends Observable{
         
         taskToAdd.setTaskID(uniqueID);
         taskToAdd.setTaskDuration(taskDuration);
-        if (taskPredecessor != null){
-            taskToAdd.addPredecessor(taskPredecessor);
-            taskPredecessor.addSuccessor(taskToAdd);
+        if (!taskPredecessor.isEmpty()){
+        	for (int p = 0; p < taskPredecessor.size(); p++)
+        	{
+                taskToAdd.addPredecessor(taskPredecessor.get(p));
+                taskPredecessor.get(p).addSuccessor(taskToAdd);
+        	}
         }
         if (taskParent != null) {
             taskToAdd.setTaskParent(taskParent);
@@ -181,12 +187,16 @@ public class Project extends Observable{
     /**
      * @param info
      */
-    public void editResource(String rID, double dailyCost, ResourceType r) {
+    public void editResource(String rName, String rID, double dailyCost, ResourceType r) {
         // Search for the Resource to Edit using resource ID,
     	for (String resourceID: resources.keySet()) {
     		if (resourceID.equals(rID)){
-    			resources.get(resourceID).setDailyCost(dailyCost);
-    			resources.get(resourceID).setResourceType(r);
+    			if (!rName.equals(""))
+    			{
+        			resources.get(resourceID).setDailyCost(dailyCost);
+        			resources.get(resourceID).setResourceType(r);
+    			}
+
     	        setChanged();
     	        notifyObservers();
     			break;
@@ -227,14 +237,21 @@ public class Project extends Observable{
      * @param taskID 
      * @param info
      */
-    public void editTask(String tID, Integer taskDuration, Task predecessorTask, Task parentTask) {
+    public void editTask(String taskName, String tID, Integer taskDuration, ArrayList<Task> predecessorTask, Task parentTask) {
         // TODO implement here
     	for (String taskID: tasks.keySet()) {
     		if (taskID.equals(tID))
     		{
+    			if (!taskName.equals("")){
+    				tasks.get(taskID).setName(taskName);
+    			}
+    			
     			tasks.get(taskID).setTaskDuration(taskDuration);
-    			if (predecessorTask != null){
-    				tasks.get(taskID).addPredecessor(predecessorTask);
+    			if (!predecessorTask.isEmpty()){
+    				for (int p = 0; p < predecessorTask.size(); p++)
+    				{
+        				tasks.get(taskID).addPredecessor(predecessorTask.get(p));
+    				}
     			}
     			if (parentTask != null) {
     				tasks.get(taskID).setTaskParent(parentTask);
@@ -281,15 +298,7 @@ public class Project extends Observable{
     public void generateSchedule() {
     	schedule.generateSchedule(this.startTime, this.tasks);
     }
-
-    /**
-     * @return
-     */
-    private List<Task> calculateCriticalPath() {
-        // TODO implement here
-        return null;
-    }
-
+    
     /**
      * @param schedule
      */

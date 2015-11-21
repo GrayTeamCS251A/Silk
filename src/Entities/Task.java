@@ -30,7 +30,6 @@ public class Task extends Observable {
     	predecessors = new HashMap<String, Task>();
     	successors = new HashMap<String, Task>();
     	children = new HashMap<String, Task>();
-    	this.parent = new Task();
     }
 
     //Second Constructor
