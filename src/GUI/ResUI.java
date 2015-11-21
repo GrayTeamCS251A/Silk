@@ -3,7 +3,9 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -23,6 +25,7 @@ public class ResUI extends JDialog {
 	private JTextField textCost;
 	private JButton okButton;
 	private JButton cancelButton;
+	private JComboBox comboBoxType;
 
 	/**
 	 * Launch the application.
@@ -74,7 +77,7 @@ public class ResUI extends JDialog {
 			textCost.setColumns(10);
 		}
 		
-		JComboBox comboBoxType = new JComboBox();
+		comboBoxType = new JComboBox();
 		comboBoxType.setBounds(103, 73, 86, 20);
 		contentPanel.add(comboBoxType);
 		{
@@ -93,6 +96,12 @@ public class ResUI extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+		
+		ArrayList<String> types= new ArrayList<String>();
+		types.add("labor");
+		types.add("equipment");
+		types.add("material");
+		comboBoxType.setModel(new DefaultComboBoxModel(types.toArray()));
 	}
 	
 	   public void addConfirmListener(ActionListener listener) {
@@ -113,19 +122,16 @@ public class ResUI extends JDialog {
 	   }
 	   
 	   public String getTextType() {
-		   return "";
-		   //return textType.getText();
+		   return (String) comboBoxType.getSelectedItem();		
 	   }
 	   
 	   public void Reset() {
 		   textName.setText("");
 		   textCost.setText("");
-		   //textType.setText("");
 	   }
 	   
 	   public void fill(Resource r){
 		   textName.setText(r.getname());
 		   textCost.setText(Double.toString(r.getDailyCost()));
-		   //textType.setText(r.getResourceType().toString());
 	   }
 }

@@ -335,4 +335,12 @@ public class Project extends Observable{
     	
     	return d;
     }
+
+    public void setTasks(HashMap<String, Task> tasks){
+    	this.tasks=tasks;
+    }
+    
+    public void setResources(HashMap<String, Resource> resources){
+    	this.resources=resources;
+    }
 }

@@ -103,7 +103,7 @@ public class MainUI{
 	private JTable table = new JTable();
 	private JList resourceList = new JList();
 	private JTree taskTree = new JTree();
-	private Project project = new Project();
+	private Project project;
 
 
 	private ResUI addRes = new ResUI("Add Resource");
@@ -115,29 +115,31 @@ public class MainUI{
 	private ProjectUI newProject = new ProjectUI("New Project");
 	private ProjectUI editProject = new ProjectUI("Edit Project");
 	
-	private AddResourceController addResourceController = new AddResourceController();
-	private EditResourceController editResourceController = new EditResourceController();
-	private DeleteResourceController deleteResourceController = new DeleteResourceController();
+	private AddResourceController addResourceController;
+	private EditResourceController editResourceController;
+	private DeleteResourceController deleteResourceController;
 	
-	private AddTaskController addTaskController = new AddTaskController();
-	private EditTaskController editTaskController = new EditTaskController();
-	private DeleteTaskController deleteTaskController = new DeleteTaskController();
+	private AddTaskController addTaskController;
+	private EditTaskController editTaskController;
+	private DeleteTaskController deleteTaskController;
 	
-	private NewProjectController newProjectController = new NewProjectController();
-	private EditProjectController editProjectController = new EditProjectController();
-	private SaveProjectController saveProjectController = new SaveProjectController();
-	private LoadProjectController loadProjectController = new LoadProjectController();
+	private NewProjectController newProjectController;
+	private EditProjectController editProjectController;
+	private SaveProjectController saveProjectController;
+	private LoadProjectController loadProjectController;
 	private JScrollPane scheduleScrollPane;
 	
-	private GenerateScheduleController generateScheduleController = new GenerateScheduleController();
-	private ViewScheduleAsGraphController viewScheduleAsGraphController = new  ViewScheduleAsGraphController();
-	private ViewScheduleAsTableController  viewScheduleAsTableController = new ViewScheduleAsTableController();
+	private GenerateScheduleController generateScheduleController;
+	private ViewScheduleAsGraphController viewScheduleAsGraphController;
+	private ViewScheduleAsTableController  viewScheduleAsTableController;
 	
-	private ResourcesView resourcesView =new ResourcesView(project,resourceList);
-	private TasksView tasksView = new TasksView(project, taskTree);	
+	private ResourcesView resourcesView ;
+	private TasksView tasksView;	
 	/**
 	 * Launch the application.
 	 */
+	
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -166,15 +168,11 @@ public class MainUI{
 		initNewProjectAction();
 		initEditProjectAction();
 		initSaveAndLoad();
-		
-		
-		project.getResources();
-		project.getResources().put("1", new Resource("1","a",3.3,ResourceType.equipment));
-		displayRes(resourceList,project.getResources());
+		initControllerAndView();
 		
 		treeTest();
-//		resouceTest();
-//		tableTest();
+		resouceTest();
+		tableTest();
 		graphTest();
 	}
 
@@ -392,9 +390,6 @@ public class MainUI{
 					int selectedIndex = resourceList.getSelectedIndex();
 					Resource r=(Resource) resourceList.getSelectedValue();
 					deleteResourceController.executeDeleteResource(r.getResourceID());
-					DefaultListModel model = (DefaultListModel) resourceList.getModel();			
-					model.remove(selectedIndex);			
-
 				}
 			}});
 	}
@@ -739,9 +734,29 @@ public class MainUI{
 		JGraph graphView=GraphUtils.makeJGraph(graph);
 		scheduleScrollPane.setViewportView(graphView);
 	}
-	
-	
-	
+		
+	private void initControllerAndView(){
+		addResourceController = new AddResourceController();
+		editResourceController = new EditResourceController();
+		deleteResourceController = new DeleteResourceController();
+		
+		addTaskController = new AddTaskController();
+		editTaskController = new EditTaskController();
+		deleteTaskController = new DeleteTaskController();
+		
+		newProjectController = new NewProjectController();
+		editProjectController = new EditProjectController();
+		saveProjectController = new SaveProjectController();
+		loadProjectController = new LoadProjectController();
+		
+		generateScheduleController = new GenerateScheduleController();
+		viewScheduleAsGraphController = new  ViewScheduleAsGraphController();
+		viewScheduleAsTableController = new ViewScheduleAsTableController();
+		
+		project=newProjectController.getProject();		
+		resourcesView =new ResourcesView(project,resourceList);
+		tasksView = new TasksView(project, taskTree);	
+	}
 	
 	
 	
@@ -788,6 +803,7 @@ public class MainUI{
 		x.get("3").getChildren().put("y0",y0);
 		x.get("3").getChildren().put("y1",y1);
 		x.get("3").getChildren().put("y2",y2);	
+		project.setTasks(x);
 		displayTree(taskTree,x);
 	
 	}
@@ -798,6 +814,7 @@ public class MainUI{
 		x.put("2",new Resource("2","ad",3.3,ResourceType.equipment));
 		x.put("3",new Resource("3","af",3.3,ResourceType.equipment));
 		x.put("4",new Resource("4","d",3.3,ResourceType.equipment));
+		project.setResources(x);
 		displayRes(resourceList,x);
 	}
 	
