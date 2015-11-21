@@ -31,6 +31,8 @@ import java.io.FileWriter;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -50,6 +52,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import jxl.write.WritableWorkbook;
+
 import org.jgraph.JGraph;
 import org.jgraph.graph.Edge;
 
@@ -67,6 +71,7 @@ import Controllers.Resources.AddResourceController;
 import Controllers.Resources.DeleteResourceController;
 import Controllers.Resources.EditResourceController;
 import Controllers.Schedule.GenerateScheduleController;
+import Controllers.Schedule.SaveScheduleController;
 import Controllers.Schedule.ViewScheduleAsGraphController;
 import Controllers.Schedule.ViewScheduleAsTableController;
 import Controllers.Tasks.AddTaskController;
@@ -130,6 +135,7 @@ public class MainUI{
 	private LoadProjectController loadProjectController;
 	private JScrollPane scheduleScrollPane;
 	
+	private SaveScheduleController saveScheduleController;
 	private GenerateScheduleController generateScheduleController;
 	private ViewScheduleAsGraphController viewScheduleAsGraphController;
 	private ViewScheduleAsTableController  viewScheduleAsTableController;
@@ -519,12 +525,13 @@ public class MainUI{
                 int returnVal = saveFile.showSaveDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     try {
-                    	String fileName = saveFile.getSelectedFile().getName();
-                    	saveProjectController.executeSaveProject(fileName);
-               	
-                    	File src = new File("");  //File returned by execute from saveSchedule    	
-                    	File dest = new File(saveFile.getSelectedFile().getAbsolutePath());
-                    	Files.copy(src.toPath(),dest.toPath(), REPLACE_EXISTING);
+                    	//String fileName = saveFile.getSelectedFile().getName();
+                    	String dest = saveFile.getSelectedFile().getAbsolutePath();
+                    	WritableWorkbook src = saveScheduleController.executeSaveSchedule(dest);
+                    	
+                    	//File src = new File("");  //File returned by execute from saveSchedule 	
+                    	//File dest = new File(saveFile.getSelectedFile().getAbsolutePath());
+                    	//Files.copy(src.toPath(),dest.toPath(), REPLACE_EXISTING);
                     	                    	
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -854,6 +861,7 @@ public class MainUI{
 		loadProjectController = new LoadProjectController();
 		
 		generateScheduleController = new GenerateScheduleController();
+    	saveScheduleController = new SaveScheduleController();
 		viewScheduleAsGraphController = new  ViewScheduleAsGraphController();
 		viewScheduleAsTableController = new ViewScheduleAsTableController();
 		
