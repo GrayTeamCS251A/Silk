@@ -343,11 +343,11 @@ public class MainUI{
 				// TODO Auto-generated method stub
 				Resource r=(Resource) resourceList.getSelectedValue();
 				editRes.fill(r);
-//				editResourceController.executeEditResource(editRes.getTextName(), 
-//						r.getResourceID(), 
-//						Double.parseDouble(editRes.getTextCost()), 
-//						editRes.getTextType());
-//				editRes.setVisible(false);
+				editResourceController.executeEditResource(editRes.getTextName(), 
+						r.getResourceID(), 
+						Double.parseDouble(editRes.getTextCost()), 
+						editRes.getTextType());
+				editRes.setVisible(false);
 			}
 						
 		});
@@ -404,12 +404,12 @@ public class MainUI{
 			    DefaultMutableTreeNode node = (DefaultMutableTreeNode)
 	                       taskTree.getLastSelectedPathComponent();		
 			    Task t = (Task) node.getUserObject();
-//				editTaskController.executeEditTask(editTask.getTaskName(), 
-//						editTask.getTaskID(), 
-//						Integer.parseInt(editTask.getTaskDuration()),
-//						editTask.getPredecessorTask(),
-//						editTask.getParentTask());
-//				editTask.setVisible(false);
+				editTaskController.executeEditTask(editTask.getTaskName(), 
+						t.getTaskID(), 
+						Integer.parseInt(editTask.getTaskDuration()),
+						editTask.getPredecessorTask(),
+						editTask.getParentTask());
+				editTask.setVisible(false);
 			}
 						
 		});
@@ -444,12 +444,11 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub 
-//				addTaskController.executeAddTask(addTask.getTaskName(), 
-//						Integer.parseInt(addTask.getTaskID()), 
-//						Integer.parseInt(addTask.getTaskDuration()),
-//						addTask.getPredecessorTask(),
-//						addTask.getParentTask());
-//				addTask.setVisible(false);
+				addTaskController.executeAddTask(addTask.getTaskName(), 
+						Integer.parseInt(addTask.getTaskDuration()),
+						addTask.getPredecessorTask(),
+						addTask.getParentTask());
+				addTask.setVisible(false);
 			}
 						
 		});
@@ -491,9 +490,9 @@ public class MainUI{
 				    DefaultMutableTreeNode node = (DefaultMutableTreeNode)
 		                       taskTree.getLastSelectedPathComponent();		
 				    Task t = (Task) node.getUserObject();
-//					TreePath tp = taskTree.getSelectionPath();
-//					deleteTaskController.executeDeleteTask(tp.getLastPathComponent());
-//					taskTree.removeSelectionPath(tp);
+					TreePath tp = taskTree.getSelectionPath();
+					deleteTaskController.executeDeleteTask(t.getTaskID());
+					taskTree.removeSelectionPath(tp);
 				}
 			}});
 	}
@@ -541,6 +540,15 @@ public class MainUI{
 				//See JGraph example
 				//JGraph graphView = viewScheduleAsGraphController.execute(??);
 				//scheduleScrollPane.setViewportView(graphView);
+				
+				Project p = viewScheduleAsGraphController.getProject();
+				
+				for (int i = 0; i < p.getTasks().size(); i++)
+				{
+					
+				}
+				
+				
 			}});
 		
 		btnTable.addActionListener(new ActionListener(){
@@ -550,6 +558,8 @@ public class MainUI{
 				// TODO Auto-generated method stub
 				//JTable table = viewScheduleAsTableController.execute(?);
 				//scheduleScrollPane.setViewportView(table);
+				
+				Project p = viewScheduleAsTableController.getProject();
 			}});
 	}
 
@@ -558,9 +568,22 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-//				newProjectController.executeNewProject(newProject.getNameField(), 
-//						newProject.getStartField(), 
-//						newProject.getAuthorField());
+				String startTimeString = newProject.getStartField();
+				Integer year = 0;
+				Integer month = 0;
+				Integer day = 0;
+
+				if (startTimeString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}"))
+				{
+					String[] splitLine = startTimeString.split("-");
+					year = Integer.parseInt(splitLine[0]);
+					month = Integer.parseInt(splitLine[1]);
+					day = Integer.parseInt(splitLine[2]);
+				}
+				
+				newProjectController.executeNewProject(newProject.getNameField(), 
+						year, month, day, 
+						newProject.getAuthorField());
 				//newProject.Reset();      
 				newProject.setVisible(false);
 			}
@@ -597,11 +620,25 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-//				editProject.fill(project);
-//				editProjectController.executeEditProject(editProject.getNameField(), 
-//						editProject.getStartField(), 
-//						editProject.getAuthorField());
-//				editProject.setVisible(false);
+				//editProject.fill(project);
+				
+				String startTimeString = newProject.getStartField();
+				Integer year = 0;
+				Integer month = 0;
+				Integer day = 0;
+
+				if (startTimeString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}"))
+				{
+					String[] splitLine = startTimeString.split("-");
+					year = Integer.parseInt(splitLine[0]);
+					month = Integer.parseInt(splitLine[1]);
+					day = Integer.parseInt(splitLine[2]);
+				}
+				
+				editProjectController.executeEditProject(editProject.getNameField(), 
+						year, month, day, 
+						editProject.getAuthorField());
+				editProject.setVisible(false);
 			}
 						
 		});
