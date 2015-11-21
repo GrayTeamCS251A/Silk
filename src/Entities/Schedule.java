@@ -113,7 +113,7 @@ public class Schedule extends Observable {
 		this.startDate = startDate;
 	}
 	
-	public String[][] generateScheduleMatrix()
+	public String[][] generateScheduleMatrix(HashMap<String, Task> tasks)
 	{
 		String[][] datavalues = null;
 		

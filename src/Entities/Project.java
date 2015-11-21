@@ -391,6 +391,6 @@ public class Project extends Observable{
     
     public String[][] getScheduleMatrix()
     {
-    	return schedule.generateScheduleMatrix();
+    	return schedule.generateScheduleMatrix(this.tasks);
     }
 }
