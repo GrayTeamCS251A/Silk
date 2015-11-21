@@ -15,7 +15,7 @@ public class EditResourceController implements Controller {
     }
 
 
-	public void executeEditResource(String resourceID, double dailyCost, String resourceType)
+	public void executeEditResource(String resourceName, String resourceID, double dailyCost, String resourceType)
 	{	
 		//Convert resourceType to a ResourceType Entity
 		ResourceType r = null;
@@ -29,6 +29,6 @@ public class EditResourceController implements Controller {
 				break;
 		}
 		
-		project.editResource(resourceID, dailyCost, r);
+		project.editResource(resourceName, resourceID, dailyCost, r);
 	}
 }
