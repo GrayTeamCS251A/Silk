@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class Deliverable {
 
-	
+	//class Deliverable
 	private String name;
     private DeliverableType type;
     
