@@ -173,7 +173,7 @@ public class TaskUI extends JDialog {
 	   
 	   
 	   public void fillEdit(Task t,Project p){
-		   textName.setText(t.getTaskName());
+		   textName.setText(t.getName());
 		   textDuration.setText(String.valueOf(t.getDuration()));
 		   fillResAndPre(t,p);  		   
 		   Task z =t.getParent();
@@ -209,7 +209,7 @@ public class TaskUI extends JDialog {
 		   for(int i=0;i<p.getTasks().values().size();i++){
 			   Task projectTask= (Task)model.get(i);
 			   for(Task task:x){
-				   if(projectTask.getTaskID().equals(task.getTaskID())){				
+				   if(projectTask.getID().equals(task.getID())){				
 					   n.add(i);
 				   }
 			   }
