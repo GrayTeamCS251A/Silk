@@ -622,6 +622,11 @@ public class MainUI{
 					aList = tempBList;
 				}
 				
+				for (Node n: scheduleGraph.getNodes())
+				{
+					n.setLabel(p.getTask(n.getLabel().toString()).getTaskName());
+				}
+				
 				displayGraph(scheduleGraph, scheduleScrollPane);				
 			}});
 		
