@@ -39,10 +39,10 @@ public class Task extends Observable {
     }
 
    //getters
-   public String getTaskID(){
+   public String getID(){
 	   return taskID;
    }
-   public String getTaskName(){
+   public String getName(){
 	   return name;
    }
    public String getDescription(){
@@ -74,8 +74,8 @@ public class Task extends Observable {
 	   return parent;
    }
    public void getTaskInfo(){
-	   getTaskID();
-	   getTaskName();
+	   getID();
+	   getName();
 	   getDescription();
 	   getDuration();
 	   getStartTime();
@@ -248,7 +248,7 @@ public class Task extends Observable {
 
 	public void addPredecessor(Task predecessor)
     {
-    	this.predecessors.put(predecessor.getTaskID(), predecessor);
+    	this.predecessors.put(predecessor.getID(), predecessor);
     }
     
     public void addDeliverable(Deliverable d)
@@ -274,12 +274,12 @@ public class Task extends Observable {
 	
 	public void addSuccessor(Task successor)
 	{
-		this.successors.put(successor.getTaskID(), successor);
+		this.successors.put(successor.getID(), successor);
 	}
 	
 	public void addChildren(Task child)
 	{
-		this.children.put(child.getTaskID(), child);
+		this.children.put(child.getID(), child);
 	}
 	
 	
