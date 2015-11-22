@@ -197,6 +197,7 @@ public class Project extends Observable{
     		if (resourceID.equals(rID)){
     			if (!rName.equals(""))
     			{
+    				resources.get(resourceID).setname(rName);
         			resources.get(resourceID).setDailyCost(dailyCost);
         			resources.get(resourceID).setResourceType(r);
     			}
@@ -206,6 +207,7 @@ public class Project extends Observable{
     			break;
     		}
     	}
+
     }
 
     /**

@@ -92,12 +92,10 @@ public class MainUI{
 	private JFrame frame;
 	private JButton btnAddResource;
 	private JButton btnDeleteResource;
-	private JButton btnViewResource;
 	private JButton btnEditResource;
 	private JButton btnAddTask;
 	private JButton btnDeleteTask;
 	private JButton btnEditTask;
-	private JButton btnViewTask;
 	private JButton btnGenerateSchedule;
 	private JButton btnSaveSchedule;
 	private JButton btnTable;
@@ -233,12 +231,8 @@ public class MainUI{
 		btnDeleteResource.setBounds(10, 360, 115, 23);
 		Resource_panel.add(btnDeleteResource);
 		
-		btnViewResource = new JButton("View Resource");
-		btnViewResource.setBounds(149, 326, 128, 23);
-		Resource_panel.add(btnViewResource);
-		
 		btnEditResource = new JButton("Edit Resource");
-		btnEditResource.setBounds(149, 360, 128, 23);
+		btnEditResource.setBounds(149, 326, 128, 23);
 		Resource_panel.add(btnEditResource);
 		
 		JPanel Task_panel = new JPanel();
@@ -258,10 +252,6 @@ public class MainUI{
 		btnAddTask = new JButton("Add Task");
 		btnAddTask.setBounds(10, 326, 105, 23);
 		Task_panel.add(btnAddTask);
-		
-		btnViewTask = new JButton("View Task");
-		btnViewTask.setBounds(172, 360, 105, 23);
-		Task_panel.add(btnViewTask);
 		
 		btnEditTask = new JButton("Edit Task");
 		btnEditTask.setBounds(172, 326, 105, 23);
@@ -349,11 +339,11 @@ public class MainUI{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				Resource r=(Resource) resourceList.getSelectedValue();
-				editRes.fill(r);
 				editResourceController.executeEditResource(editRes.getTextName(), 
 						r.getResourceID(), 
 						Double.parseDouble(editRes.getTextCost()), 
 						editRes.getTextType());
+				System.out.println(editRes.getTextName());
 				editRes.setVisible(false);
 			}
 						
@@ -361,6 +351,9 @@ public class MainUI{
 		
 		btnEditResource.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent arg0) {
+				Resource r=(Resource) resourceList.getSelectedValue();
+	        	editRes.Reset();
+	        	editRes.fill(r);  
 	            if (!editRes.isVisible()) {
 	            	editRes.setVisible(true);
 	            }
@@ -423,6 +416,11 @@ public class MainUI{
 		
 		btnEditTask.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent arg0) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+								taskTree.getLastSelectedPathComponent();		
+				Task t = (Task) node.getUserObject();
+				editTask.Reset();
+				editTask.fill(t);
 	            if (!editTask.isVisible()) {
 	            	editTask.setVisible(true);
 	            }
@@ -724,6 +722,8 @@ public class MainUI{
 		
 		Edit.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent arg0) {
+	        	 	editProject.Reset();
+					editProject.fill(project); 
 	            if (!editProject.isVisible()) {
 	            	editProject.setVisible(true);
 	            }
@@ -838,7 +838,7 @@ public class MainUI{
 		resourceList.setModel(model);
 		for (Resource r:resouces.values()){
 			model.addElement(r);
-		}		
+		}	
 	}
 		
 	public static void displayTable(String columnNames[], String dataValues[][],JScrollPane scheduleScrollPane){

@@ -120,4 +120,18 @@ public class ProjectUI extends JDialog {
 	   public String getAuthorField(){
 		   return authorField.getText();   
 	   }
+
+	public void Reset() {
+		// TODO Auto-generated method stub
+		nameField.setText("");
+		startField.setText("");
+		authorField.setText("");		
+	}
+
+	public void fill(Project p) {
+		// TODO Auto-generated method stub
+		nameField.setText(p.getProjectName());
+		startField.setText(p.getStartTime().toString());
+		authorField.setText(p.getProjectAuthor());				
+	}
 }
