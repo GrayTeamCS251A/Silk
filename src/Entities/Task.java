@@ -9,7 +9,7 @@ public class Task extends Observable {
 	
 	 private String name;
 	    private String description;
-	    private int duration;
+	    private double duration;
 	    private double startTime;
 	    private double endTime;
 	    private double percentCompleted;
@@ -47,7 +47,7 @@ public class Task extends Observable {
    public String getDescription(){
 	   return description;
    }
-   public int getDuration(){
+   public double getDuration(){
 	   return duration;
    }
    public double getStartTime(){
@@ -143,11 +143,109 @@ public class Task extends Observable {
      * Calculates the start time of this Task and any subtasks (and their subtasks). startTimes should be integer values
      * @param startTime the start time of this Task
      */
-    public void calculateStartTimes(int startTime) {
-    	// TODO
-    }
+    public void calculateStartTimes(int sT) {
+    	this.startTime = 0;
+    	this.endTime = 0;
+    	
+    	//Checks if starting task
+    	if (this.predecessors == null){
+    		//assigns startTime for this task as the offset value sT
+    		this.startTime = sT;
+    		//calc endTime for this task
+    		this.endTime = this.startTime + this.duration;
+    		//Checks if this task has children
+    		if(this.children != null){
+    			double childEndTime = 0;
+    			//Call Child function here
+    			childEndTime = startTimeChild(children, this.startTime); 
+    			//Checks old and new value and assigns greater value for task's endTime
+    			if (this.endTime < childEndTime){
+    				this.endTime = childEndTime;
+    			}
+    		}
+     	}
+    	else{ //Else if not the starting task
+    		//Gets the predecessor values
+    		Collection<Task> predecessor = this.predecessors.values();
+    		//If more than 1 predecessor (Join Tasks)
+    		if (predecessor.size() > 1){
+    			this.startTime = max(predecessor);
+    		}
+    		else{
+    			for(Task t : predecessor){
+    				this.startTime = t.endTime;
+    			}
+    			
+    		}
+    		this.endTime = this.startTime + this.duration;
+    		//Then Checks if children are there
+    		if(this.children !=null){
+    			//calc children
+    			double tempEndValue = 0;
+    			tempEndValue = startTimeChild(children, this.startTime);
+    			//Checks old and new value and assigns greater value for task's endTime
+    			if(this.endTime < tempEndValue){
+    				this.endTime = tempEndValue;
+    			}
+    		}
+    		
+    	}
+    }	
     
-    public void addPredecessor(Task predecessor)
+    //To calculate the bigger endTime of the predecessor to be the startTime for the current task
+    private double max(Collection<Task> predecessor) {
+		double maxValue = 0;
+    	for (Task t : predecessor){
+			if (maxValue < t.endTime){
+				maxValue = t.endTime;
+			}
+		}
+    	return maxValue;
+	}
+    
+    //Calculate the endTime for the children
+	public double startTimeChild(HashMap<String, Task> children, double startTime){
+    	//Gets collection of children tasks
+		Collection<Task> childrens = children.values();
+    	double returnValue=0;
+		for (Task child: childrens){
+			//Checks if the task has more subtasks
+			if(child.children != null){
+				//Recursive function
+				double temp = startTimeChild(child.children, child.startTime);
+				child.endTime = temp;
+			}
+			//If child task if first task
+			else if(child.predecessors == null){
+					//Assigns startTime as startTime fo main task
+					child.startTime = startTime;
+					child.endTime = child.startTime + child.duration;
+					returnValue = child.endTime;
+				}
+			else{ //If not the first task
+					Collection<Task> predecessor = child.predecessors.values();
+		    		if (predecessor.size() > 1){
+		    			child.startTime = max(predecessor);
+		    		}
+		    		else{
+		    			for(Task t : predecessor){
+		    				child.startTime = t.endTime;
+		    			}
+		    			
+		    		}
+		    		child.endTime = child.startTime + child.duration;
+		    		returnValue = child.endTime;
+				}
+				
+			}
+		return returnValue;
+			
+		
+    }
+		
+  
+
+	public void addPredecessor(Task predecessor)
     {
     	this.predecessors.put(predecessor.getTaskID(), predecessor);
     }
@@ -182,4 +280,6 @@ public class Task extends Observable {
 	{
 		this.children.put(child.getTaskID(), child);
 	}
+	
+	
 }
