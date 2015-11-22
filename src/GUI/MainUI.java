@@ -113,8 +113,8 @@ public class MainUI{
 	private ResUI addRes = new ResUI("Add Resource");
 	private ResUI editRes = new ResUI("Edit Resource");
 	
-	private TaskUI addTask = new TaskUI("Add Task");
-	private TaskUI editTask = new TaskUI("Edit Task");
+	private TaskUI addTask = new TaskUI("Add Task","Use Ctrl+Left Click to highlight desired resources or predecessors");
+	private TaskUI editTask = new TaskUI("Edit Task","Use Ctrl+Left Click to highlight desired resources or predecessors");
 	
 	private ProjectUI newProject = new ProjectUI("New Project");
 	private ProjectUI editProject = new ProjectUI("Edit Project");
@@ -175,8 +175,8 @@ public class MainUI{
 		initSaveAndLoad();
 		initControllerAndView();
 		
-		treeTest();
 		resouceTest();
+		treeTest();
 		tableTest();
 		graphTest();
 	}
@@ -410,6 +410,7 @@ public class MainUI{
 						editTask.getPredecessorTask(),
 						editTask.getParentTask());
 				editTask.setVisible(false);
+				System.out.println(t.getPredecessors());
 			}
 						
 		});
@@ -420,7 +421,7 @@ public class MainUI{
 								taskTree.getLastSelectedPathComponent();		
 				Task t = (Task) node.getUserObject();
 				editTask.Reset();
-				editTask.fill(t);
+				editTask.fillEdit(t,project);
 	            if (!editTask.isVisible()) {
 	            	editTask.setVisible(true);
 	            }
@@ -460,6 +461,7 @@ public class MainUI{
 		
 		btnAddTask.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent arg0) {
+	        	 addTask.fillAdd(project);
 	            if (!addTask.isVisible()) {
 	            	addTask.setVisible(true);
 	            }
@@ -824,9 +826,9 @@ public class MainUI{
 			{
 				DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(innerTask);
 				aTask.add(newRoot);	
-				newRoot.add(new DefaultMutableTreeNode("ID:"+t.getTaskID()));
-				newRoot.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
-				newRoot.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));	
+				newRoot.add(new DefaultMutableTreeNode("ID:"+innerTask.getTaskID()));
+				newRoot.add(new DefaultMutableTreeNode("Duration:"+innerTask.getDuration()));
+				newRoot.add(new DefaultMutableTreeNode("Description:"+innerTask.getDescription()));	
 				helper(newRoot,innerTask.getChildren());							
 			}
 		}	
@@ -915,21 +917,41 @@ public class MainUI{
 
 	private void treeTest(){
 		HashMap<String, Task> x= new HashMap<String, Task>();				
-		Task y0=new Task("2","T21","C",2);
-		Task y1=new Task("2","T22","C",2);
-		Task y2=new Task("2","T23","C",2);			
-		x.put("1",new Task("1","T1","A",1));
-		x.put("2",new Task("2","T2","B",2));
+		
+		Task y0=new Task("11","T21kk","C",2);
+		Task y1=new Task("12","T22","C",2);
+		Task y2=new Task("13","T23","C",2);	
+		
+		Task a=new Task("1","T1","A",1);
+		Task b=new Task("2","T2","B",2);
+		Task c=new Task("3","T3","C",3);
+		Task e=new Task("4","T4","D",4);
+		
+		x.put("1",a);
+		x.put("2",b);
+		x.put("3",c);
+		x.put("4",e);		
+		y2.getChildren().put("131",new Task("131","dd","sf",3));
+		y2.getChildren().put("132",new Task("132","ddasd","sfdsf",3));	
+		
+		
 		x.get("1").getChildren().put("y0",y0);
 		x.get("1").getChildren().put("y1",y1);
 		x.get("1").getChildren().put("y2",y2);
-		x.put("3",new Task("2","T3","C",3));
-		x.put("4",new Task("3","T4","D",4));		
-		y2.getChildren().put("3",new Task("3","dd","sf",3));
-		y2.getChildren().put("2",new Task("2","ddasd","sfdsf",3));					
-		x.get("3").getChildren().put("y0",y0);
-		x.get("3").getChildren().put("y1",y1);
-		x.get("3").getChildren().put("y2",y2);	
+		
+		Task z0=new Task("31","T212","C1",2);
+		Task z1=new Task("32","T222","C1",2);
+		Task z2=new Task("33","T232","C1",2);
+		x.get("3").getChildren().put("z0",z0);
+		x.get("3").getChildren().put("z1",z1);
+		x.get("3").getChildren().put("z2",z2);	
+		
+		
+		b.addResource(project.getResource("2"));
+		b.addPredecessor(a);
+		System.out.println(y0.getRequiredResources());
+		
+		
 		project.setTasks(x);
 		displayTree(taskTree,x);
 	

@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JComboBox;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -37,24 +38,11 @@ public class TaskUI extends JDialog {
 	private JList listPred;
 
 	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		try {
-//			TaskUI dialog = new TaskUI("");
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-	/**
 	 * Create the dialog.
 	 */
-	public TaskUI(String x) {
+	public TaskUI(String x,String instr) {
 		setTitle(x);
-		setBounds(100, 100, 550, 329);
+		setBounds(100, 100, 550, 348);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -69,7 +57,7 @@ public class TaskUI extends JDialog {
 		contentPanel.add(lblParent);
 		
 		JLabel lblPredecessor = new JLabel("Predecessor");
-		lblPredecessor.setBounds(291, 60, 84, 14);
+		lblPredecessor.setBounds(283, 60, 84, 14);
 		contentPanel.add(lblPredecessor);
 		
 		textName = new JTextField();
@@ -110,6 +98,10 @@ public class TaskUI extends JDialog {
 		
 		listPred = new JList();
 		scrollPanePred.setViewportView(listPred);
+		
+		JLabel lblInstr = new JLabel(instr);
+		lblInstr.setBounds(65, 258, 376, 14);
+		contentPanel.add(lblInstr);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -126,6 +118,7 @@ public class TaskUI extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+
 	}
 	
 	   public void addConfirmListener(ActionListener listener) {
@@ -150,22 +143,23 @@ public class TaskUI extends JDialog {
 	   }
  
 	   public ArrayList<Task> getPredecessorTask() {
-		   int[] r=listPred.getSelectedIndices();	
+		   int[] r=listPred.getSelectedIndices();
 		   ArrayList<Task> x=new ArrayList<Task>();
 		   for(int i=0;i<r.length;i++){
-			   Task t= (Task) listPred.getModel().getElementAt(i);
+			   Task t= (Task) listPred.getModel().getElementAt(r[i]);
 			   x.add(t);
-		   }		   
+		   }	
+		   //System.out.println(x);
 		   return x;
 	   }
 	   
 	   public ArrayList<Resource> getResouces() {
-		   int[] r=listRes.getSelectedIndices();	
+		   int[] r=listRes.getSelectedIndices();
 		   ArrayList<Resource> x=new ArrayList<Resource>();
 		   for(int i=0;i<r.length;i++){
-			   Resource t= (Resource) listRes.getModel().getElementAt(i);
+			   Resource t= (Resource) listRes.getModel().getElementAt(r[i]);
 			   x.add(t);
-		   }		   
+		   }
 		   return x;
 	   }
 	   
@@ -178,26 +172,77 @@ public class TaskUI extends JDialog {
 	   }
 	   
 	   
-	   public void fill(Task t){
+	   public void fillEdit(Task t,Project p){
 		   textName.setText(t.getTaskName());
 		   textDuration.setText(String.valueOf(t.getDuration()));
-		   Collection<Task> x =t.getPredecessors().values();			
-		   DefaultListModel model = new DefaultListModel();
-		   listPred.setModel(model);
-		   for(Task task:x){
-			 	model.addElement(task);
-		   }
-		   		   
-		   Collection<Resource> y =t.getRequiredResources().values();
-		   DefaultListModel model2 = new DefaultListModel();
-		   listRes.setModel(model);
-		   for(Resource resource:y){
-			 	model2.addElement(resource);
-		   }
-		   
+		   fillResAndPre(t,p);  		   
 		   Task z =t.getParent();
 		   DefaultComboBoxModel model3 = new DefaultComboBoxModel();
 		   comboBoxParent.setModel( model3);
 		   model3.addElement(z);
+	   }
+	   
+	   public void fillAdd(Project p){
+		   DefaultListModel model = new DefaultListModel();
+		   listPred.setModel(model);
+		   for(Task task: p.getTasks().values()){
+			 	model.addElement(task);
+		   }
+		   DefaultListModel model2 = new DefaultListModel();
+		   listRes.setModel(model2);		  
+		   for(Resource resource: p.getResources().values()){
+			 	model2.addElement(resource);
+		   }  
+	   }
+	   
+	   private void fillResAndPre(Task t,Project p){
+		
+		   Collection<Task> x =t.getPredecessors().values();			
+		   DefaultListModel model = new DefaultListModel();
+		   listPred.setModel(model);
+		   for(Task task: p.getTasks().values()){
+			 	model.addElement(task);
+		   }  
+		  
+		   ArrayList<Integer> n = new  ArrayList<Integer>();
+		  
+		   for(int i=0;i<p.getTasks().values().size();i++){
+			   Task projectTask= (Task)model.get(i);
+			   for(Task task:x){
+				   if(projectTask.getTaskID().equals(task.getTaskID())){				
+					   n.add(i);
+				   }
+			   }
+		   }
+		   
+		  int[] IntArray = new int[n.size()];
+		  for(int i=0;i<n.size();i++){
+			  IntArray[i]=n.get(i);
+		  }		  
+		  listPred.setSelectedIndices(IntArray);
+		   
+		  
+		  ArrayList<Integer> n2 = new  ArrayList<Integer>();
+		   Collection<Resource> y =t.getRequiredResources().values();
+		   DefaultListModel model2 = new DefaultListModel();
+		   listRes.setModel(model2);		  
+		   for(Resource resource: p.getResources().values()){
+			 	model2.addElement(resource);
+		   }  
+		   for(int i=0;i<p.getResources().values().size();i++){
+			   Resource r= (Resource)model2.get(i);
+			   for(Resource resource:y){
+				   if(r.getResourceID().equals(resource.getResourceID())){
+					   //listRes.setSelectedIndex(i);
+					   n2.add(i);
+				   }
+			   }
+		   }
+		   
+		 int[] IntArray2 = new int[n2.size()];
+			for(int i=0;i<n2.size();i++){
+			 IntArray2[i]=n2.get(i);
+			}		  
+		 listRes.setSelectedIndices(IntArray2);
 	   }
 }
