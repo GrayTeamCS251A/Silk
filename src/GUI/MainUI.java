@@ -404,7 +404,7 @@ public class MainUI{
 	                       taskTree.getLastSelectedPathComponent();		
 			    Task t = (Task) node.getUserObject();
 				editTaskController.executeEditTask(editTask.getTaskName(), 
-						t.getTaskID(), 
+						t.getID(), 
 						Integer.parseInt(editTask.getTaskDuration()),
 						editTask.getPredecessorTask(),
 						editTask.getParentTask(),
@@ -499,7 +499,7 @@ public class MainUI{
 		                       taskTree.getLastSelectedPathComponent();		
 				    Task t = (Task) node.getUserObject();
 					TreePath tp = taskTree.getSelectionPath();
-					deleteTaskController.executeDeleteTask(t.getTaskID());
+					deleteTaskController.executeDeleteTask(t.getID());
 					taskTree.removeSelectionPath(tp);
 				}
 			}});
@@ -625,7 +625,7 @@ public class MainUI{
 				
 				for (Node n: scheduleGraph.getNodes())
 				{
-					n.setLabel(p.getTask(n.getLabel().toString()).getTaskName());
+					n.setLabel(p.getTask(n.getLabel().toString()).getName());
 				}
 				
 				displayGraph(scheduleGraph, scheduleScrollPane);				
@@ -819,7 +819,7 @@ public class MainUI{
 		{			
 			DefaultMutableTreeNode aTask = new DefaultMutableTreeNode(t);	  	  
 			root.add(aTask);
-			aTask.add(new DefaultMutableTreeNode("ID:"+t.getTaskID()));
+			aTask.add(new DefaultMutableTreeNode("ID:"+t.getID()));
 			aTask.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
 			aTask.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));	
 			
@@ -827,7 +827,7 @@ public class MainUI{
 			{
 				DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(innerTask);
 				aTask.add(newRoot);	
-				newRoot.add(new DefaultMutableTreeNode("ID:"+innerTask.getTaskID()));
+				newRoot.add(new DefaultMutableTreeNode("ID:"+innerTask.getID()));
 				newRoot.add(new DefaultMutableTreeNode("Duration:"+innerTask.getDuration()));
 				newRoot.add(new DefaultMutableTreeNode("Description:"+innerTask.getDescription()));	
 				helper(newRoot,innerTask.getChildren());							

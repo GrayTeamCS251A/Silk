@@ -114,8 +114,8 @@ public class Project extends Observable{
         //Generate Task ID
         String uniqueID = UUID.randomUUID().toString();
         
-        taskToAdd.setTaskID(uniqueID);
-        taskToAdd.setTaskDuration(taskDuration);
+        taskToAdd.setID(uniqueID);
+        taskToAdd.setDuration(taskDuration);
         if (!taskPredecessor.isEmpty()){
         	for (int p = 0; p < taskPredecessor.size(); p++)
         	{
@@ -144,8 +144,8 @@ public class Project extends Observable{
     public void createTaskfromLoadProject(String taskName, String taskID, Integer taskDuration) {
         Task taskToAdd = new Task();
         taskToAdd.setName(taskName);
-        taskToAdd.setTaskID(taskID);
-        taskToAdd.setTaskDuration(taskDuration);
+        taskToAdd.setID(taskID);
+        taskToAdd.setDuration(taskDuration);
         
         tasks.put(taskID, taskToAdd);
         setChanged();
@@ -271,7 +271,7 @@ public class Project extends Observable{
     				tasks.get(taskID).setName(taskName);
     			}
     			
-    			tasks.get(taskID).setTaskDuration(taskDuration);
+    			tasks.get(taskID).setDuration(taskDuration);
     			if (!predecessorTask.isEmpty()){
     				for (int p = 0; p < predecessorTask.size(); p++)
     				{
