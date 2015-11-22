@@ -102,7 +102,12 @@ public class Project extends Observable{
     /**
      * @param info
      */
-    public void createTaskFromUI(String taskName, Integer taskDuration, ArrayList<Task> taskPredecessor, Task taskParent) {
+    public void createTaskFromUI(String taskName, 
+    		Integer taskDuration, 
+    		ArrayList<Task> taskPredecessor, 
+    		Task taskParent, 
+    		ArrayList<Resource> taskResources)
+    {
         Task taskToAdd = new Task();
         taskToAdd.setName(taskName);
         
@@ -121,6 +126,14 @@ public class Project extends Observable{
         if (taskParent != null) {
             taskToAdd.setTaskParent(taskParent);
             taskParent.addChildren(taskToAdd);
+        }
+        
+        if (!taskResources.isEmpty())
+        {
+        	for (int i = 0; i < taskResources.size(); i++)
+        	{
+        		taskToAdd.addResource(taskResources.get(i));
+        	}
         }
         
         tasks.put(uniqueID, taskToAdd);
@@ -243,7 +256,13 @@ public class Project extends Observable{
      * @param taskID 
      * @param info
      */
-    public void editTask(String taskName, String tID, Integer taskDuration, ArrayList<Task> predecessorTask, Task parentTask) {
+    public void editTask(String taskName, 
+    		String tID, 
+    		Integer taskDuration, 
+    		ArrayList<Task> predecessorTask, 
+    		Task parentTask, 
+    		ArrayList<Resource> taskResources)
+    {
         // TODO implement here
     	for (String taskID: tasks.keySet()) {
     		if (taskID.equals(tID))
@@ -261,6 +280,14 @@ public class Project extends Observable{
     			}
     			if (parentTask != null) {
     				tasks.get(taskID).setTaskParent(parentTask);
+    			}
+    			
+    			if (!taskResources.isEmpty())
+    			{
+    				for (int i = 0; i < taskResources.size(); i++)
+    				{
+    					tasks.get(taskID).addResource(taskResources.get(i));
+    				}
     			}
     			
     			setChanged();
