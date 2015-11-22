@@ -14,20 +14,21 @@ import GUI.MainUI;
 /**
  * 
  */
-public abstract class TasksView implements View {
+public class TasksView implements View {
 	private Project project;
-	private JTree tree;
+	private JTree tree=new JTree();
 
     public TasksView(Project project,JTree tree) {
     	this.project=project;
     	this.tree=tree;
     	project.addObserver(this);   	
     }
-
+    
+    @Override
     public void update(Observable o, Object arg){
+    	// TODO Auto-generated method stub
     	HashMap<String,Task> list =project.getTasks();
-    	List<Task> tasks = new ArrayList<Task>(list.values());
-    	MainUI.displayTree(tree,tasks);	
+    	MainUI.displayTree(tree,list);
     }
 		
 }

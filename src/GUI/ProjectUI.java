@@ -20,9 +20,8 @@ public class ProjectUI extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField nameField;
-	private JTextField authorField;
 	private JTextField startField;
-	private JTextField endField;
+	private JTextField authorField;
 	private JButton okButton;
 	private JButton cancelButton;
 
@@ -54,37 +53,32 @@ public class ProjectUI extends JDialog {
 		lblProjectName.setBounds(26, 21, 77, 14);
 		contentPanel.add(lblProjectName);
 		
-		JLabel lblProjectId = new JLabel("Project ID");
-		lblProjectId.setBounds(26, 46, 77, 14);
-		contentPanel.add(lblProjectId);
-		
 		JLabel lblStartTime = new JLabel("Start Time");
-		lblStartTime.setBounds(26, 71, 64, 14);
+		lblStartTime.setBounds(26, 46, 64, 14);
 		contentPanel.add(lblStartTime);
 		
-		JLabel lblEndTime = new JLabel("End Time");
-		lblEndTime.setBounds(26, 96, 77, 14);
-		contentPanel.add(lblEndTime);
+		JLabel lblAuthor = new JLabel("Author");
+		lblAuthor.setBounds(26, 94, 77, 14);
+		contentPanel.add(lblAuthor);
 		
 		nameField = new JTextField();
 		nameField.setBounds(113, 18, 131, 20);
 		contentPanel.add(nameField);
 		nameField.setColumns(10);
 		
-		authorField = new JTextField();
-		authorField.setBounds(113, 43, 131, 20);
-		contentPanel.add(authorField);
-		authorField.setColumns(10);
-		
 		startField = new JTextField();
-		startField.setBounds(113, 68, 131, 20);
+		startField.setBounds(113, 43, 131, 20);
 		contentPanel.add(startField);
 		startField.setColumns(10);
 		
-		endField = new JTextField();
-		endField.setBounds(113, 93, 131, 20);
-		contentPanel.add(endField);
-		endField.setColumns(10);
+		authorField = new JTextField();
+		authorField.setBounds(113, 91, 131, 20);
+		contentPanel.add(authorField);
+		authorField.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Example: 2010-03-12");
+		lblNewLabel.setBounds(113, 66, 131, 14);
+		contentPanel.add(lblNewLabel);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -112,7 +106,7 @@ public class ProjectUI extends JDialog {
 	   }
 	   
 	   public String getEndField(){
-		   return endField.getText();   
+		   return authorField.getText();   
 	   }
 	   
 	   public String getStartField(){
@@ -126,20 +120,18 @@ public class ProjectUI extends JDialog {
 	   public String getAuthorField(){
 		   return authorField.getText();   
 	   }
-	   
-	   public void Reset(){
-		   nameField.setText("");
-		   authorField.setText("");
-		   startField.setText("");
-		   endField.setText("");
-	   }
-	   
-	   public void fill(Project p){
-		   nameField.setText("");
-		   authorField.setText("");
-		   startField.setText("");
-		   endField.setText("");
-	   }
-	   
-	   
+
+	public void Reset() {
+		// TODO Auto-generated method stub
+		nameField.setText("");
+		startField.setText("");
+		authorField.setText("");		
+	}
+
+	public void fill(Project p) {
+		// TODO Auto-generated method stub
+		nameField.setText(p.getProjectName());
+		startField.setText(p.getStartTime().toString());
+		authorField.setText(p.getProjectAuthor());				
+	}
 }

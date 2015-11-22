@@ -3,7 +3,6 @@ package Controllers.Project;
 import java.io.File;
 import java.util.*;
 
-import AnalysisModel.Boundaries.Panels.Oracle;
 import Controllers.*;
 import Entities.Deliverable;
 import Entities.Project;
@@ -20,7 +19,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -181,6 +179,18 @@ public class SaveProjectController implements Controller {
     				index++;
     			}
     			
+    			Element prTaskChildrenRoot = doc.createElement("TaskChildren");
+    			index = 1;
+    			for (Task child: t.getChildren().values())
+    			{
+    				Element prTaskChild = doc.createElement("TaskChild");
+    				prTaskChild.setAttribute("id", child.getTaskID());
+    				prTaskChild.appendChild(doc.createTextNode(child.getTaskName()));
+    				
+    				prTaskChildrenRoot.appendChild(prTaskChild);
+    				index++;
+    			}
+    			
     			prTaskRoot.appendChild(prTaskName);
     			prTaskRoot.appendChild(prTaskDescription);
     			prTaskRoot.appendChild(prTaskDuration);
@@ -191,6 +201,7 @@ public class SaveProjectController implements Controller {
     			prTaskRoot.appendChild(prTaskPredRoot);
     			prTaskRoot.appendChild(prTaskDeliverableRoot);
     			prTaskRoot.appendChild(prTaskResourcesRoot);
+    			prTaskRoot.appendChild(prTaskChildrenRoot);
     			
     			projectTaskElementRoot.appendChild(prTaskRoot);
     		}

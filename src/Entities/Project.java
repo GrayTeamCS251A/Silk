@@ -1,6 +1,12 @@
 package Entities;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
+
+import jxl.*;
+import jxl.write.*;
 /**
  * 
  */
@@ -45,7 +51,10 @@ public class Project extends Observable{
      * 
      */
     public void clear() {
+    	projectName = "";
+    	projectAuthor = "";
     	startTime = new GregorianCalendar();
+    	endTime = new GregorianCalendar();
     	resources = new HashMap<String, Resource>();
     	tasks = new HashMap<String, Task>();
     	schedule = new Schedule();
@@ -93,7 +102,12 @@ public class Project extends Observable{
     /**
      * @param info
      */
-    public void createTaskFromUI(String taskName, Integer taskDuration, Task taskPredecessor, Task taskParent) {
+    public void createTaskFromUI(String taskName, 
+    		Integer taskDuration, 
+    		ArrayList<Task> taskPredecessor, 
+    		Task taskParent, 
+    		ArrayList<Resource> taskResources)
+    {
         Task taskToAdd = new Task();
         taskToAdd.setName(taskName);
         
@@ -102,11 +116,24 @@ public class Project extends Observable{
         
         taskToAdd.setTaskID(uniqueID);
         taskToAdd.setTaskDuration(taskDuration);
-        if (taskPredecessor != null){
-            taskToAdd.addPredecessor(taskPredecessor);
+        if (!taskPredecessor.isEmpty()){
+        	for (int p = 0; p < taskPredecessor.size(); p++)
+        	{
+                taskToAdd.addPredecessor(taskPredecessor.get(p));
+                taskPredecessor.get(p).addSuccessor(taskToAdd);
+        	}
         }
         if (taskParent != null) {
             taskToAdd.setTaskParent(taskParent);
+            taskParent.addChildren(taskToAdd);
+        }
+        
+        if (!taskResources.isEmpty())
+        {
+        	for (int i = 0; i < taskResources.size(); i++)
+        	{
+        		taskToAdd.addResource(taskResources.get(i));
+        	}
         }
         
         tasks.put(uniqueID, taskToAdd);
@@ -177,17 +204,23 @@ public class Project extends Observable{
     /**
      * @param info
      */
-    public void editResource(String rID, double dailyCost, ResourceType r) {
+    public void editResource(String rName, String rID, double dailyCost, ResourceType r) {
         // Search for the Resource to Edit using resource ID,
     	for (String resourceID: resources.keySet()) {
     		if (resourceID.equals(rID)){
-    			resources.get(resourceID).setDailyCost(dailyCost);
-    			resources.get(resourceID).setResourceType(r);
+    			if (!rName.equals(""))
+    			{
+    				resources.get(resourceID).setname(rName);
+        			resources.get(resourceID).setDailyCost(dailyCost);
+        			resources.get(resourceID).setResourceType(r);
+    			}
+
     	        setChanged();
     	        notifyObservers();
     			break;
     		}
     	}
+
     }
 
     /**
@@ -223,17 +256,38 @@ public class Project extends Observable{
      * @param taskID 
      * @param info
      */
-    public void editTask(String tID, Integer taskDuration, Task predecessorTask, Task parentTask) {
+    public void editTask(String taskName, 
+    		String tID, 
+    		Integer taskDuration, 
+    		ArrayList<Task> predecessorTask, 
+    		Task parentTask, 
+    		ArrayList<Resource> taskResources)
+    {
         // TODO implement here
     	for (String taskID: tasks.keySet()) {
     		if (taskID.equals(tID))
     		{
+    			if (!taskName.equals("")){
+    				tasks.get(taskID).setName(taskName);
+    			}
+    			
     			tasks.get(taskID).setTaskDuration(taskDuration);
-    			if (predecessorTask != null){
-    				tasks.get(taskID).addPredecessor(predecessorTask);
+    			if (!predecessorTask.isEmpty()){
+    				for (int p = 0; p < predecessorTask.size(); p++)
+    				{
+        				tasks.get(taskID).addPredecessor(predecessorTask.get(p));
+    				}
     			}
     			if (parentTask != null) {
     				tasks.get(taskID).setTaskParent(parentTask);
+    			}
+    			
+    			if (!taskResources.isEmpty())
+    			{
+    				for (int i = 0; i < taskResources.size(); i++)
+    				{
+    					tasks.get(taskID).addResource(taskResources.get(i));
+    				}
     			}
     			
     			setChanged();
@@ -277,20 +331,40 @@ public class Project extends Observable{
     public void generateSchedule() {
     	schedule.generateSchedule(this.startTime, this.tasks);
     }
-
-    /**
-     * @return
-     */
-    private List<Task> calculateCriticalPath() {
-        // TODO implement here
-        return null;
-    }
-
+    
     /**
      * @param schedule
+     * @throws IOException 
+     * @throws WriteException 
      */
-    public void saveSchedule() {
-        schedule.toXLS();
+    public WritableWorkbook saveSchedule(String dest) throws IOException, WriteException {
+        String[][] dataValue = this.getScheduleMatrix();
+        
+        WritableWorkbook workbook = Workbook.createWorkbook(new File(Paths.get(dest) + ".xls"));
+        
+        WritableSheet scheduleSheet = workbook.createSheet("Schedule", 0);
+        
+        for (int i = 0; i < dataValue.length; i++)
+        {
+            Label dateLabel = new Label(i, 0, dataValue[i][0]);
+            
+            String[] s = dataValue[i][1].split(",");
+            String taskNames = "";
+            for (int t = 0; t < s.length; t++)
+            {
+            	taskNames += getTask(s[t]) + ",";
+            }
+                        
+            Label taskLabel = new Label(i, 1, taskNames.substring(0, taskNames.length() - 1));
+            
+            scheduleSheet.addCell(dateLabel);
+            scheduleSheet.addCell(taskLabel);
+        }
+
+        workbook.write(); 
+        workbook.close();
+        
+        return workbook;
     }
     
     public String getProjectName()
@@ -334,5 +408,18 @@ public class Project extends Observable{
     	d.setDeliverableType(dt);
     	
     	return d;
+    }
+
+    public void setTasks(HashMap<String, Task> tasks){
+    	this.tasks=tasks;
+    }
+    
+    public void setResources(HashMap<String, Resource> resources){
+    	this.resources=resources;
+    }
+    
+    public String[][] getScheduleMatrix()
+    {
+    	return schedule.generateScheduleMatrix(this.tasks);
     }
 }

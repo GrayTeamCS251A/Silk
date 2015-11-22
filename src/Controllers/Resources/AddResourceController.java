@@ -14,7 +14,7 @@ public class AddResourceController implements Controller {
     public AddResourceController() {
     }
 
-	public void executeAddResource(String resourceName, int resourceID, double dailyCost, String resourceType)
+	public void executeAddResource(String resourceName, double dailyCost, String resourceType)
 	{	
 		//Convert resourceType to a ResourceType Entity
 		ResourceType r = null;
