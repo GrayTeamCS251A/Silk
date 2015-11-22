@@ -113,7 +113,7 @@ public class SaveProjectController implements Controller {
     			prTaskRoot.setAttribute("id", taskID);
     			
     			Element prTaskName = doc.createElement("TaskName");
-    			prTaskName.appendChild(doc.createTextNode(t.getTaskName()));
+    			prTaskName.appendChild(doc.createTextNode(t.getName()));
     			
     			Element prTaskDescription = doc.createElement("TaskDescription");
     			prTaskDescription.appendChild(doc.createTextNode(t.getDescription()));
@@ -131,7 +131,7 @@ public class SaveProjectController implements Controller {
     			prPercentCompleted.appendChild(doc.createTextNode(String.valueOf(t.getPercentCompleted())));
     			
     			Element prParentTask = doc.createElement("TaskParentTask");
-    			prParentTask.appendChild(doc.createTextNode(t.getParent().getTaskID()));
+    			prParentTask.appendChild(doc.createTextNode(t.getParent().getID()));
     			
     			Element prTaskPredRoot = doc.createElement("TaskPredecessors");
     			int index = 1;
@@ -139,8 +139,8 @@ public class SaveProjectController implements Controller {
     			for (Task pred: t.getPredecessors().values())
     			{
     				Element prTaskPred = doc.createElement("TaskPredecessor");
-    				prTaskPred.setAttribute("id", pred.getTaskID());
-    				prTaskPred.appendChild(doc.createTextNode(pred.getTaskName()));
+    				prTaskPred.setAttribute("id", pred.getID());
+    				prTaskPred.appendChild(doc.createTextNode(pred.getName()));
     				
     				prTaskPredRoot.appendChild(prTaskPred);
     				index++;
@@ -184,8 +184,8 @@ public class SaveProjectController implements Controller {
     			for (Task child: t.getChildren().values())
     			{
     				Element prTaskChild = doc.createElement("TaskChild");
-    				prTaskChild.setAttribute("id", child.getTaskID());
-    				prTaskChild.appendChild(doc.createTextNode(child.getTaskName()));
+    				prTaskChild.setAttribute("id", child.getID());
+    				prTaskChild.appendChild(doc.createTextNode(child.getName()));
     				
     				prTaskChildrenRoot.appendChild(prTaskChild);
     				index++;
