@@ -1,5 +1,6 @@
 package Entities;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import jxl.*;
 import jxl.write.*;
@@ -56,6 +57,7 @@ public class Schedule extends Observable {
     	this.tasks = tasks;
     	this.current = true;
 
+ /*
     	// if we have a startTime then great, otherwise we can't proceed 
     	if (this.startDate != null) {
     		// create a super task
@@ -74,6 +76,9 @@ public class Schedule extends Observable {
     	} else { 
     		return null;
     	}
+ 
+    */
+    	return null;
     }
 
     
@@ -95,15 +100,6 @@ public class Schedule extends Observable {
     	return current;
     }
 
-    public WritableWorkbook toXLS() {
-    	if (this.current) {
-    		/** export the schedule **/
-    	} else {
-    		/** don't **/
-    	}
-
-    	return null;    	
-    }
 
 	public Calendar getStartDate() {
 		return startDate;
@@ -113,10 +109,77 @@ public class Schedule extends Observable {
 		this.startDate = startDate;
 	}
 	
-	public String[][] generateScheduleMatrix(HashMap<String, Task> tasks)
+	
+	/**
+	 * 
+	 * @return a matrix of strings if the Schedule is current, otherwise returns nul.
+	 */
+	public String[][] toMatrix()
 	{
-		String[][] datavalues = null;
+		if (!this.current || this.tasks == null) {
+			return null;
+		}
+
+		Collection<Task> tasks = this.tasks.values();
 		
-		return datavalues;
+		
+//		Queue<Task> queue = new LinkedList<Task>();
+		
+		
+		//iterate through queue and construct matrix
+		HashMap<Integer, Set<Task>> matrix = new HashMap<Integer, Set<Task>>();
+
+		// for each task, put them on all their days
+		int totalDays = 0;
+		for (Task task : tasks) {
+			for (int day = (int)task.getStartTime(); day < (int)task.getEndTime(); day ++ ) {
+				
+				// check if there's anything there
+				if (matrix.containsKey(day)) {
+					matrix.get(day).add(task);
+				} else {
+					Set<Task> set = new HashSet<Task>();
+					set.add(task);
+					matrix.put(day, set);
+				}
+				
+				// maintain totalDays
+				if (totalDays < day) {
+					totalDays = day;
+				}
+			}
+		}
+		
+		// increment by 1 because we're actually counting total days
+		totalDays ++;
+
+		System.out.println(matrix);
+		
+		// we assume that a successful run of the scheduler leaves no "empty" days 
+		
+		// convert hash map to a String[][], and make sure it's in order
+		// we know how many total days we want
+		
+		String matrixString [][] = new String[totalDays][2]; 
+		for (int day = 0; day < totalDays && matrix.containsKey(day); day ++) {
+			Calendar date = (GregorianCalendar)this.startDate.clone();
+			date.add(Calendar.DAY_OF_YEAR, day);
+			
+			// figure out date
+			String dateString = date.get(Calendar.YEAR) + "/" + date.get(Calendar.MONTH) + "/" + date.get(Calendar.DAY_OF_MONTH);
+			
+			// compile tasks		
+			String taskString = "";
+			for (Task task : matrix.get(day)){
+				taskString += task.getTaskID() + ",";
+			}
+			taskString = taskString.substring(0, taskString.length()-1);
+			
+			matrixString [day][0] = dateString;
+			matrixString [day][1] = taskString;
+		}
+		
+		return matrixString;
 	}
+
 }

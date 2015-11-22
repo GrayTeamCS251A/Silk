@@ -420,6 +420,7 @@ public class Project extends Observable{
     
     public String[][] getScheduleMatrix()
     {
-    	return schedule.generateScheduleMatrix(this.tasks);
+    	// careful, this could be null (if schedule isn't current)
+    	return schedule.toMatrix();
     }
 }
