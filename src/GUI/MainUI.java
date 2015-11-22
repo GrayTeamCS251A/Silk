@@ -84,7 +84,6 @@ import Entities.Task;
 import graph.Arrow;
 import graph.Graph;
 import graph.GraphUtils;
-import graph.Link;
 import graph.Node;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public class MainUI{
@@ -408,7 +407,8 @@ public class MainUI{
 						t.getTaskID(), 
 						Integer.parseInt(editTask.getTaskDuration()),
 						editTask.getPredecessorTask(),
-						editTask.getParentTask());
+						editTask.getParentTask(),
+						editTask.getResouces());
 				editTask.setVisible(false);
 				System.out.println(t.getPredecessors());
 			}
@@ -453,7 +453,8 @@ public class MainUI{
 				addTaskController.executeAddTask(addTask.getTaskName(), 
 						Integer.parseInt(addTask.getTaskDuration()),
 						addTask.getPredecessorTask(),
-						addTask.getParentTask());
+						addTask.getParentTask(),
+						addTask.getResouces());
 				addTask.setVisible(false);
 			}
 						
