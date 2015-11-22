@@ -171,7 +171,7 @@ public class Schedule extends Observable {
 			// compile tasks		
 			String taskString = "";
 			for (Task task : matrix.get(day)){
-				taskString += task.getTaskID() + ",";
+				taskString += task.getID() + ",";
 			}
 			taskString = taskString.substring(0, taskString.length()-1);
 			
