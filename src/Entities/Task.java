@@ -87,7 +87,7 @@ public class Task extends Observable {
 	   getParent();
    }
    
-   public void setTaskID(String taskID){
+   public void setID(String taskID){
 	   this.taskID = taskID;
    }
    public void setName(String name){
@@ -96,7 +96,7 @@ public class Task extends Observable {
    public void setDescription(String description){
 	   this.description = description;
    }
-   public void setTaskDuration(int duration){
+   public void setDuration(int duration){
 	   this.duration= duration;
    }
    public void setStartTime(double startTime){
@@ -115,7 +115,7 @@ public class Task extends Observable {
    public void setRequiredResources(HashMap<String, Resource> requiredResources){
 	   this.requiredResources = requiredResources;
    }
-   public void setPredecessorTask(HashMap<String, Task> predecessors){
+   public void setPredecessors(HashMap<String, Task> predecessors){
 	   this.predecessors = predecessors;
    }
    public void setTaskParent(Task parent){
@@ -126,16 +126,16 @@ public class Task extends Observable {
      */
     public void updateTask(String taskID, String name, String description, int duration, double startTime, double endTime, double percentCompleted, HashMap<String, Resource> requiredResources, HashMap<String, Task> predecessors, Task parent) {
         // TODO implement here
-    	setTaskID(taskID);
+    	setID(taskID);
     	setName(name);
     	setDescription(description);
-    	setTaskDuration(duration);
+    	setDuration(duration);
     	setStartTime(startTime);
     	setEndTime(endTime);
     	setPercentCompleted(percentCompleted);
     	//setDeliverables(deliverables);
     	setRequiredResources(requiredResources);
-    	setPredecessorTask(predecessors);
+    	setPredecessors(predecessors);
     	setTaskParent(parent);
     		
     }
