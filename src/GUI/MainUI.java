@@ -873,7 +873,7 @@ public class MainUI{
 				
 				if(!innerTask.getDeliverables().isEmpty()){
 					DefaultMutableTreeNode Res = new DefaultMutableTreeNode("Deliverables");	
-					aTask.add(Res);	
+					newRoot.add(Res);	
 					for(Deliverable d:innerTask.getDeliverables()){
 						Res.add(new DefaultMutableTreeNode(d.toString()));	
 					}
@@ -881,7 +881,7 @@ public class MainUI{
 				
 				if(!innerTask.getRequiredResources().isEmpty()){
 					DefaultMutableTreeNode Res = new DefaultMutableTreeNode("Resources");	
-					aTask.add(Res);	
+					newRoot.add(Res);	
 					for(Resource r:innerTask.getRequiredResources().values()){
 						Res.add(new DefaultMutableTreeNode(r));	
 					}
@@ -889,14 +889,14 @@ public class MainUI{
 
 				if(!innerTask.getPredecessors().isEmpty()){
 					DefaultMutableTreeNode PreC = new DefaultMutableTreeNode("Predecessors");	
-					aTask.add(PreC);	
+					newRoot.add(PreC);	
 					for(Task task:innerTask.getPredecessors().values()){
 						PreC.add(new DefaultMutableTreeNode(task.getName()));	
 					}
 				}
 				if(!innerTask.getSuccessors().isEmpty()){
 					DefaultMutableTreeNode SucC = new DefaultMutableTreeNode("Successors");	
-					aTask.add(SucC);	
+					newRoot.add(SucC);	
 					for(Task task:innerTask.getSuccessors().values()){
 						SucC.add(new DefaultMutableTreeNode(task.getName()));	
 					}

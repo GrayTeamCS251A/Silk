@@ -138,8 +138,8 @@ public class Project extends Observable{
         		taskToAdd.addResource(taskResources.get(i));
         	}
         }
-        
-        tasks.put(uniqueID, taskToAdd);
+        if(taskParent == null){
+        tasks.put(uniqueID, taskToAdd);}
         setChanged();
         notifyObservers();
     }
@@ -300,7 +300,12 @@ public class Project extends Observable{
     		}
     	}
     }
-
+    private void findTask(int taskID, Task task){
+    	if(task.getChildren().isEmpty()) return;
+    	
+    	
+    	
+    }
     /**
      * 
      */
