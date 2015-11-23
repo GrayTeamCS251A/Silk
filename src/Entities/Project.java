@@ -124,8 +124,8 @@ public class Project extends Observable{
         	}
         }
         if (taskParent != null) {
-            taskToAdd.setTaskParent(taskParent);
-            taskParent.addChildren(taskToAdd);
+            taskToAdd.setParent(taskParent);
+            taskParent.addChild(taskToAdd);
         }
         
         if (!taskResources.isEmpty())
@@ -279,7 +279,7 @@ public class Project extends Observable{
     				}
     			}
     			if (parentTask != null) {
-    				tasks.get(taskID).setTaskParent(parentTask);
+    				tasks.get(taskID).setParent(parentTask);
     			}
     			
     			if (!taskResources.isEmpty())
