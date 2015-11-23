@@ -21,8 +21,9 @@ public class AddTaskController implements Controller {
 			Integer taskDuration, 
 			ArrayList<Task> predecessorTask, 
 			Task parentTask, 
-			ArrayList<Resource> taskResources) 
+			ArrayList<Resource> taskResources,
+			String taskDescription) 
 	{
-		project.createTaskFromUI(taskName, taskDuration, predecessorTask, parentTask, taskResources);
+		project.createTaskFromUI(taskName, taskDuration, predecessorTask, parentTask, taskResources, taskDescription);
 	}
 }
