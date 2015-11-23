@@ -412,7 +412,8 @@ public class MainUI{
 						Integer.parseInt(editTask.getTaskDuration()),
 						editTask.getPredecessorTask(),
 						editTask.getParentTask(),
-						editTask.getResouces());
+						editTask.getResouces(),
+						editTask.getDescription());
 				editTask.setVisible(false);
 				System.out.println(t.getPredecessors());
 			}
@@ -458,7 +459,8 @@ public class MainUI{
 						Integer.parseInt(addTask.getTaskDuration()),
 						addTask.getPredecessorTask(),
 						addTask.getParentTask(),
-						addTask.getResouces());
+						addTask.getResouces(),
+						addTask.getDescription());
 				addTask.setVisible(false);
 			}
 						
