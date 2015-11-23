@@ -31,6 +31,7 @@ public class Task extends Observable {
     	successors = new HashMap<String, Task>();
     	children = new HashMap<String, Task>();
     	requiredResources=new HashMap<String, Resource>();
+    	deliverables=new HashSet<>();
     }
 
     //Second Constructor
@@ -69,6 +70,9 @@ public class Task extends Observable {
    public HashMap<String, Task> getPredecessors(){
 	   return predecessors;
    } 
+   public HashMap<String, Task> getSuccessors(){
+	   return successors;
+   }
    public HashMap<String, Task> getSuccessors(){
 	   return successors;
    }

@@ -34,4 +34,7 @@ public class Deliverable {
     	this.type = type;
     }
     
+    public String toString(){
+		return name;	
+    }
 }
