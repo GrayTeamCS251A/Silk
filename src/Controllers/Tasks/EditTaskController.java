@@ -22,8 +22,9 @@ public class EditTaskController implements Controller {
 			Integer taskDuration, 
 			ArrayList<Task> predecessorTask, 
 			Task parentTask, 
-			ArrayList<Resource> taskResources) {
-		project.editTask(taskName, taskID, taskDuration, predecessorTask, parentTask, taskResources);
+			ArrayList<Resource> taskResources,
+			String taskDescription) {
+		project.editTask(taskName, taskID, taskDuration, predecessorTask, parentTask, taskResources, taskDescription);
 	}
 
 }

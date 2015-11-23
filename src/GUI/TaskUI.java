@@ -197,6 +197,10 @@ public class TaskUI extends JDialog {
 		   return x;
 	   }
 	   
+	   public String getDescription()
+	   {
+		   return txtpnDescription.getText();
+	   }
    
 	   public void Reset(){
 		   textName.setText("");

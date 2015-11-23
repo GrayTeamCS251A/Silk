@@ -311,9 +311,9 @@ public class LoadProjectController implements Controller {
 						}
 					}
 										
-					project.getTask(taskID).setTaskParent(project.getTask(parentTaskID));
-					project.getTask(taskID).setStartTime(Double.parseDouble(taskStartTime));
-					project.getTask(taskID).setEndTime(Double.parseDouble(taskEndTime));
+					project.getTask(taskID).setParent(project.getTask(parentTaskID));
+					project.getTask(taskID).setStartTime(Integer.parseInt(taskStartTime));
+					project.getTask(taskID).setEndTime(Integer.parseInt(taskEndTime));
 					
 					//Set the list of predecessor tasks
 					for (int l = 0; l < listOfTaskPredecessorIDs.size(); l++)
@@ -336,7 +336,7 @@ public class LoadProjectController implements Controller {
 					//Set the list of Children for the task
 					for (int c = 0; c < listOfTaskChildIDs.size(); c++)
 					{
-						project.getTask(taskID).addChildren(project.getTask(listOfTaskChildIDs.get(c)));
+						project.getTask(taskID).addChild(project.getTask(listOfTaskChildIDs.get(c)));
 					}
 				}
 			}

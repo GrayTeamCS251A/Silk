@@ -9,9 +9,9 @@ public class Task extends Observable {
 	
 	 private String name;
 	    private String description;
-	    private double duration;
-	    private double startTime;
-	    private double endTime;
+	    private int duration;
+	    private int startTime;
+	    private int endTime;
 	    private double percentCompleted;
 	    private String taskID;
 	    private Set<Deliverable> deliverables;
@@ -49,16 +49,15 @@ public class Task extends Observable {
    public String getDescription(){
 	   return description;
    }
-   public double getDuration(){
+   public int getDuration(){
 	   return duration;
    }
-   public double getStartTime(){
+   public int getStartTime(){
 	   return startTime;
    }
-   public double getEndTime(){
+   public int getEndTime(){
 	   return endTime;
    }
-   
    public double getPercentCompleted(){
 	   return percentCompleted;
    }
@@ -70,7 +69,7 @@ public class Task extends Observable {
    }
    public HashMap<String, Task> getPredecessors(){
 	   return predecessors;
-   }
+   } 
    public HashMap<String, Task> getSuccessors(){
 	   return successors;
    }
@@ -103,10 +102,10 @@ public class Task extends Observable {
    public void setDuration(int duration){
 	   this.duration= duration;
    }
-   public void setStartTime(double startTime){
+   public void setStartTime(int startTime){
 	   this.startTime= startTime;
    }
-   public void setEndTime(double endTime){
+   public void setEndTime(int endTime){
 	   this.endTime= endTime;
    }
    
@@ -122,13 +121,13 @@ public class Task extends Observable {
    public void setPredecessors(HashMap<String, Task> predecessors){
 	   this.predecessors = predecessors;
    }
-   public void setTaskParent(Task parent){
+   public void setParent(Task parent){
 	   this.parent = parent;
    }
     /**
      * @param info
      */
-    public void updateTask(String taskID, String name, String description, int duration, double startTime, double endTime, double percentCompleted, HashMap<String, Resource> requiredResources, HashMap<String, Task> predecessors, Task parent) {
+    public void updateTask(String taskID, String name, String description, int duration, int startTime, int endTime, double percentCompleted, HashMap<String, Resource> requiredResources, HashMap<String, Task> predecessors, Task parent) {
         // TODO implement here
     	setID(taskID);
     	setName(name);
@@ -140,67 +139,44 @@ public class Task extends Observable {
     	//setDeliverables(deliverables);
     	setRequiredResources(requiredResources);
     	setPredecessors(predecessors);
-    	setTaskParent(parent);
+    	setParent(parent);
     		
     }
 
     /**
-     * Calculates the start time of this Task and any subtasks (and their subtasks). startTimes should be integer values
+     * Calculates the start time of this Task and any subtasks (and their subtasks, etc) based on the starting time sT. startTimes should be integer values. The duration of a project with children should be changed to the total duration of their children's path.
      * @param startTime the start time of this Task
      */
     public void calculateStartTimes(int sT) {
     	this.startTime = 0;
     	this.endTime = 0;
-    	
-    	//Checks if starting task
-    	if (this.predecessors == null){
-    		//assigns startTime for this task as the offset value sT
-    		this.startTime = sT;
-    		//calc endTime for this task
-    		this.endTime = this.startTime + this.duration;
-    		//Checks if this task has children
-    		if(this.children != null){
-    			double childEndTime = 0;
-    			//Call Child function here
-    			childEndTime = startTimeChild(children, this.startTime); 
-    			//Checks old and new value and assigns greater value for task's endTime
-    			if (this.endTime < childEndTime){
-    				this.endTime = childEndTime;
-    			}
-    		}
-     	}
-    	else{ //Else if not the starting task
-    		//Gets the predecessor values
-    		Collection<Task> predecessor = this.predecessors.values();
-    		//If more than 1 predecessor (Join Tasks)
-    		if (predecessor.size() > 1){
-    			this.startTime = max(predecessor);
-    		}
-    		else{
-    			for(Task t : predecessor){
-    				this.startTime = t.endTime;
-    			}
-    			
-    		}
-    		this.endTime = this.startTime + this.duration;
-    		//Then Checks if children are there
-    		if(this.children !=null){
-    			//calc children
-    			double tempEndValue = 0;
-    			tempEndValue = startTimeChild(children, this.startTime);
-    			//Checks old and new value and assigns greater value for task's endTime
-    			if(this.endTime < tempEndValue){
-    				this.endTime = tempEndValue;
-    			}
-    		}
-    		
-    	}
+
+    	//no need to figure if this is a "starting task" or not, because this function will only be called if we already know what it's startTime is
+		//assigns startTime for this task as the offset value sT
+		this.startTime = sT;
+
+		//Checks if this task has children
+		if(this.children != null){
+
+			//Call Child function here
+			startTimeChild(children, this.startTime); 
+
+			//Update Duration
+			this.duration = Math.max(this.duration, maxEndTime(children.values()) - this.startTime);
+		}
+		
+		//calc endTime for this task
+		this.endTime = this.startTime + this.duration;
     }	
     
-    //To calculate the bigger endTime of the predecessor to be the startTime for the current task
-    private double max(Collection<Task> predecessor) {
-		double maxValue = 0;
-    	for (Task t : predecessor){
+    /**
+     * To calculate the biggest endTime of a collection of tasks
+     * @param tasks a collection of Tasks
+     * @return the largest endTime
+     */
+    private int maxEndTime(Collection<Task> tasks) {
+		int maxValue = -1;
+    	for (Task t : tasks){
 			if (maxValue < t.endTime){
 				maxValue = t.endTime;
 			}
@@ -208,44 +184,56 @@ public class Task extends Observable {
     	return maxValue;
 	}
     
-    //Calculate the endTime for the children
-	public double startTimeChild(HashMap<String, Task> children, double startTime){
-    	//Gets collection of children tasks
-		Collection<Task> childrens = children.values();
-    	double returnValue=0;
-		for (Task child: childrens){
-			//Checks if the task has more subtasks
-			if(child.children != null){
-				//Recursive function
-				double temp = startTimeChild(child.children, child.startTime);
-				child.endTime = temp;
-			}
-			//If child task if first task
-			else if(child.predecessors == null){
-					//Assigns startTime as startTime fo main task
-					child.startTime = startTime;
-					child.endTime = child.startTime + child.duration;
-					returnValue = child.endTime;
-				}
-			else{ //If not the first task
-					Collection<Task> predecessor = child.predecessors.values();
-		    		if (predecessor.size() > 1){
-		    			child.startTime = max(predecessor);
-		    		}
-		    		else{
-		    			for(Task t : predecessor){
-		    				child.startTime = t.endTime;
-		    			}
-		    			
-		    		}
-		    		child.endTime = child.startTime + child.duration;
-		    		returnValue = child.endTime;
-				}
+    
+    /**
+     * Calculate the starTime and endTime for the collection of tasks
+     * @param children tasks
+     * @param startTime start time for this collection of tasks to start at
+     */
+	public void startTimeChild(HashMap<String, Task> children, int startTime){
+		Queue<Task> queue = new LinkedList<Task>();
+
+		for (Task child: children.values()){
+			if(child.getPredecessors().isEmpty()){
+				// put into queue
+				queue.add(child);
 				
+				// set start and end times to -1
+				child.setStartTime(-1);
+				child.setEndTime(-1);
 			}
-		return returnValue;
-			
+		}
 		
+		// Loop through queue, as we go we'll
+		// 1. calculate the startTime of the task
+		// 2. deal with any children
+		// 3. calculate duration and endTime
+		// 4. put any successors on the queue
+		
+		while (!queue.isEmpty()) {
+			Task child = queue.remove();
+
+			// 1. calculate the startTime of the task
+			if (child.getPredecessors().isEmpty()) {
+				child.setStartTime(startTime);
+			} else {
+				child.setStartTime(maxEndTime(child.getPredecessors().values()));
+			}
+			
+			// 2. deal with any children
+			if (!child.getChildren().isEmpty()) {
+				startTimeChild(child.getChildren(), child.getStartTime());
+			}
+
+			// set this child's duration & endTime
+			child.setDuration(Math.max(child.getDuration(), maxEndTime(child.getChildren().values())-child.getStartTime()));
+			child.setEndTime(child.getStartTime() + child.getDuration());
+			
+			// 4. put their successors in the queue
+			for (Task successor : child.getSuccessors().values()) {
+				queue.add(successor);
+			}
+		}
     }
 		
   
@@ -281,7 +269,12 @@ public class Task extends Observable {
 		this.successors.put(successor.getID(), successor);
 	}
 	
-	public void addChildren(Task child)
+	public void addChildren(HashMap<String, Task> children)
+	{
+		this.children = children;
+	}
+
+	public void addChild(Task child)
 	{
 		this.children.put(child.getID(), child);
 	}
