@@ -43,7 +43,6 @@ public class Schedule extends Observable {
      * @return a reference to this schedule. The tasks will have been assigned startTimes
      */
     public Schedule generateSchedule(Calendar startDate, HashMap<String,Task> tasks) {
-        // TODO implement here
     	this.startDate = startDate;
     	
     	return this.generateSchedule(tasks);
@@ -57,7 +56,7 @@ public class Schedule extends Observable {
     	this.tasks = tasks;
     	this.current = true;
 
- /*
+ 
     	// if we have a startTime then great, otherwise we can't proceed 
     	if (this.startDate != null) {
     		// create a super task
@@ -69,16 +68,11 @@ public class Schedule extends Observable {
     		// calculate the start times
     		superTask.calculateStartTimes(0);
     		
-    		// generate schedule to output
-    		// TODO
-    		
-    		return null;    		
+    		return this;
     	} else { 
     		return null;
     	}
  
-    */
-    	return null;
     }
 
     
@@ -153,8 +147,6 @@ public class Schedule extends Observable {
 		// increment by 1 because we're actually counting total days
 		totalDays ++;
 
-		System.out.println(matrix);
-		
 		// we assume that a successful run of the scheduler leaves no "empty" days 
 		
 		// convert hash map to a String[][], and make sure it's in order

@@ -99,6 +99,7 @@ public class ScheduleUnitTests {
 		Task task1 = new Task("1a","Task1", "description", 10);
 		tasks.put("1", task1);
 		Task task2 = new Task("1","Task2", "description", 10);
+		task1.addSuccessor(task2);
 		task2.addPredecessor(task1);
 		tasks.put("2", task2);
 		
@@ -108,8 +109,8 @@ public class ScheduleUnitTests {
 		// assert statements
 		tester.generateSchedule(startDate, tasks);
 		
-		assertEquals("Task1's startTime should be 0", (int)0, (int)task1.getStartTime());
-		assertEquals("Task2's startTime should be 10", (int)10, (int)task2.getStartTime());
+		assertEquals("Task1's startTime should be 0", 0, task1.getStartTime());
+		assertEquals("Task2's startTime should be 10", 10, task2.getStartTime());
 	}		
 	
 	@Test
@@ -202,8 +203,7 @@ public class ScheduleUnitTests {
 		assertEquals("result[3][0] should be 2015/7/2", "2015/7/2", result[3][0]);
 
 		assertEquals("result[0][1] should be \"aaa\"", "aaa", result[0][1]);
-		assertEquals("result[1][1] should be \"bbb,ddd\"", "bbb,ddd", result[1][1]);
-		assertEquals("result[2][1] should be \"bbb\"", "bbb", result[2][1]);
+		assertEquals("either result[1][1] or result[2][1] should be \"bbb,ddd\" or \"ddd,bbb\"", true, result[1][1].equals("bbb,ddd") || result [2][1].equals("bbb,ddd") || result[1][1].equals("ddd,bbb") || result [2][1].equals("ddd,bbb"));
 		assertEquals("result[3][1] should be \"ccc\"", "ccc", result[3][1]);
 	}
 
