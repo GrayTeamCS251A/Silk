@@ -1000,7 +1000,7 @@ public class MainUI{
 		x.put("1",a);
 		x.put("2",b);
 		x.put("3",c);
-		//x.put("4",e);		
+		x.put("4",d);		
 		y2.getChildren().put("131",new Task("131","dd","sf",3));
 		y2.getChildren().put("132",new Task("132","ddasd","sfdsf",3));	
 		
@@ -1017,14 +1017,14 @@ public class MainUI{
 		x.get("3").getChildren().put("z2",z2);	
 		
 		
-		a.addResource(project.getResource("2"));
-		a.addPredecessor(a);
-		a.addSuccessor(c);
-		a.addDeliverable(new Deliverable("F1",DeliverableType.file));
-		a.addDeliverable(new Deliverable("F2",DeliverableType.file));
-		a.addDeliverable(new Deliverable("F3",DeliverableType.file));
+		b.addResource(project.getResource("2"));
+		b.addPredecessor(a);
+		b.addSuccessor(c);
+		b.addDeliverable(new Deliverable("F1",DeliverableType.file));
+		b.addDeliverable(new Deliverable("F2",DeliverableType.file));
+		b.addDeliverable(new Deliverable("F3",DeliverableType.file));
 		
-		d.setTaskParent(b);		
+		//d.setTaskParent(b);		
 		
 
 
