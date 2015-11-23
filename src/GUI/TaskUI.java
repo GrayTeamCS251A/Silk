@@ -233,7 +233,7 @@ public class TaskUI extends JDialog {
 			for(int i=0;i<p.getTasks().values().size();i++){
 				   Task projectTask= (Task)model3.getElementAt(i);
 				   for(Task task:p.getTasks().values()){
-					   if(projectTask.getTaskID().equals(task.getTaskID())){				
+					   if(projectTask.getID().equals(task.getID())){				
 						   comboBoxParent.setSelectedIndex(i);
 					   }
 				   }

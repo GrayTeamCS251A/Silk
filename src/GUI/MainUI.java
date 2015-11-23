@@ -848,7 +848,7 @@ public class MainUI{
 				DefaultMutableTreeNode Pre = new DefaultMutableTreeNode("Predecessors");	
 				aTask.add(Pre);	
 				for(Task task:t.getPredecessors().values()){
-					Pre.add(new DefaultMutableTreeNode(task.getTaskName()));	
+					Pre.add(new DefaultMutableTreeNode(task.getName()));	
 				}
 			}	
 			if(!t.getSuccessors().isEmpty()){
@@ -856,7 +856,7 @@ public class MainUI{
 				aTask.add(Suc);	
 				for(Task task:t.getSuccessors().values()){
 					System.out.println(task);
-					Suc.add(new DefaultMutableTreeNode(task.getTaskName()));	
+					Suc.add(new DefaultMutableTreeNode(task.getName()));	
 				}
 			}
 			
@@ -889,14 +889,14 @@ public class MainUI{
 					DefaultMutableTreeNode PreC = new DefaultMutableTreeNode("Predecessors");	
 					aTask.add(PreC);	
 					for(Task task:innerTask.getPredecessors().values()){
-						PreC.add(new DefaultMutableTreeNode(task.getTaskName()));	
+						PreC.add(new DefaultMutableTreeNode(task.getName()));	
 					}
 				}
 				if(!innerTask.getSuccessors().isEmpty()){
 					DefaultMutableTreeNode SucC = new DefaultMutableTreeNode("Successors");	
 					aTask.add(SucC);	
 					for(Task task:innerTask.getSuccessors().values()){
-						SucC.add(new DefaultMutableTreeNode(task.getTaskName()));	
+						SucC.add(new DefaultMutableTreeNode(task.getName()));	
 					}
 				}
 				helper(newRoot,innerTask.getChildren());							
