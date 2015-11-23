@@ -1026,11 +1026,7 @@ public class MainUI{
 		a.addDeliverable(new Deliverable("F2",DeliverableType.file));
 		a.addDeliverable(new Deliverable("F3",DeliverableType.file));
 		
-		d.setTaskParent(b);		
-		
-
-
-		
+		d.setParent(b);		
 		
 		project.setTasks(x);
 		displayTree(taskTree,x);

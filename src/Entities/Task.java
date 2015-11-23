@@ -73,9 +73,6 @@ public class Task extends Observable {
    public HashMap<String, Task> getSuccessors(){
 	   return successors;
    }
-   public HashMap<String, Task> getSuccessors(){
-	   return successors;
-   }
    public Task getParent(){
 	   return parent;
    }
