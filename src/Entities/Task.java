@@ -162,7 +162,6 @@ public class Task extends Observable {
 
 			//Update Duration
 			this.duration = Math.max(this.duration, maxEndTime(children.values()) - this.startTime);
-			System.out.println("-->" + this.duration);
 		}
 		
 		//calc endTime for this task
@@ -213,16 +212,12 @@ public class Task extends Observable {
 		while (!queue.isEmpty()) {
 			Task child = queue.remove();
 
-			System.out.println("working with Task " + child);
-			
 			// 1. calculate the startTime of the task
 			if (child.getPredecessors().isEmpty()) {
 				child.setStartTime(startTime);
 			} else {
 				child.setStartTime(maxEndTime(child.getPredecessors().values()));
 			}
-			
-			System.out.println("  setting start time to " + child.getStartTime());
 			
 			// 2. deal with any children
 			if (!child.getChildren().isEmpty()) {

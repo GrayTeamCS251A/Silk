@@ -34,7 +34,6 @@ public class TaskUnitTests {
 		tester.calculateStartTimes(10);
 
 		// assert statements
-//		System.out.println(tester.getEndTime());
 		assertEquals("startTime should be 10", 10, tester.getStartTime());
 		assertEquals("endTime should be 12", 12, tester.getEndTime());
 	}
@@ -51,9 +50,6 @@ public class TaskUnitTests {
 		
 		//calculate start times on them
 		task1.calculateStartTimes(0);
-		
-		System.out.println(task1.getName() + ": " + task1.getStartTime() + "->" + task1.getEndTime() + " (d: " + task1.getDuration() + ")");
-		System.out.println(task2.getName() + ": " + task2.getStartTime() + "->" + task2.getEndTime() + " (d: " + task2.getDuration() + ")");
 		
 		// assert statements
 		assertEquals("task1.startTime should be 0", 0, task1.getStartTime());
@@ -97,9 +93,9 @@ public class TaskUnitTests {
 		//calculate start times on them
 		superTask.calculateStartTimes(0);
 		
-		for (Task child : superTask.getChildren().values()) {
-			System.out.println(child.getName() + ": " + child.getStartTime() + "->" + child.getEndTime() + " (d: " + child.getDuration() + ")");
-		}
+//		for (Task child : superTask.getChildren().values()) {
+//			System.out.println(child.getName() + ": " + child.getStartTime() + "->" + child.getEndTime() + " (d: " + child.getDuration() + ")");
+//		}
 		
 		// assert statements
 		assertEquals("superTask.startTime should be 0", 0, superTask.getStartTime());
@@ -113,7 +109,7 @@ public class TaskUnitTests {
 
 		assertEquals("task3.startTime should be 3", 3, task3.getStartTime());
 		assertEquals("task3.endTime should be 4", 4, task3.getEndTime());
-
+		
 		assertEquals("task4.startTime should be 1", 1, task4.getStartTime());
 		assertEquals("task4.endTime should be 2", 2, task4.getEndTime());
 		
