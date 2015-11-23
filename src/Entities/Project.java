@@ -106,7 +106,8 @@ public class Project extends Observable{
     		Integer taskDuration, 
     		ArrayList<Task> taskPredecessor, 
     		Task taskParent, 
-    		ArrayList<Resource> taskResources)
+    		ArrayList<Resource> taskResources,
+    		String taskDescription)
     {
         Task taskToAdd = new Task();
         taskToAdd.setName(taskName);
@@ -116,6 +117,8 @@ public class Project extends Observable{
         
         taskToAdd.setID(uniqueID);
         taskToAdd.setDuration(taskDuration);
+        taskToAdd.setDescription(taskDescription);
+        
         if (!taskPredecessor.isEmpty()){
         	for (int p = 0; p < taskPredecessor.size(); p++)
         	{
@@ -261,17 +264,17 @@ public class Project extends Observable{
     		Integer taskDuration, 
     		ArrayList<Task> predecessorTask, 
     		Task parentTask, 
-    		ArrayList<Resource> taskResources)
+    		ArrayList<Resource> taskResources,
+    		String taskDescription)
     {
         // TODO implement here
     	for (String taskID: tasks.keySet()) {
     		if (taskID.equals(tID))
     		{
-    			if (!taskName.equals("")){
-    				tasks.get(taskID).setName(taskName);
-    			}
+    			tasks.get(taskID).setName(taskName);
     			
     			tasks.get(taskID).setDuration(taskDuration);
+    			
     			if (!predecessorTask.isEmpty()){
     				for (int p = 0; p < predecessorTask.size(); p++)
     				{
@@ -289,6 +292,7 @@ public class Project extends Observable{
     					tasks.get(taskID).addResource(taskResources.get(i));
     				}
     			}
+    			tasks.get(taskID).setDescription(taskDescription);
     			
     			setChanged();
     			notifyObservers();
