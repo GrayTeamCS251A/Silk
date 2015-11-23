@@ -149,22 +149,25 @@ public class Task extends Observable {
     	this.endTime = 0;
     	
     	//Checks if starting task
-    	if (this.predecessors == null){
+    	if (this.predecessors == null || this.predecessors.isEmpty()){
     		//assigns startTime for this task as the offset value sT
     		this.startTime = sT;
-    		//calc endTime for this task
-    		this.endTime = this.startTime + this.duration;
+
     		//Checks if this task has children
     		if(this.children != null){
     			double childEndTime = 0;
+
     			//Call Child function here
     			childEndTime = startTimeChild(children, this.startTime); 
-    			//Checks old and new value and assigns greater value for task's endTime
-    			if (this.endTime < childEndTime){
-    				this.endTime = childEndTime;
-    			}
+
+    			//Update Duration
+    			this.duration = Math.max(this.duration, childEndTime - this.startTime);
+    			
     		}
-     	}
+    		
+    		//calc endTime for this task
+    		this.endTime = this.startTime + this.duration;
+    	}
     	else{ //Else if not the starting task
     		//Gets the predecessor values
     		Collection<Task> predecessor = this.predecessors.values();
@@ -277,7 +280,12 @@ public class Task extends Observable {
 		this.successors.put(successor.getID(), successor);
 	}
 	
-	public void addChildren(Task child)
+	public void addChildren(HashMap<String, Task> children)
+	{
+		this.children = children;
+	}
+
+	public void addChild(Task child)
 	{
 		this.children.put(child.getID(), child);
 	}
