@@ -36,12 +36,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -77,6 +79,8 @@ import Controllers.Schedule.ViewScheduleAsTableController;
 import Controllers.Tasks.AddTaskController;
 import Controllers.Tasks.DeleteTaskController;
 import Controllers.Tasks.EditTaskController;
+import Entities.Deliverable;
+import Entities.DeliverableType;
 import Entities.Project;
 import Entities.Resource;
 import Entities.ResourceType;
@@ -821,7 +825,40 @@ public class MainUI{
 			root.add(aTask);
 			aTask.add(new DefaultMutableTreeNode("ID:"+t.getID()));
 			aTask.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
-			aTask.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));	
+			aTask.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));
+			aTask.add(new DefaultMutableTreeNode("Complete:"+t.getPercentCompleted()));	
+			
+			if(!t.getDeliverables().isEmpty()){
+				DefaultMutableTreeNode Res = new DefaultMutableTreeNode("Deliverables");	
+				aTask.add(Res);	
+				for(Deliverable d:t.getDeliverables()){
+					Res.add(new DefaultMutableTreeNode(d.toString()));	
+				}
+			}
+			
+			if(!t.getRequiredResources().isEmpty()){
+				DefaultMutableTreeNode Res = new DefaultMutableTreeNode("Resources");	
+				aTask.add(Res);	
+				for(Resource r:t.getRequiredResources().values()){
+					Res.add(new DefaultMutableTreeNode(r));	
+				}
+			}
+			
+			if(!t.getPredecessors().isEmpty()){
+				DefaultMutableTreeNode Pre = new DefaultMutableTreeNode("Predecessors");	
+				aTask.add(Pre);	
+				for(Task task:t.getPredecessors().values()){
+					Pre.add(new DefaultMutableTreeNode(task.getTaskName()));	
+				}
+			}	
+			if(!t.getSuccessors().isEmpty()){
+				DefaultMutableTreeNode Suc = new DefaultMutableTreeNode("Successors");	
+				aTask.add(Suc);	
+				for(Task task:t.getSuccessors().values()){
+					System.out.println(task);
+					Suc.add(new DefaultMutableTreeNode(task.getTaskName()));	
+				}
+			}
 			
 			for (Task innerTask : t.getChildren().values())
 			{
@@ -829,7 +866,39 @@ public class MainUI{
 				aTask.add(newRoot);	
 				newRoot.add(new DefaultMutableTreeNode("ID:"+innerTask.getID()));
 				newRoot.add(new DefaultMutableTreeNode("Duration:"+innerTask.getDuration()));
-				newRoot.add(new DefaultMutableTreeNode("Description:"+innerTask.getDescription()));	
+				newRoot.add(new DefaultMutableTreeNode("Description:"+innerTask.getDescription()));
+				newRoot.add(new DefaultMutableTreeNode("Complete:"+innerTask.getPercentCompleted()));	
+				
+				if(!innerTask.getDeliverables().isEmpty()){
+					DefaultMutableTreeNode Res = new DefaultMutableTreeNode("Deliverables");	
+					aTask.add(Res);	
+					for(Deliverable d:innerTask.getDeliverables()){
+						Res.add(new DefaultMutableTreeNode(d.toString()));	
+					}
+				}
+				
+				if(!innerTask.getRequiredResources().isEmpty()){
+					DefaultMutableTreeNode Res = new DefaultMutableTreeNode("Resources");	
+					aTask.add(Res);	
+					for(Resource r:innerTask.getRequiredResources().values()){
+						Res.add(new DefaultMutableTreeNode(r));	
+					}
+				}
+
+				if(!innerTask.getPredecessors().isEmpty()){
+					DefaultMutableTreeNode PreC = new DefaultMutableTreeNode("Predecessors");	
+					aTask.add(PreC);	
+					for(Task task:innerTask.getPredecessors().values()){
+						PreC.add(new DefaultMutableTreeNode(task.getTaskName()));	
+					}
+				}
+				if(!innerTask.getSuccessors().isEmpty()){
+					DefaultMutableTreeNode SucC = new DefaultMutableTreeNode("Successors");	
+					aTask.add(SucC);	
+					for(Task task:innerTask.getSuccessors().values()){
+						SucC.add(new DefaultMutableTreeNode(task.getTaskName()));	
+					}
+				}
 				helper(newRoot,innerTask.getChildren());							
 			}
 		}	
@@ -926,12 +995,12 @@ public class MainUI{
 		Task a=new Task("1","T1","A",1);
 		Task b=new Task("2","T2","B",2);
 		Task c=new Task("3","T3","C",3);
-		Task e=new Task("4","T4","D",4);
+		Task d=new Task("4","T4","D",4);
 		
 		x.put("1",a);
 		x.put("2",b);
 		x.put("3",c);
-		x.put("4",e);		
+		//x.put("4",e);		
 		y2.getChildren().put("131",new Task("131","dd","sf",3));
 		y2.getChildren().put("132",new Task("132","ddasd","sfdsf",3));	
 		
@@ -948,9 +1017,17 @@ public class MainUI{
 		x.get("3").getChildren().put("z2",z2);	
 		
 		
-		b.addResource(project.getResource("2"));
-		b.addPredecessor(a);
-		System.out.println(y0.getRequiredResources());
+		a.addResource(project.getResource("2"));
+		a.addPredecessor(a);
+		a.addSuccessor(c);
+		a.addDeliverable(new Deliverable("F1",DeliverableType.file));
+		a.addDeliverable(new Deliverable("F2",DeliverableType.file));
+		a.addDeliverable(new Deliverable("F3",DeliverableType.file));
+		
+		d.setTaskParent(b);		
+		
+
+
 		
 		
 		project.setTasks(x);
