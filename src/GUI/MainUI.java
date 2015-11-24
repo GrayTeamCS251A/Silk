@@ -767,12 +767,13 @@ public class MainUI{
                 int returnVal = saveFile.showSaveDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     try {
-                    	String fileName = saveFile.getSelectedFile().getName();
-                    	saveProjectController.executeSaveProject(fileName);
+                    	//String fileName = saveFile.getSelectedFile().getName();
+                    	String dest = saveFile.getSelectedFile().getAbsolutePath();
+                    	saveProjectController.executeSaveProject(dest);
                	
-                    	File src = new File("");  //File returned by executeSaveProject      	
-                    	File dest = new File(saveFile.getSelectedFile().getAbsolutePath());
-                    	Files.copy(src.toPath(),dest.toPath(), REPLACE_EXISTING);
+                    	//File src = new File("");  //File returned by executeSaveProject      	
+                    	//File dest = new File(saveFile.getSelectedFile().getAbsolutePath());
+                    	//Files.copy(src.toPath(),dest.toPath(), REPLACE_EXISTING);
                     	                    	
                     } catch (Exception ex) {
                         ex.printStackTrace();
