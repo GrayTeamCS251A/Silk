@@ -415,10 +415,10 @@ public class Project extends Observable{
     	DeliverableType dt = null;
     	
     	switch (deliverableType){
-    		case "DeliverableType.file": dt = DeliverableType.file;
+    		case "file": dt = DeliverableType.file;
     									break;
-    		case "DeliverableType.presentation": dt = DeliverableType.presentation;
-    											break;
+    		case "presentation": dt = DeliverableType.presentation;
+    							break;
     	}
     	
     	d.setDeliverableName(deliverableName);
