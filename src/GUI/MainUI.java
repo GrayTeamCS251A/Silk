@@ -413,7 +413,8 @@ public class MainUI{
 						editTask.getPredecessorTask(),
 						editTask.getParentTask(),
 						editTask.getResouces(),
-						editTask.getDescription());
+						editTask.getDescription(),
+						editTask.getDeliverable());
 				editTask.setVisible(false);
 				System.out.println(t.getPredecessors());
 			}
@@ -460,7 +461,8 @@ public class MainUI{
 						addTask.getPredecessorTask(),
 						addTask.getParentTask(),
 						addTask.getResouces(),
-						addTask.getDescription());
+						addTask.getDescription(),
+						addTask.getDeliverable());
 				addTask.setVisible(false);
 			}
 						
