@@ -180,8 +180,8 @@ public class MainUI{
 		
 		resouceTest();
 		treeTest();
-		tableTest();
-		graphTest();
+		//tableTest();
+		//graphTest();
 	}
 
 	/**
