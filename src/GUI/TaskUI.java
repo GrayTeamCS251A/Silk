@@ -41,13 +41,14 @@ public class TaskUI extends JDialog {
 	private JList listPred;
 	private JRadioButton rdbtnNoParent;
 	private JTextPane txtpnDescription;
+	private JComboBox comboBoxDeliverable;
 
 	/**
 	 * Create the dialog.
 	 */
 	public TaskUI(String x,String instr) {
 		setTitle(x);
-		setBounds(100, 100, 639, 373);
+		setBounds(100, 100, 639, 391);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -62,7 +63,7 @@ public class TaskUI extends JDialog {
 		contentPanel.add(lblParent);
 		
 		JLabel lblPredecessor = new JLabel("Predecessor");
-		lblPredecessor.setBounds(246, 79, 84, 14);
+		lblPredecessor.setBounds(246, 104, 84, 14);
 		contentPanel.add(lblPredecessor);
 		
 		textName = new JTextField();
@@ -76,46 +77,46 @@ public class TaskUI extends JDialog {
 		JScrollPane scrollPaneRes = new JScrollPane();
 		scrollPaneRes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPaneRes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPaneRes.setBounds(65, 104, 145, 162);
+		scrollPaneRes.setBounds(65, 129, 145, 162);
 		contentPanel.add(scrollPaneRes);
 		
 		listRes = new JList();
 		scrollPaneRes.setViewportView(listRes);
 		
 		JLabel lblResource = new JLabel("Resource");
-		lblResource.setBounds(65, 79, 94, 14);
+		lblResource.setBounds(65, 104, 94, 14);
 		contentPanel.add(lblResource);
 		
 		JLabel lblDuration = new JLabel("Duration");
-		lblDuration.setBounds(179, 51, 84, 14);
+		lblDuration.setBounds(196, 51, 84, 14);
 		contentPanel.add(lblDuration);
 		
 		textDuration = new JTextField();
-		textDuration.setBounds(236, 48, 42, 20);
+		textDuration.setBounds(246, 48, 42, 20);
 		contentPanel.add(textDuration);
 		textDuration.setColumns(10);
 		
 		JScrollPane scrollPanePred = new JScrollPane();
 		scrollPanePred.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPanePred.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPanePred.setBounds(246, 104, 145, 162);
+		scrollPanePred.setBounds(246, 129, 145, 162);
 		contentPanel.add(scrollPanePred);
 		
 		listPred = new JList();
 		scrollPanePred.setViewportView(listPred);
 		
 		JLabel lblInstr = new JLabel(instr);
-		lblInstr.setBounds(65, 277, 376, 14);
+		lblInstr.setBounds(65, 302, 376, 14);
 		contentPanel.add(lblInstr);
 		
 		JLabel lblDescription = new JLabel("Description");
-		lblDescription.setBounds(423, 79, 84, 14);
+		lblDescription.setBounds(423, 104, 84, 14);
 		contentPanel.add(lblDescription);
 		
 		JScrollPane scrollPaneDescription = new JScrollPane();
 		scrollPaneDescription.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneDescription.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPaneDescription.setBounds(424, 104, 144, 162);
+		scrollPaneDescription.setBounds(423, 129, 144, 162);
 		contentPanel.add(scrollPaneDescription);
 		
 		txtpnDescription = new JTextPane();
@@ -133,6 +134,15 @@ public class TaskUI extends JDialog {
 		});
 		rdbtnNoParent.setBounds(422, 18, 146, 23);
 		contentPanel.add(rdbtnNoParent);
+		
+		JLabel lblDeliverable = new JLabel("Deliverable");
+		lblDeliverable.setBounds(338, 76, 71, 14);
+		contentPanel.add(lblDeliverable);
+		
+		comboBoxDeliverable = new JComboBox();
+		comboBoxDeliverable.setBounds(423, 76, 145, 20);
+
+		contentPanel.add(comboBoxDeliverable);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -149,7 +159,12 @@ public class TaskUI extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-
+			
+		ArrayList<String> types= new ArrayList<String>();
+		types.add("file");
+		types.add("presentation");
+		comboBoxDeliverable.setModel(new DefaultComboBoxModel(types.toArray()));
+		
 	}
 	
 	   public void addConfirmListener(ActionListener listener) {
@@ -174,6 +189,10 @@ public class TaskUI extends JDialog {
 				  return (Task) comboBoxParent.getSelectedItem();
 			  }		   
 			 return  null;
+	   }
+	   
+	   public String getDeliverable() {
+			return (String) comboBoxDeliverable.getSelectedItem();
 	   }
  
 	   public ArrayList<Task> getPredecessorTask() {
@@ -208,12 +227,14 @@ public class TaskUI extends JDialog {
 		   listRes.removeAll();
 		   listPred.removeAll();
 		   comboBoxParent.removeAll();
+		   txtpnDescription.setText("");
 	   }
 	   
 	   
 	   public void fillEdit(Task t,Project p){
 		   textName.setText(t.getName());
 		   textDuration.setText(String.valueOf(t.getDuration()));
+		   txtpnDescription.setText(t.getDescription());
 		   fillResAndPre(t,p);  		   
 		   Task parent =t.getParent();
 
@@ -227,26 +248,25 @@ public class TaskUI extends JDialog {
 		  
 		   DefaultComboBoxModel model3 = new DefaultComboBoxModel();
 		   comboBoxParent.setModel( model3);
-			   for(Task task: p.getTasks().values()){
+			   for(Task task: findAllTask(p)){
 				 	model3.addElement(task);
 			   }
 		  
 			   
 		   if(parent!=null){
 			rdbtnNoParent.setSelected(false);   
-			for(int i=0;i<p.getTasks().values().size();i++){
+			for(int i=0;i< findAllTask(p).size();i++)
+			{
 				   Task projectTask= (Task)model3.getElementAt(i);
-				   for(Task task:p.getTasks().values()){
-					   if(projectTask.getID().equals(task.getID())){				
+					   if(projectTask.getID().equals(parent.getID())){				
 						   comboBoxParent.setSelectedIndex(i);
 					   }
-				   }
 			   }
 			}
 		  
 	   }
 	   
-	   public void fillAdd(Project p){
+	   public void fillAdd(Project p, Task selectedTask){
 		   DefaultListModel model = new DefaultListModel();
 		   listPred.setModel(model);
 		   for(Task task: p.getTasks().values()){
@@ -259,9 +279,10 @@ public class TaskUI extends JDialog {
 		   } 		   
 		   DefaultComboBoxModel model3 = new DefaultComboBoxModel();
 		   comboBoxParent.setModel( model3);
-		   for(Task task: p.getTasks().values()){
-			 	model3.addElement(task);
-		   }
+		   
+		   model3.addElement(selectedTask);
+		
+		
 	   }
 	   
 	   private void fillResAndPre(Task t,Project p){
@@ -317,4 +338,28 @@ public class TaskUI extends JDialog {
 			  }	  
 		 listRes.setSelectedIndices(num2);	  
 	   }
+
+	   
+	 private ArrayList<Task> findAllTask(Project p)
+	 {  
+		 ArrayList<Task> x= new ArrayList<Task>();
+		 for(Task t:p.getTasks().values()){
+			 x.add(t);
+			 findAllTaskHelper(t,x);
+		 }
+		 return x;
+	 }
+
+	   		
+	 private void findAllTaskHelper(Task task,ArrayList<Task> x)
+		   	{	
+				 if(!task.getChildren().isEmpty())
+				 {
+					for(Task t:task.getChildren().values()) {
+						x.add(t);
+						findAllTaskHelper(t, x);
+					 }
+				 }			   
+			   
+		   	}	   	
 }

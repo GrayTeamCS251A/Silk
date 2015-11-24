@@ -468,7 +468,14 @@ public class MainUI{
 		
 		btnAddTask.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent arg0) {
-	        	 addTask.fillAdd(project);
+	        	 DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+							taskTree.getLastSelectedPathComponent();
+	        	 Task selectedTask=new Task();
+	        	 if(node.getUserObject().getClass().equals(String.class)){
+	        		 selectedTask=null;
+	        	 }else
+	        		selectedTask = (Task) node.getUserObject();
+	        	addTask.fillAdd(project,selectedTask);
 	            if (!addTask.isVisible()) {
 	            	addTask.setVisible(true);
 	            }
@@ -808,7 +815,7 @@ public class MainUI{
 	
 	public static void displayTree(JTree tree, HashMap<String, Task> mapTask){
 		
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Tasks");
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
 		
 		helper(root,mapTask);
 					
@@ -1028,7 +1035,7 @@ public class MainUI{
 		b.addDeliverable(new Deliverable("F3",DeliverableType.file));
 		
 
-		d.setParent(b);		
+		z0.setParent(c);		
 
 		
 		project.setTasks(x);
