@@ -333,7 +333,9 @@ public class LoadProjectController implements Controller {
 									}
 								}
 								
-								listOfTaskDeliverables.add(project.createDeliverable(deliverableName, deliverableType));	
+								if (!deliverableName.equals("") && !deliverableType.equals("")){
+									listOfTaskDeliverables.add(project.createDeliverable(deliverableName, deliverableType));	
+								}
 							}
 						}
 						

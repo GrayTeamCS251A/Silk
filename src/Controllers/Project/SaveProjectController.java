@@ -38,7 +38,7 @@ public class SaveProjectController implements Controller  {
      * @param project 
      * @return
      */
-    private static File convert(Project project, String fileName) throws NullPointerException {
+    public static File convert(Project project, String fileName) throws NullPointerException {
         // Convert Project to XML format to the specified fileName
     	try {
 
@@ -171,7 +171,16 @@ public class SaveProjectController implements Controller  {
     				prTaskDeliverableName.appendChild(doc.createTextNode(d.getDeliverableName()));
     				
     				Element prTaskDeliverableType = doc.createElement("TaskDeliverableType");
-    				prTaskDeliverable.appendChild(doc.createTextNode(String.valueOf(d.getDeliverableType())));
+    				String deliverableType = "";
+    				switch (d.getDeliverableType().toString())
+    				{
+    					case "file": deliverableType = "file";
+    								break;
+    					case "presentation": deliverableType = "presentation";
+    										break;
+						
+    				}
+    				prTaskDeliverable.appendChild(doc.createTextNode(deliverableType));
     				
     				
     				prTaskDeliverable.appendChild(prTaskDeliverableName);
