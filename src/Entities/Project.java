@@ -165,7 +165,11 @@ public class Project extends Observable{
 
         resourceToCreate.setResourceID(uniqueID);
         resourceToCreate.setDailyCost(dailyCost);
-        resourceToCreate.setResourceType(r);
+        
+        if (r != null)
+        {
+            resourceToCreate.setResourceType(r);
+        }
         
         resources.put(uniqueID, resourceToCreate);
         setChanged();
@@ -178,7 +182,11 @@ public class Project extends Observable{
 
         resourceToCreate.setResourceID(resourceID);
         resourceToCreate.setDailyCost(dailyCost);
-        resourceToCreate.setResourceType(r);
+        
+        if (r != null)
+        {
+            resourceToCreate.setResourceType(r);
+        }
         
         resources.put(resourceID, resourceToCreate);
         setChanged();
