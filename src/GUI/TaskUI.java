@@ -22,6 +22,8 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JList;
 
+import Entities.Deliverable;
+import Entities.DeliverableType;
 import Entities.Project;
 import Entities.Resource;
 import Entities.Task;
@@ -42,81 +44,86 @@ public class TaskUI extends JDialog {
 	private JRadioButton rdbtnNoParent;
 	private JTextPane txtpnDescription;
 	private JComboBox comboBoxDeliverable;
+	private JTextField textFieldDeliverable;
+	private JList listDeliverable;
+	private JButton btnAddDel;
+	private JButton btnDeleteDel;
+	private DefaultComboBoxModel DeliverableModel=new DefaultComboBoxModel();
 
 	/**
 	 * Create the dialog.
 	 */
 	public TaskUI(String x,String instr) {
 		setTitle(x);
-		setBounds(100, 100, 639, 391);
+		setBounds(100, 100, 823, 433);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
 		JLabel lblTaskName = new JLabel("Task Name");
-		lblTaskName.setBounds(22, 51, 84, 14);
+		lblTaskName.setBounds(10, 61, 84, 14);
 		contentPanel.add(lblTaskName);
 		
 		JLabel lblParent = new JLabel("Current Parent");
-		lblParent.setBounds(338, 51, 84, 14);
+		lblParent.setBounds(497, 61, 84, 14);
 		contentPanel.add(lblParent);
 		
 		JLabel lblPredecessor = new JLabel("Predecessor");
-		lblPredecessor.setBounds(246, 104, 84, 14);
+		lblPredecessor.setBounds(246, 139, 84, 14);
 		contentPanel.add(lblPredecessor);
 		
 		textName = new JTextField();
-		textName.setBounds(91, 48, 78, 20);
+		textName.setBounds(120, 58, 78, 20);
 		contentPanel.add(textName);
 		textName.setColumns(10);
 		
-		comboBoxParent.setBounds(423, 48, 145, 20);
+		comboBoxParent.setBounds(591, 58, 145, 20);
 		contentPanel.add(comboBoxParent);
 		
 		JScrollPane scrollPaneRes = new JScrollPane();
 		scrollPaneRes.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		scrollPaneRes.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPaneRes.setBounds(65, 129, 145, 162);
+		scrollPaneRes.setBounds(65, 164, 145, 162);
 		contentPanel.add(scrollPaneRes);
 		
 		listRes = new JList();
 		scrollPaneRes.setViewportView(listRes);
 		
 		JLabel lblResource = new JLabel("Resource");
-		lblResource.setBounds(65, 104, 94, 14);
+		lblResource.setBounds(65, 139, 94, 14);
 		contentPanel.add(lblResource);
 		
 		JLabel lblDuration = new JLabel("Duration");
-		lblDuration.setBounds(196, 51, 84, 14);
+		lblDuration.setBounds(228, 61, 84, 14);
 		contentPanel.add(lblDuration);
 		
 		textDuration = new JTextField();
-		textDuration.setBounds(246, 48, 42, 20);
+		textDuration.setBounds(299, 58, 94, 20);
 		contentPanel.add(textDuration);
 		textDuration.setColumns(10);
 		
 		JScrollPane scrollPanePred = new JScrollPane();
 		scrollPanePred.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPanePred.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPanePred.setBounds(246, 129, 145, 162);
+		scrollPanePred.setBounds(246, 164, 145, 162);
 		contentPanel.add(scrollPanePred);
 		
 		listPred = new JList();
 		scrollPanePred.setViewportView(listPred);
 		
 		JLabel lblInstr = new JLabel(instr);
-		lblInstr.setBounds(65, 302, 376, 14);
+		lblInstr.setBounds(65, 337, 376, 14);
 		contentPanel.add(lblInstr);
 		
 		JLabel lblDescription = new JLabel("Description");
-		lblDescription.setBounds(423, 104, 84, 14);
+		lblDescription.setBounds(423, 139, 84, 14);
 		contentPanel.add(lblDescription);
 		
 		JScrollPane scrollPaneDescription = new JScrollPane();
 		scrollPaneDescription.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPaneDescription.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPaneDescription.setBounds(423, 129, 144, 162);
+		scrollPaneDescription.setBounds(423, 164, 144, 162);
 		contentPanel.add(scrollPaneDescription);
 		
 		txtpnDescription = new JTextPane();
@@ -132,15 +139,15 @@ public class TaskUI extends JDialog {
 				}
 			}
 		});
-		rdbtnNoParent.setBounds(422, 18, 146, 23);
+		rdbtnNoParent.setBounds(590, 28, 146, 23);
 		contentPanel.add(rdbtnNoParent);
 		
-		JLabel lblDeliverable = new JLabel("Deliverable");
-		lblDeliverable.setBounds(338, 76, 71, 14);
+		JLabel lblDeliverable = new JLabel("DeliverableType");
+		lblDeliverable.setBounds(599, 108, 103, 14);
 		contentPanel.add(lblDeliverable);
 		
 		comboBoxDeliverable = new JComboBox();
-		comboBoxDeliverable.setBounds(423, 76, 145, 20);
+		comboBoxDeliverable.setBounds(712, 105, 59, 20);
 
 		contentPanel.add(comboBoxDeliverable);
 		{
@@ -163,7 +170,55 @@ public class TaskUI extends JDialog {
 		ArrayList<String> types= new ArrayList<String>();
 		types.add("file");
 		types.add("presentation");
+		types.add("");
 		comboBoxDeliverable.setModel(new DefaultComboBoxModel(types.toArray()));
+		
+		textFieldDeliverable = new JTextField();
+		textFieldDeliverable.setBounds(712, 136, 59, 20);
+		contentPanel.add(textFieldDeliverable);
+		textFieldDeliverable.setColumns(10);
+		
+		JLabel lblDeliverableName = new JLabel("Deliverable Name");
+		lblDeliverableName.setBounds(599, 139, 113, 14);
+		contentPanel.add(lblDeliverableName);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBounds(599, 164, 137, 162);
+		contentPanel.add(scrollPane);
+		
+		listDeliverable = new JList<Deliverable>();
+		scrollPane.setViewportView(listDeliverable);
+		listDeliverable.setModel(  DeliverableModel);
+		
+		btnAddDel = new JButton("+");
+		btnAddDel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String x=(String) comboBoxDeliverable.getSelectedItem();
+				String Dname=textFieldDeliverable.getText();
+				if(x.equals("")||Dname.equals("")){
+					return;
+				}
+				if(x.equals("file")){
+					 DeliverableModel.addElement(new Deliverable(Dname,DeliverableType.file));	
+				}else if(x.equals("presentation")){
+					 DeliverableModel.addElement(new Deliverable(Dname,DeliverableType.presentation));
+				}					
+			}
+		});
+		btnAddDel.setBounds(599, 333, 42, 23);
+		contentPanel.add(btnAddDel);
+		
+		btnDeleteDel = new JButton("-");
+		btnDeleteDel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int x=listDeliverable.getSelectedIndex();
+				 DeliverableModel.removeElementAt(x);	
+			}
+		});
+		btnDeleteDel.setBounds(647, 333, 42, 23);
+		contentPanel.add(btnDeleteDel);
 		
 	}
 	
@@ -195,6 +250,17 @@ public class TaskUI extends JDialog {
 			return (String) comboBoxDeliverable.getSelectedItem();
 	   }
  
+	   public ArrayList<Deliverable> getDeliverableList(){
+		   ArrayList<Deliverable> x=new ArrayList<Deliverable>();
+		   for(int i=0;i<DeliverableModel.getSize();i++){
+			   x.add((Deliverable) DeliverableModel.getElementAt(i));
+		   }
+		   return x; 
+	   }
+	   
+	   public String getDeliverableName(){
+		   return textFieldDeliverable.getText();	   
+	   }
 	   public ArrayList<Task> getPredecessorTask() {
 		   int[] r=listPred.getSelectedIndices();
 		   ArrayList<Task> x=new ArrayList<Task>();
@@ -228,6 +294,7 @@ public class TaskUI extends JDialog {
 		   listPred.removeAll();
 		   comboBoxParent.removeAll();
 		   txtpnDescription.setText("");
+		   listDeliverable.removeAll();	   
 	   }
 	   
 	   
@@ -255,15 +322,19 @@ public class TaskUI extends JDialog {
 		  
 
 		   if(parent!=null){
-			rdbtnNoParent.setSelected(false);   
-			for(int i=0;i< model3.getSize();i++)
-			{
+		   rdbtnNoParent.setSelected(false);   
+		   for(int i=0;i< model3.getSize();i++){
 				   Task projectTask= (Task)model3.getElementAt(i);
-					   if(projectTask.getID().equals(parent.getID())){				
-						   comboBoxParent.setSelectedIndex(i);
-					   }
+				   if(projectTask.getID().equals(parent.getID())){				
+				      comboBoxParent.setSelectedIndex(i);
+				   }
 			   }
 			}
+		   
+		   DeliverableModel.removeAllElements();
+		   	for(Deliverable task: t.getDeliverables()){
+		   		DeliverableModel.addElement(task);
+			   }
 		  
 	   }
 	   

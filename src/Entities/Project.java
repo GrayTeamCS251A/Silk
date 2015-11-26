@@ -108,7 +108,7 @@ public class Project extends Observable{
     		Task taskParent, 
     		ArrayList<Resource> taskResources,
     		String taskDescription,
-    		Deliverable taskDeliverable)
+    		ArrayList<Deliverable> taskDeliverable)
     {
         Task taskToAdd = new Task();
         taskToAdd.setName(taskName);
@@ -140,8 +140,12 @@ public class Project extends Observable{
         	}
         }
         
-        if (taskDeliverable != null){
-        	taskToAdd.addDeliverable(taskDeliverable);
+//        if (taskDeliverable != null){
+//        	taskToAdd.addDeliverable(taskDeliverable);
+//        }
+        
+        for(Deliverable d:taskDeliverable){
+        	taskToAdd.addDeliverable(d);
         }
         
         tasks.put(uniqueID, taskToAdd);
@@ -280,7 +284,7 @@ public class Project extends Observable{
     		Task parentTask, 
     		ArrayList<Resource> taskResources,
     		String taskDescription,
-    		Deliverable taskDeliverable)
+    		ArrayList<Deliverable> taskDeliverable)
     {
         // TODO implement here
     	for (String taskID: tasks.keySet()) {
@@ -310,11 +314,15 @@ public class Project extends Observable{
     			}
     			tasks.get(taskID).setDescription(taskDescription);
     			
-    			if (taskDeliverable != null)
-    			{
-    				tasks.get(taskID).addDeliverable(taskDeliverable);
-    			}
-    			
+//    			if (taskDeliverable != null)
+//    			{
+//    				tasks.get(taskID).addDeliverable(taskDeliverable);
+//    			}
+    			tasks.get(taskID).emptyDeliverables();
+    	        for(Deliverable d:taskDeliverable){
+    	        	tasks.get(taskID).addDeliverable(d);
+    	        }
+    			 			
     			setChanged();
     			notifyObservers();
     			break;

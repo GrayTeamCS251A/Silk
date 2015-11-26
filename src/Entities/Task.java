@@ -124,6 +124,9 @@ public class Task extends Observable {
    public void setParent(Task parent){
 	   this.parent = parent;
    }
+   public void emptyDeliverables(){
+	  this.deliverables.clear();
+   }
     /**
      * @param info
      */

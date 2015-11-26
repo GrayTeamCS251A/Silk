@@ -421,7 +421,7 @@ public class MainUI{
 						editTask.getParentTask(),
 						editTask.getResouces(),
 						editTask.getDescription(),
-						editTask.getDeliverable());
+						editTask.getDeliverableList());
 				editTask.setVisible(false);
 				btnTable.setEnabled(false);
 				btnGraph.setEnabled(false);
@@ -471,7 +471,8 @@ public class MainUI{
 						addTask.getParentTask(),
 						addTask.getResouces(),
 						addTask.getDescription(),
-						addTask.getDeliverable());
+						addTask.getDeliverableList()
+						);
 				addTask.setVisible(false);
 				btnTable.setEnabled(false);
 				btnGraph.setEnabled(false);
@@ -856,7 +857,7 @@ public class MainUI{
 			aTask.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
 			aTask.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));
 			aTask.add(new DefaultMutableTreeNode("Complete:"+t.getPercentCompleted()));	
-			
+
 			if(!t.getDeliverables().isEmpty()){
 				DefaultMutableTreeNode Res = new DefaultMutableTreeNode("Deliverables");	
 				aTask.add(Res);	
@@ -1059,15 +1060,18 @@ public class MainUI{
 //
 //		
 //		project.setTasks(x);
+		
+		ArrayList<Deliverable> d= new ArrayList<Deliverable>();
+		d.add(new Deliverable("a", DeliverableType.file));
 
 		project.createTaskFromUI("t1", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
-				"....",new Deliverable("D1", DeliverableType.file));
+				"....",d);
 		project.createTaskFromUI("t2", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
-				"....",new Deliverable("D2", DeliverableType.file));
+				"....",d);
 		project.createTaskFromUI("t3", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
-				"....",new Deliverable("D3", DeliverableType.file));
+				"....",d);
 		project.createTaskFromUI("t4", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
-				"....",new Deliverable("D4", DeliverableType.file));
+				"....",d);
 		
 		
 		Collection<Task> x=new ArrayList<Task>();
@@ -1079,7 +1083,7 @@ public class MainUI{
 		}
 		
 		project.createTaskFromUI("t5", 3, new ArrayList<Task>(), z,new ArrayList<Resource>(), 
-				"....",new Deliverable("D4", DeliverableType.file));
+				"....",d);
 			
 		displayTree(taskTree,project.getTasks());
 	}

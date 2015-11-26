@@ -25,22 +25,22 @@ public class AddTaskController implements Controller {
 			Task parentTask, 
 			ArrayList<Resource> taskResources,
 			String taskDescription,
-			String taskDeliverable) 
+			ArrayList<Deliverable> taskDeliverable) 
 	{
-		Deliverable d = new Deliverable();
+//		Deliverable d = new Deliverable();
+//		
+//		switch (taskDeliverable)
+//		{
+//			case "file": d.setDeliverableName(taskDeliverable);
+//						d.setDeliverableType(DeliverableType.file);
+//						break;
+//			case "presentation": d.setDeliverableName(taskDeliverable);
+//								d.setDeliverableType(DeliverableType.presentation);
+//								break;
+//			case "": d = null;
+//					break;
+//		}
 		
-		switch (taskDeliverable)
-		{
-			case "file": d.setDeliverableName(taskDeliverable);
-						d.setDeliverableType(DeliverableType.file);
-						break;
-			case "presentation": d.setDeliverableName(taskDeliverable);
-								d.setDeliverableType(DeliverableType.presentation);
-								break;
-			case "": d = null;
-					break;
-		}
-		
-		project.createTaskFromUI(taskName, taskDuration, predecessorTask, parentTask, taskResources, taskDescription, d);
+		project.createTaskFromUI(taskName, taskDuration, predecessorTask, parentTask, taskResources, taskDescription, taskDeliverable);
 	}
 }

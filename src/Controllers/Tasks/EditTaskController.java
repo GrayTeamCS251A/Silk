@@ -26,23 +26,23 @@ public class EditTaskController implements Controller {
 			Task parentTask, 
 			ArrayList<Resource> taskResources,
 			String taskDescription,
-			String taskDeliverable) {
+			ArrayList<Deliverable> taskDeliverable) {
 		
-		Deliverable d = new Deliverable();
+//		Deliverable d = new Deliverable();
+//		
+//		switch (taskDeliverable)
+//		{
+//			case "file": d.setDeliverableName(taskDeliverable);
+//						d.setDeliverableType(DeliverableType.file);
+//						break;
+//			case "presentation": d.setDeliverableName(taskDeliverable);
+//								d.setDeliverableType(DeliverableType.presentation);
+//								break;
+//			case "": d = null;
+//					break;
+//		}
 		
-		switch (taskDeliverable)
-		{
-			case "file": d.setDeliverableName(taskDeliverable);
-						d.setDeliverableType(DeliverableType.file);
-						break;
-			case "presentation": d.setDeliverableName(taskDeliverable);
-								d.setDeliverableType(DeliverableType.presentation);
-								break;
-			case "": d = null;
-					break;
-		}
-		
-		project.editTask(taskName, taskID, taskDuration, predecessorTask, parentTask, taskResources, taskDescription, d);
+		project.editTask(taskName, taskID, taskDuration, predecessorTask, parentTask, taskResources, taskDescription, taskDeliverable);
 	}
 
 }
