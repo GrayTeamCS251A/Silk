@@ -298,7 +298,8 @@ public class Project extends Observable{
     			}
     			if (parentTask != null) {
     				tasks.get(taskID).setParent(parentTask);
-    			}
+    				//parentTask.addChild(tasks.get(taskID));
+    			} //else tasks.get(taskID).setParent(null);
     			
     			if (!taskResources.isEmpty())
     			{
@@ -320,12 +321,7 @@ public class Project extends Observable{
     		}
     	}
     }
-    private void findTask(int taskID, Task task){
-    	if(task.getChildren().isEmpty()) return;
-    	
-    	
-    	
-    }
+
     /**
      * 
      */

@@ -249,13 +249,14 @@ public class TaskUI extends JDialog {
 		   DefaultComboBoxModel model3 = new DefaultComboBoxModel();
 		   comboBoxParent.setModel( model3);
 			   for(Task task: findAllTask(p)){
+				   if(task.getID()!=t.getID())
 				 	model3.addElement(task);
 			   }
 		  
-			   
+
 		   if(parent!=null){
 			rdbtnNoParent.setSelected(false);   
-			for(int i=0;i< findAllTask(p).size();i++)
+			for(int i=0;i< model3.getSize();i++)
 			{
 				   Task projectTask= (Task)model3.getElementAt(i);
 					   if(projectTask.getID().equals(parent.getID())){				
@@ -345,7 +346,7 @@ public class TaskUI extends JDialog {
 		 ArrayList<Task> x= new ArrayList<Task>();
 		 for(Task t:p.getTasks().values()){
 			 x.add(t);
-			 findAllTaskHelper(t,x);
+			 //findAllTaskHelper(t,x);
 		 }
 		 return x;
 	 }
@@ -353,6 +354,7 @@ public class TaskUI extends JDialog {
 	   		
 	 private void findAllTaskHelper(Task task,ArrayList<Task> x)
 		   	{	
+
 				 if(!task.getChildren().isEmpty())
 				 {
 					for(Task t:task.getChildren().values()) {

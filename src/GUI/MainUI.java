@@ -292,7 +292,8 @@ public class MainUI{
 		btnTable.setBounds(186, 360, 84, 23);
 		Schedule_panel.add(btnTable);
 		
-		
+		btnTable.setEnabled(false);
+		btnGraph.setEnabled(false);
 	}
 	
 	
@@ -307,6 +308,8 @@ public class MainUI{
 						addRes.getTextType());
 				addRes.Reset();      
 				addRes.setVisible(false);
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
 			}
 						
 		});
@@ -346,8 +349,10 @@ public class MainUI{
 						r.getResourceID(), 
 						Double.parseDouble(editRes.getTextCost()), 
 						editRes.getTextType());
-				System.out.println(editRes.getTextName());
+				//System.out.println(editRes.getTextName());
 				editRes.setVisible(false);
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
 			}
 						
 		});
@@ -393,6 +398,8 @@ public class MainUI{
 					int selectedIndex = resourceList.getSelectedIndex();
 					Resource r=(Resource) resourceList.getSelectedValue();
 					deleteResourceController.executeDeleteResource(r.getResourceID());
+					btnTable.setEnabled(false);
+					btnGraph.setEnabled(false);
 				}
 			}});
 	}
@@ -416,7 +423,9 @@ public class MainUI{
 						editTask.getDescription(),
 						editTask.getDeliverable());
 				editTask.setVisible(false);
-				System.out.println(t.getPredecessors());
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
+				//System.out.println(t.getParent());
 			}
 						
 		});
@@ -464,6 +473,8 @@ public class MainUI{
 						addTask.getDescription(),
 						addTask.getDeliverable());
 				addTask.setVisible(false);
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
 			}
 						
 		});
@@ -516,6 +527,8 @@ public class MainUI{
 					TreePath tp = taskTree.getSelectionPath();
 					deleteTaskController.executeDeleteTask(t.getID());
 					taskTree.removeSelectionPath(tp);
+					btnTable.setEnabled(false);
+					btnGraph.setEnabled(false);
 				}
 			}});
 	}
@@ -526,6 +539,8 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				btnTable.setEnabled(true);
+				btnGraph.setEnabled(true);
 				generateScheduleController.generateSchedule();
 			}});
 		
@@ -651,10 +666,9 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				//JTable table = viewScheduleAsTableController.execute(?);
-				//scheduleScrollPane.setViewportView(table);
-				
-				
+				String columnNames[] = { "Task","Duration" };
+				displayTable(columnNames,project.getSchedule().toMatrix(),scheduleScrollPane);
+				scheduleScrollPane.setViewportView(table);								
 			}});
 	}
 
@@ -816,8 +830,8 @@ public class MainUI{
 	
 	
 	public static void displayTree(JTree tree, HashMap<String, Task> mapTask){
-		
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("root");
+
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
 		
 		helper(root,mapTask);
 					
@@ -830,9 +844,12 @@ public class MainUI{
 		if(mapTask.isEmpty()){
 			return;
 		}
-		
+	
 		for (Task t : mapTask.values())
-		{			
+		{		
+		 if(!(root.getUserObject() instanceof String) || t.getParent() ==null )
+		 {
+
 			DefaultMutableTreeNode aTask = new DefaultMutableTreeNode(t);	  	  
 			root.add(aTask);
 			aTask.add(new DefaultMutableTreeNode("ID:"+t.getID()));
@@ -867,13 +884,13 @@ public class MainUI{
 				DefaultMutableTreeNode Suc = new DefaultMutableTreeNode("Successors");	
 				aTask.add(Suc);	
 				for(Task task:t.getSuccessors().values()){
-					System.out.println(task);
 					Suc.add(new DefaultMutableTreeNode(task.getName()));	
 				}
 			}
 			
 			for (Task innerTask : t.getChildren().values())
 			{
+				
 				DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(innerTask);
 				aTask.add(newRoot);	
 				newRoot.add(new DefaultMutableTreeNode("ID:"+innerTask.getID()));
@@ -913,7 +930,8 @@ public class MainUI{
 				}
 				helper(newRoot,innerTask.getChildren());							
 			}
-		}	
+		 }	
+		}
 	}
 		
 	public static void displayRes(JList resourceList, HashMap<String,Resource> resouces){
@@ -998,51 +1016,72 @@ public class MainUI{
 	}
 
 	private void treeTest(){
-		HashMap<String, Task> x= new HashMap<String, Task>();				
-		
-		Task y0=new Task("11","T21kk","C",2);
-		Task y1=new Task("12","T22","C",2);
-		Task y2=new Task("13","T23","C",2);	
-		
-		Task a=new Task("1","T1","A",1);
-		Task b=new Task("2","T2","B",2);
-		Task c=new Task("3","T3","C",3);
-		Task d=new Task("4","T4","D",4);
-		
-		x.put("1",a);
-		x.put("2",b);
-		x.put("3",c);
-		x.put("4",d);		
-		y2.getChildren().put("131",new Task("131","dd","sf",3));
-		y2.getChildren().put("132",new Task("132","ddasd","sfdsf",3));	
-		
-		
-		x.get("1").getChildren().put("y0",y0);
-		x.get("1").getChildren().put("y1",y1);
-		x.get("1").getChildren().put("y2",y2);
-		
-		Task z0=new Task("31","T212","C1",2);
-		Task z1=new Task("32","T222","C1",2);
-		Task z2=new Task("33","T232","C1",2);
-		x.get("3").getChildren().put("z0",z0);
-		x.get("3").getChildren().put("z1",z1);
-		x.get("3").getChildren().put("z2",z2);	
-		
-		
-		b.addResource(project.getResource("2"));
-		b.addPredecessor(a);
-		b.addSuccessor(c);
-		b.addDeliverable(new Deliverable("F1",DeliverableType.file));
-		b.addDeliverable(new Deliverable("F2",DeliverableType.file));
-		b.addDeliverable(new Deliverable("F3",DeliverableType.file));
-		
+//		HashMap<String, Task> x= new HashMap<String, Task>();				
+//		
+//		Task y0=new Task("11","T21kk","C",2);
+//		Task y1=new Task("12","T22","C",2);
+//		Task y2=new Task("13","T23","C",2);	
+//		
+//		Task a=new Task("1","T1","A",1);
+//		Task b=new Task("2","T2","B",2);
+//		Task c=new Task("3","T3","C",3);
+//		Task d=new Task("4","T4","D",4);
+//		
+//		x.put("1",a);
+//		x.put("2",b);
+//		x.put("3",c);
+//		x.put("4",d);		
+//		y2.getChildren().put("131",new Task("131","dd","sf",3));
+//		y2.getChildren().put("132",new Task("132","ddasd","sfdsf",3));	
+//		
+//		
+//		x.get("1").getChildren().put("y0",y0);
+//		x.get("1").getChildren().put("y1",y1);
+//		x.get("1").getChildren().put("y2",y2);
+//		
+//		Task z0=new Task("31","T212","C1",2);
+//		Task z1=new Task("32","T222","C1",2);
+//		Task z2=new Task("33","T232","C1",2);
+//		x.get("3").getChildren().put("z0",z0);
+//		x.get("3").getChildren().put("z1",z1);
+//		x.get("3").getChildren().put("z2",z2);	
+//		
+//		
+//		b.addResource(project.getResource("2"));
+//		b.addPredecessor(a);
+//		b.addSuccessor(c);
+//		b.addDeliverable(new Deliverable("F1",DeliverableType.file));
+//		b.addDeliverable(new Deliverable("F2",DeliverableType.file));
+//		b.addDeliverable(new Deliverable("F3",DeliverableType.file));
+//		
+//
+//		z0.setParent(c);		
+//
+//		
+//		project.setTasks(x);
 
-		z0.setParent(c);		
-
+		project.createTaskFromUI("t1", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
+				"....",new Deliverable("D1", DeliverableType.file));
+		project.createTaskFromUI("t2", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
+				"....",new Deliverable("D2", DeliverableType.file));
+		project.createTaskFromUI("t3", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
+				"....",new Deliverable("D3", DeliverableType.file));
+		project.createTaskFromUI("t4", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
+				"....",new Deliverable("D4", DeliverableType.file));
 		
-		project.setTasks(x);
-		displayTree(taskTree,x);
-	
+		
+		Collection<Task> x=new ArrayList<Task>();
+		x= project.getTasks().values();
+		
+		Task z=new Task();
+		for(Task t:x){
+			z=t;
+		}
+		
+		project.createTaskFromUI("t5", 3, new ArrayList<Task>(), z,new ArrayList<Resource>(), 
+				"....",new Deliverable("D4", DeliverableType.file));
+			
+		displayTree(taskTree,project.getTasks());
 	}
 
 	private void resouceTest(){
