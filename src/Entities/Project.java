@@ -298,6 +298,7 @@ public class Project extends Observable{
     				for (int p = 0; p < predecessorTask.size(); p++)
     				{
         				tasks.get(taskID).addPredecessor(predecessorTask.get(p));
+        				(predecessorTask.get(p)).addSuccessor(tasks.get(taskID));
     				}
     			}
     			if (parentTask != null) {
@@ -343,6 +344,11 @@ public class Project extends Observable{
     public void deleteTask(String tID) {
     	for (String taskID: tasks.keySet()) {
     		if (taskID.equals(tID)) {
+    			Collection<Task> pd = tasks.get(tID).getPredecessors().values();
+    			for (Task t : pd){
+    				t.getSuccessors().remove(tID);   
+    			}
+    			tasks.get(tID).setPredecessors(null);
     			tasks.remove(taskID);
     	        setChanged();
     	        notifyObservers();
