@@ -353,8 +353,10 @@ public class TaskUI extends JDialog {
 		   comboBoxParent.setModel( model3);
 		   
 		   model3.addElement(selectedTask);
-		
-		
+		   
+		   DeliverableModel.removeAllElements();
+		   textName.setText("");
+		   textDuration.setText("");
 	   }
 	   
 	   private void fillResAndPre(Task t,Project p){
