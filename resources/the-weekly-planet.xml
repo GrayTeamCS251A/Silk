@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Silk>
+<ProjectInfo>
+<ProjectName>The Weekly Planet</ProjectName>
+<ProjectAuthor>Mark Carpenter</ProjectAuthor>
+<ProjectStartTime>java.util.GregorianCalendar[time=?,areFieldsSet=false,areAllFieldsSet=false,lenient=true,zone=sun.util.calendar.ZoneInfo[id="America/Los_Angeles",offset=-28800000,dstSavings=3600000,useDaylight=true,transitions=185,lastRule=java.util.SimpleTimeZone[id=America/Los_Angeles,offset=-28800000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=3,startMonth=2,startDay=8,startDayOfWeek=1,startTime=7200000,startTimeMode=0,endMode=3,endMonth=10,endDay=1,endDayOfWeek=1,endTime=7200000,endTimeMode=0]],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=?,YEAR=2015,MONTH=11,WEEK_OF_YEAR=?,WEEK_OF_MONTH=?,DAY_OF_MONTH=27,DAY_OF_YEAR=?,DAY_OF_WEEK=?,DAY_OF_WEEK_IN_MONTH=?,AM_PM=0,HOUR=0,HOUR_OF_DAY=0,MINUTE=0,SECOND=0,MILLISECOND=?,ZONE_OFFSET=?,DST_OFFSET=?]</ProjectStartTime>
+<ProjectEndTime>java.util.GregorianCalendar[time=1448661415765,areFieldsSet=true,areAllFieldsSet=true,lenient=true,zone=sun.util.calendar.ZoneInfo[id="America/Los_Angeles",offset=-28800000,dstSavings=3600000,useDaylight=true,transitions=185,lastRule=java.util.SimpleTimeZone[id=America/Los_Angeles,offset=-28800000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=3,startMonth=2,startDay=8,startDayOfWeek=1,startTime=7200000,startTimeMode=0,endMode=3,endMonth=10,endDay=1,endDayOfWeek=1,endTime=7200000,endTimeMode=0]],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=1,YEAR=2015,MONTH=10,WEEK_OF_YEAR=48,WEEK_OF_MONTH=4,DAY_OF_MONTH=27,DAY_OF_YEAR=331,DAY_OF_WEEK=6,DAY_OF_WEEK_IN_MONTH=4,AM_PM=1,HOUR=1,HOUR_OF_DAY=13,MINUTE=56,SECOND=55,MILLISECOND=765,ZONE_OFFSET=-28800000,DST_OFFSET=0]</ProjectEndTime>
+</ProjectInfo>
+<ProjectResources>
+<Resource id="53bb342b-c80c-48f1-b8bd-d0c66f63253c">
+<ResourceName>Newspaper printing</ResourceName>
+<ResourceDailyCost>1000.0</ResourceDailyCost>
+<ResourceType>material</ResourceType>
+</Resource>
+<Resource id="8db63613-11c4-4d99-b5bc-3bf927229422">
+<ResourceName>Susan</ResourceName>
+<ResourceDailyCost>80.0</ResourceDailyCost>
+<ResourceType>labor</ResourceType>
+</Resource>
+<Resource id="32afc997-619b-4c56-9956-4be14c89a7ea">
+<ResourceName>Computer #2</ResourceName>
+<ResourceDailyCost>10.0</ResourceDailyCost>
+<ResourceType>equipment</ResourceType>
+</Resource>
+<Resource id="db3c897c-feee-4a6b-8762-c7936e345c78">
+<ResourceName>Carl</ResourceName>
+<ResourceDailyCost>80.0</ResourceDailyCost>
+<ResourceType>labor</ResourceType>
+</Resource>
+<Resource id="a6eaf071-dea5-43b6-be40-477ad7841871">
+<ResourceName>Computer #1</ResourceName>
+<ResourceDailyCost>10.0</ResourceDailyCost>
+<ResourceType>equipment</ResourceType>
+</Resource>
+</ProjectResources>
+<ProjectTasks>
+<Task id="2c81db99-899b-4a48-ae88-f837088e8976">
+<TaskName>Write Article 1</TaskName>
+<TaskDescription>Write article 1</TaskDescription>
+<TaskDuration>1</TaskDuration>
+<TaskStartTime>0</TaskStartTime>
+<TaskEndTime>0</TaskEndTime>
+<TaskPercentCompleted>0.0</TaskPercentCompleted>
+<TaskParentTask>f04892db-4011-4756-8221-5ee5a5496828</TaskParentTask>
+<TaskPredecessors/>
+<TaskDeliverables/>
+<TaskResources>
+<TaskResource id="8db63613-11c4-4d99-b5bc-3bf927229422">Susan</TaskResource>
+<TaskResource id="a6eaf071-dea5-43b6-be40-477ad7841871">Computer #1</TaskResource>
+</TaskResources>
+<TaskChildren/>
+</Task>
+<Task id="f04892db-4011-4756-8221-5ee5a5496828">
+<TaskName>Compile Articles</TaskName>
+<TaskDescription>Compile all the articles for the weekly issue.</TaskDescription>
+<TaskDuration>1</TaskDuration>
+<TaskStartTime>0</TaskStartTime>
+<TaskEndTime>0</TaskEndTime>
+<TaskPercentCompleted>0.0</TaskPercentCompleted>
+<TaskParentTask/>
+<TaskPredecessors/>
+<TaskDeliverables/>
+<TaskResources/>
+<TaskChildren>
+<TaskChild id="2c81db99-899b-4a48-ae88-f837088e8976">Write Article 1</TaskChild>
+</TaskChildren>
+</Task>
+</ProjectTasks>
+</Silk>

@@ -35,6 +35,6 @@ public class Deliverable {
     }
     
     public String toString(){
-		return name;	
+		return type.toString()+" "+name;	
     }
 }

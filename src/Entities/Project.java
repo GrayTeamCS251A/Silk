@@ -107,7 +107,8 @@ public class Project extends Observable{
     		ArrayList<Task> taskPredecessor, 
     		Task taskParent, 
     		ArrayList<Resource> taskResources,
-    		String taskDescription)
+    		String taskDescription,
+    		ArrayList<Deliverable> taskDeliverable)
     {
         Task taskToAdd = new Task();
         taskToAdd.setName(taskName);
@@ -139,7 +140,16 @@ public class Project extends Observable{
         	}
         }
         
+//        if (taskDeliverable != null){
+//        	taskToAdd.addDeliverable(taskDeliverable);
+//        }
+        
+        for(Deliverable d:taskDeliverable){
+        	taskToAdd.addDeliverable(d);
+        }
+        
         tasks.put(uniqueID, taskToAdd);
+        
         setChanged();
         notifyObservers();
     }
@@ -165,7 +175,11 @@ public class Project extends Observable{
 
         resourceToCreate.setResourceID(uniqueID);
         resourceToCreate.setDailyCost(dailyCost);
-        resourceToCreate.setResourceType(r);
+        
+        if (r != null)
+        {
+            resourceToCreate.setResourceType(r);
+        }
         
         resources.put(uniqueID, resourceToCreate);
         setChanged();
@@ -178,7 +192,11 @@ public class Project extends Observable{
 
         resourceToCreate.setResourceID(resourceID);
         resourceToCreate.setDailyCost(dailyCost);
-        resourceToCreate.setResourceType(r);
+        
+        if (r != null)
+        {
+            resourceToCreate.setResourceType(r);
+        }
         
         resources.put(resourceID, resourceToCreate);
         setChanged();
@@ -265,7 +283,8 @@ public class Project extends Observable{
     		ArrayList<Task> predecessorTask, 
     		Task parentTask, 
     		ArrayList<Resource> taskResources,
-    		String taskDescription)
+    		String taskDescription,
+    		ArrayList<Deliverable> taskDeliverable)
     {
         // TODO implement here
     	for (String taskID: tasks.keySet()) {
@@ -275,14 +294,37 @@ public class Project extends Observable{
     			
     			tasks.get(taskID).setDuration(taskDuration);
     			
-    			if (!predecessorTask.isEmpty()){
-    				for (int p = 0; p < predecessorTask.size(); p++)
-    				{
-        				tasks.get(taskID).addPredecessor(predecessorTask.get(p));
-    				}
+    			//clear Suc/Pred relationship    			
+    			for(Task t:tasks.get(tID).getPredecessors().values()){
+    				if(t.getSuccessors().containsKey(tID)){
+    					t.getSuccessors().remove(tID);
+    				}			
     			}
+    			tasks.get(tID).getPredecessors().clear();
+    			
+    	 		//re-establish Suc/Pred relationship
+    			for (int p = 0; p < predecessorTask.size(); p++)
+    			{
+        			tasks.get(taskID).addPredecessor(predecessorTask.get(p));
+        			(predecessorTask.get(p)).addSuccessor(tasks.get(taskID));
+    			}
+    			
+    			//Parent/child handler
     			if (parentTask != null) {
+    				for(Task t:tasks.values()){
+    					if(t.getChildren().containsKey(tID)){
+    						t.getChildren().remove(tID);
+    					}
+    				}
     				tasks.get(taskID).setParent(parentTask);
+    				parentTask.addChild(tasks.get(taskID));
+    			}  else {
+    				tasks.get(taskID).setParent(null);
+    				for(Task t:tasks.values()){
+    					if(t.getChildren().containsKey(tID)){
+    						t.getChildren().remove(tID);
+    					}
+    				}
     			}
     			
     			if (!taskResources.isEmpty())
@@ -294,6 +336,11 @@ public class Project extends Observable{
     			}
     			tasks.get(taskID).setDescription(taskDescription);
     			
+    			tasks.get(taskID).emptyDeliverables();
+    	        for(Deliverable d:taskDeliverable){
+    	        	tasks.get(taskID).addDeliverable(d);
+    	        }
+    			 			
     			setChanged();
     			notifyObservers();
     			break;
@@ -314,6 +361,50 @@ public class Project extends Observable{
     public void deleteTask(String tID) {
     	for (String taskID: tasks.keySet()) {
     		if (taskID.equals(tID)) {
+    			Collection<Task> pd = tasks.get(tID).getPredecessors().values();
+    			//Remove this task from it's predecessors
+    			if (!pd.isEmpty())
+    			{
+					for (Task t : pd){
+						t.getSuccessors().remove(tID);
+					}
+    			}
+    			
+    			//Remove this task from it's successors
+    			if (!tasks.get(taskID).getSuccessors().values().isEmpty())
+    			{
+					for (Task t: tasks.get(taskID).getSuccessors().values())
+					{
+						t.getPredecessors().remove(taskID);
+					}
+    			}
+    			
+    			//Remove children tasks in this task
+    			if (!tasks.get(taskID).getChildren().isEmpty())
+    			{
+    				for (String childID: tasks.get(taskID).getChildren().keySet())
+    				{
+    					tasks.remove(childID);
+    				}
+    			}
+    			
+    			//Link this tasks predecessor's to this tasks Successors
+    			for (Task t: pd)
+    			{
+    				for (Task successor: tasks.get(taskID).getSuccessors().values())
+    				{
+    					t.addSuccessor(successor);
+    				}
+    			}
+    			
+    			for (Task t: tasks.get(taskID).getSuccessors().values())
+    			{
+    				for (Task predecessor: pd)
+    				{
+    					t.addPredecessor(predecessor);
+    				}
+    			}
+    			
     			tasks.remove(taskID);
     	        setChanged();
     	        notifyObservers();
@@ -348,9 +439,15 @@ public class Project extends Observable{
         
         WritableSheet scheduleSheet = workbook.createSheet("Schedule", 0);
         
+        Label daysLabel = new Label(0, 0, "Day");
+        Label tasksLabel = new Label(1, 0, "Tasks");
+        
+        scheduleSheet.addCell(daysLabel);
+        scheduleSheet.addCell(tasksLabel);
+        
         for (int i = 0; i < dataValue.length; i++)
         {
-            Label dateLabel = new Label(i, 0, dataValue[i][0]);
+            Label dateLabel = new Label(0, i + 1, dataValue[i][0]);
             
             String[] s = dataValue[i][1].split(",");
             String taskNames = "";
@@ -359,7 +456,7 @@ public class Project extends Observable{
             	taskNames += getTask(s[t]) + ",";
             }
                         
-            Label taskLabel = new Label(i, 1, taskNames.substring(0, taskNames.length() - 1));
+            Label taskLabel = new Label(1, i + 1, taskNames.substring(0, taskNames.length() - 1));
             
             scheduleSheet.addCell(dateLabel);
             scheduleSheet.addCell(taskLabel);
@@ -402,10 +499,10 @@ public class Project extends Observable{
     	DeliverableType dt = null;
     	
     	switch (deliverableType){
-    		case "DeliverableType.file": dt = DeliverableType.file;
+    		case "file": dt = DeliverableType.file;
     									break;
-    		case "DeliverableType.presentation": dt = DeliverableType.presentation;
-    											break;
+    		case "presentation": dt = DeliverableType.presentation;
+    							break;
     	}
     	
     	d.setDeliverableName(deliverableName);
@@ -426,5 +523,10 @@ public class Project extends Observable{
     {
     	// careful, this could be null (if schedule isn't current)
     	return schedule.toMatrix();
+    }
+    
+    public void addTask(String id, Task t)
+    {
+    	tasks.put(id, t);
     }
 }
