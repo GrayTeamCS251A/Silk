@@ -588,10 +588,22 @@ public class MainUI{
 				Project p = viewScheduleAsGraphController.getProject();
 				
 				String dataValues[][] = p.getScheduleMatrix();
-				for (int i = 0; i <  dataValues.length; i++)
-				{
-					System.out.println(dataValues[i][0] + ": " + dataValues[i][1]);
-				}
+				
+				//***Testing***
+//				for (int i = 0; i <  dataValues.length; i++)
+//				{
+//					String tasksString = "";
+//					String taskIDString = dataValues[i][1];
+//					
+//					String[] tasksIDList = taskIDString.split(",");
+//					
+//					for (int t = 0; t < tasksIDList.length; t++)
+//					{
+//						tasksString += project.getTask(tasksIDList[t]).getName() + ",";
+//					}
+//					System.out.println(dataValues[i][0] + ": " + tasksString);
+//				}
+				//***Testing***
 				
 				// Get the Starting task(s)
 				String getTasks = dataValues[0][1];
@@ -1096,6 +1108,12 @@ public class MainUI{
 		
 		ArrayList<Deliverable> d= new ArrayList<Deliverable>();
 		d.add(new Deliverable("a", DeliverableType.file));
+		Task ttt = new Task(UUID.randomUUID().toString(), "test1", "testing", 2);
+		Task ppp = new Task(UUID.randomUUID().toString(), "test2", "testing2", 3);
+		ppp.addPredecessor(ttt);
+		project.addTask(ttt.getID(), ttt);
+		project.addTask(ppp.getID(), ppp);
+		
 				
 		project.createTaskFromUI("t1", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
 				"....",d);
