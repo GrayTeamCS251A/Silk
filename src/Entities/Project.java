@@ -294,17 +294,38 @@ public class Project extends Observable{
     			
     			tasks.get(taskID).setDuration(taskDuration);
     			
-    			if (!predecessorTask.isEmpty()){
-    				for (int p = 0; p < predecessorTask.size(); p++)
-    				{
-        				tasks.get(taskID).addPredecessor(predecessorTask.get(p));
-        				(predecessorTask.get(p)).addSuccessor(tasks.get(taskID));
+    			//clear Suc/Pred relationship    			
+    			for(Task t:tasks.get(tID).getPredecessors().values()){
+    				if(t.getSuccessors().containsKey(tID)){
+    					t.getSuccessors().remove(tID);
+    				}			
+    			}
+    			tasks.get(tID).getPredecessors().clear();
+    			
+    	 		//re-establish Suc/Pred relationship
+    			for (int p = 0; p < predecessorTask.size(); p++)
+    			{
+        			tasks.get(taskID).addPredecessor(predecessorTask.get(p));
+        			(predecessorTask.get(p)).addSuccessor(tasks.get(taskID));
+    			}
+    			
+    			//Parent/child handler
+    			if (parentTask != null) {
+    				for(Task t:tasks.values()){
+    					if(t.getChildren().containsKey(tID)){
+    						t.getChildren().remove(tID);
+    					}
+    				}
+    				tasks.get(taskID).setParent(parentTask);
+    				parentTask.addChild(tasks.get(taskID));
+    			}  else {
+    				tasks.get(taskID).setParent(null);
+    				for(Task t:tasks.values()){
+    					if(t.getChildren().containsKey(tID)){
+    						t.getChildren().remove(tID);
+    					}
     				}
     			}
-    			if (parentTask != null) {
-    				tasks.get(taskID).setParent(parentTask);
-    				//parentTask.addChild(tasks.get(taskID));
-    			} //else tasks.get(taskID).setParent(null);
     			
     			if (!taskResources.isEmpty())
     			{
@@ -315,10 +336,6 @@ public class Project extends Observable{
     			}
     			tasks.get(taskID).setDescription(taskDescription);
     			
-//    			if (taskDeliverable != null)
-//    			{
-//    				tasks.get(taskID).addDeliverable(taskDeliverable);
-//    			}
     			tasks.get(taskID).emptyDeliverables();
     	        for(Deliverable d:taskDeliverable){
     	        	tasks.get(taskID).addDeliverable(d);
@@ -348,7 +365,13 @@ public class Project extends Observable{
     			for (Task t : pd){
     				t.getSuccessors().remove(tID);   
     			}
-    			tasks.get(tID).setPredecessors(null);
+    			//tasks.get(tID).getPredecessors().clear();
+    			for (Task t : tasks.values()){				
+    				if(t.getChildren().containsKey(tID)){
+    					t.getChildren().remove(tID);
+    				}   				
+    			}
+    			 			
     			tasks.remove(taskID);
     	        setChanged();
     	        notifyObservers();
