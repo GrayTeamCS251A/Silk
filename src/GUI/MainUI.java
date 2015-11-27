@@ -674,7 +674,14 @@ public class MainUI{
 				
 				for (Node n: scheduleGraph.getNodes())
 				{
-					n.setLabel(p.getTask(n.getLabel().toString()).getName());
+					if (p.getTask(n.getLabel().toString()).getChildren().isEmpty())
+					{
+						n.setLabel(p.getTask(n.getLabel().toString()).getName());
+					}
+					else
+					{
+						n.setLabel(p.getTask(n.getLabel().toString()).getName() + " o-o");
+					}
 				}
 				
 				displayGraph(scheduleGraph, scheduleScrollPane);				
@@ -1111,8 +1118,11 @@ public class MainUI{
 		Task ttt = new Task(UUID.randomUUID().toString(), "test1", "testing", 2);
 		Task ppp = new Task(UUID.randomUUID().toString(), "test2", "testing2", 3);
 		ppp.addPredecessor(ttt);
-		//project.addTask(ttt.getID(), ttt);
-		//project.addTask(ppp.getID(), ppp);
+
+		ttt.addSuccessor(ppp);
+		project.addTask(ttt.getID(), ttt);
+		project.addTask(ppp.getID(), ppp);
+
 		
 				
 		project.createTaskFromUI("t1", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
