@@ -439,9 +439,15 @@ public class Project extends Observable{
         
         WritableSheet scheduleSheet = workbook.createSheet("Schedule", 0);
         
+        Label daysLabel = new Label(0, 0, "Day");
+        Label tasksLabel = new Label(1, 0, "Tasks");
+        
+        scheduleSheet.addCell(daysLabel);
+        scheduleSheet.addCell(tasksLabel);
+        
         for (int i = 0; i < dataValue.length; i++)
         {
-            Label dateLabel = new Label(i, 0, dataValue[i][0]);
+            Label dateLabel = new Label(0, i + 1, dataValue[i][0]);
             
             String[] s = dataValue[i][1].split(",");
             String taskNames = "";
@@ -450,7 +456,7 @@ public class Project extends Observable{
             	taskNames += getTask(s[t]) + ",";
             }
                         
-            Label taskLabel = new Label(i, 1, taskNames.substring(0, taskNames.length() - 1));
+            Label taskLabel = new Label(1, i + 1, taskNames.substring(0, taskNames.length() - 1));
             
             scheduleSheet.addCell(dateLabel);
             scheduleSheet.addCell(taskLabel);
