@@ -485,4 +485,9 @@ public class Project extends Observable{
     	// careful, this could be null (if schedule isn't current)
     	return schedule.toMatrix();
     }
+    
+    public void addTask(String id, Task t)
+    {
+    	tasks.put(id, t);
+    }
 }
