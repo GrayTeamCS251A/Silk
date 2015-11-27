@@ -105,54 +105,60 @@ public class Schedule extends Observable {
 	
 	
 	/**
-	 * 
-	 * @return a matrix of strings if the Schedule is current, otherwise returns nul.
+	 * Does not include children
+	 * @return a matrix of strings if the Schedule is current, otherwise returns null.
 	 */
-	public String[][] toMatrix()
+	public String[][] toMatrix() {
+		return toMatrix(false);
+	}
+
+	
+	/**
+	 * 
+	 * @param showChildren shows children if true, else if false
+	 * @return a matrix of strings if the Schedule is current, otherwise returns null.
+	 */
+	public String[][] toMatrix(boolean showChildren)
 	{
 		if (!this.current || this.tasks == null) {
 			return null;
 		}
 
 		Collection<Task> tasks = this.tasks.values();
-		
-		
-//		Queue<Task> queue = new LinkedList<Task>();
-		
-		
-		//iterate through queue and construct matrix
 		HashMap<Integer, Set<Task>> matrix = new HashMap<Integer, Set<Task>>();
+		int totalDays = 0;
 
 		// for each task, put them on all their days
-		int totalDays = 0;
 		for (Task task : tasks) {
-			for (int day = (int)task.getStartTime(); day < (int)task.getEndTime(); day ++ ) {
-				
-				// check if there's anything there
-				if (matrix.containsKey(day)) {
-					matrix.get(day).add(task);
-				} else {
-					Set<Task> set = new HashSet<Task>();
-					set.add(task);
-					matrix.put(day, set);
-				}
-				
-				// maintain totalDays
-				if (totalDays < day) {
-					totalDays = day;
+			if ((task.getParent() == null) || (task.getParent() != null && showChildren)) {
+				for (int day = task.getStartTime(); day < task.getEndTime(); day ++ ) {
+					
+					// check if there's anything there
+					if (matrix.containsKey(day)) {
+						matrix.get(day).add(task);
+					} else {
+						Set<Task> set = new HashSet<Task>();
+						set.add(task);
+						matrix.put(day, set);
+					}
+					
+					// maintain totalDays
+					if (totalDays < day) {
+						totalDays = day;
+					}
 				}
 			}
 		}
 		
 		// increment by 1 because we're actually counting total days
 		totalDays ++;
-
+	
 		// we assume that a successful run of the scheduler leaves no "empty" days 
 		
 		// convert hash map to a String[][], and make sure it's in order
 		// we know how many total days we want
-		
 		String matrixString [][] = new String[totalDays][2]; 
+		
 		for (int day = 0; day < totalDays && matrix.containsKey(day); day ++) {
 			Calendar date = (GregorianCalendar)this.startDate.clone();
 			date.add(Calendar.DAY_OF_YEAR, day);
@@ -170,8 +176,10 @@ public class Schedule extends Observable {
 			matrixString [day][0] = dateString;
 			matrixString [day][1] = taskString;
 		}
+
 		
 		return matrixString;
+		
 	}
 
 }
