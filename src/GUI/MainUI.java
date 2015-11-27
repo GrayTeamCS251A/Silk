@@ -179,9 +179,9 @@ public class MainUI{
 		initEditProjectAction();
 		initSaveAndLoad();
 		initControllerAndView();
-		
-		resouceTest();
-		treeTest();
+		project.updateInfo("dd", 1991, 3, 2, "dd");
+		//resouceTest();
+		//treeTest();
 		//tableTest();
 		//graphTest();
 	}
@@ -1111,8 +1111,8 @@ public class MainUI{
 		Task ttt = new Task(UUID.randomUUID().toString(), "test1", "testing", 2);
 		Task ppp = new Task(UUID.randomUUID().toString(), "test2", "testing2", 3);
 		ppp.addPredecessor(ttt);
-		project.addTask(ttt.getID(), ttt);
-		project.addTask(ppp.getID(), ppp);
+		//project.addTask(ttt.getID(), ttt);
+		//project.addTask(ppp.getID(), ppp);
 		
 				
 		project.createTaskFromUI("t1", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 

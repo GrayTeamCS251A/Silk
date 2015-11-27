@@ -339,10 +339,12 @@ public class TaskUI extends JDialog {
 	   }
 	   
 	   public void fillAdd(Project p, Task selectedTask){
-		   DefaultListModel model = new DefaultListModel();
-		   listPred.setModel(model);
-		   for(Task task:selectedTask.getChildren().values()){
-			 	model.addElement(task);
+		   if(selectedTask!=null){			  
+			   DefaultListModel model = new DefaultListModel();
+			   listPred.setModel(model);
+			   for(Task task:selectedTask.getChildren().values()){
+				   model.addElement(task);
+			   }
 		   }
 		   DefaultListModel model2 = new DefaultListModel();
 		   listRes.setModel(model2);		  
