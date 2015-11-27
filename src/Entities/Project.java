@@ -388,6 +388,23 @@ public class Project extends Observable{
     				}
     			}
     			
+    			//Link this tasks predecessor's to this tasks Successors
+    			for (Task t: pd)
+    			{
+    				for (Task successor: tasks.get(taskID).getSuccessors().values())
+    				{
+    					t.addSuccessor(successor);
+    				}
+    			}
+    			
+    			for (Task t: tasks.get(taskID).getSuccessors().values())
+    			{
+    				for (Task predecessor: pd)
+    				{
+    					t.addPredecessor(predecessor);
+    				}
+    			}
+    			
     			tasks.remove(taskID);
     	        setChanged();
     	        notifyObservers();
