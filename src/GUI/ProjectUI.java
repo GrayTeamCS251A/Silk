@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.sql.Time;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -110,6 +111,7 @@ public class ProjectUI extends JDialog {
 	   }
 	   
 	   public String getStartField(){
+		   System.out.println(startField.getText());
 		   return startField.getText();   
 	   }
 	   
@@ -131,7 +133,7 @@ public class ProjectUI extends JDialog {
 	public void fill(Project p) {
 		// TODO Auto-generated method stub
 		nameField.setText(p.getProjectName());
-		startField.setText(p.getStartTime().toString());
+		startField.setText(p.getStartTime().get(Calendar.YEAR) + "-" + p.getStartTime().get(Calendar.MONTH) + "-" + p.getStartTime().get(Calendar.DAY_OF_MONTH));
 		authorField.setText(p.getProjectAuthor());				
 	}
 }
