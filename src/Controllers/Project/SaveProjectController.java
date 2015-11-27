@@ -7,6 +7,7 @@ import Controllers.*;
 import Entities.Deliverable;
 import Entities.Project;
 import Entities.Resource;
+import Entities.ResourceType;
 import Entities.Task;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -25,7 +26,7 @@ import org.w3c.dom.Element;
 /**
  * 
  */
-public class SaveProjectController implements Controller {
+public class SaveProjectController implements Controller  {
 
     /**
      * 
@@ -37,7 +38,7 @@ public class SaveProjectController implements Controller {
      * @param project 
      * @return
      */
-    private static File convert(Project project, String fileName) {
+    public static File convert(Project project, String fileName) throws NullPointerException {
         // Convert Project to XML format to the specified fileName
     	try {
 
@@ -90,7 +91,17 @@ public class SaveProjectController implements Controller {
     			prResDailyCost.appendChild(doc.createTextNode(String.valueOf(r.getDailyCost())));
     			
     			Element prResType = doc.createElement("ResourceType");
-    			prResType.appendChild(doc.createTextNode(String.valueOf(r.getResourceType())));
+    			String resourceType = "";
+    			switch (r.getResourceType().toString())
+    			{
+    				case "labor": resourceType = "labor";
+    					break;
+    				case "equipment": resourceType = "equipment";
+    					break;
+    				case "material": resourceType = "material";
+    					break;
+    			}
+    			prResType.appendChild(doc.createTextNode(resourceType));
     			
     			prResRoot.appendChild(prResName);
     			prResRoot.appendChild(prResDailyCost);
@@ -113,7 +124,7 @@ public class SaveProjectController implements Controller {
     			prTaskRoot.setAttribute("id", taskID);
     			
     			Element prTaskName = doc.createElement("TaskName");
-    			prTaskName.appendChild(doc.createTextNode(t.getTaskName()));
+    			prTaskName.appendChild(doc.createTextNode(t.getName()));
     			
     			Element prTaskDescription = doc.createElement("TaskDescription");
     			prTaskDescription.appendChild(doc.createTextNode(t.getDescription()));
@@ -131,16 +142,19 @@ public class SaveProjectController implements Controller {
     			prPercentCompleted.appendChild(doc.createTextNode(String.valueOf(t.getPercentCompleted())));
     			
     			Element prParentTask = doc.createElement("TaskParentTask");
-    			prParentTask.appendChild(doc.createTextNode(t.getParent().getTaskID()));
-    			
+    			if (t.getParent() != null)
+    			{
+        			prParentTask.appendChild(doc.createTextNode(t.getParent().getID()));
+    			}
+
     			Element prTaskPredRoot = doc.createElement("TaskPredecessors");
     			int index = 1;
     			//Create an Element for each Predecessor
     			for (Task pred: t.getPredecessors().values())
     			{
     				Element prTaskPred = doc.createElement("TaskPredecessor");
-    				prTaskPred.setAttribute("id", pred.getTaskID());
-    				prTaskPred.appendChild(doc.createTextNode(pred.getTaskName()));
+    				prTaskPred.setAttribute("id", pred.getID());
+    				prTaskPred.appendChild(doc.createTextNode(pred.getName()));
     				
     				prTaskPredRoot.appendChild(prTaskPred);
     				index++;
@@ -157,7 +171,16 @@ public class SaveProjectController implements Controller {
     				prTaskDeliverableName.appendChild(doc.createTextNode(d.getDeliverableName()));
     				
     				Element prTaskDeliverableType = doc.createElement("TaskDeliverableType");
-    				prTaskDeliverable.appendChild(doc.createTextNode(String.valueOf(d.getDeliverableType())));
+    				String deliverableType = "";
+    				switch (d.getDeliverableType().toString())
+    				{
+    					case "file": deliverableType = "file";
+    								break;
+    					case "presentation": deliverableType = "presentation";
+    										break;
+						
+    				}
+    				prTaskDeliverable.appendChild(doc.createTextNode(deliverableType));
     				
     				
     				prTaskDeliverable.appendChild(prTaskDeliverableName);
@@ -184,8 +207,8 @@ public class SaveProjectController implements Controller {
     			for (Task child: t.getChildren().values())
     			{
     				Element prTaskChild = doc.createElement("TaskChild");
-    				prTaskChild.setAttribute("id", child.getTaskID());
-    				prTaskChild.appendChild(doc.createTextNode(child.getTaskName()));
+    				prTaskChild.setAttribute("id", child.getID());
+    				prTaskChild.appendChild(doc.createTextNode(child.getName()));
     				
     				prTaskChildrenRoot.appendChild(prTaskChild);
     				index++;

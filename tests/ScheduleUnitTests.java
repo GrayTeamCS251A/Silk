@@ -39,8 +39,6 @@ public class ScheduleUnitTests {
 
 		tester.generateSchedule(tasks);
 		assertEquals("Schedule should be current after a successful generateSchedule()", true, tester.isCurrent());
-
-		assertEquals("Schedule shouldn't generate XLS if Schedule is not current", null, tester.toXLS());
 	}
 
 	@Test
@@ -101,6 +99,7 @@ public class ScheduleUnitTests {
 		Task task1 = new Task("1a","Task1", "description", 10);
 		tasks.put("1", task1);
 		Task task2 = new Task("1","Task2", "description", 10);
+		task1.addSuccessor(task2);
 		task2.addPredecessor(task1);
 		tasks.put("2", task2);
 		
@@ -110,8 +109,104 @@ public class ScheduleUnitTests {
 		// assert statements
 		tester.generateSchedule(startDate, tasks);
 		
-		assertEquals("Task1's startTime should be 0", (int)0, (int)task1.getStartTime());
-		assertEquals("Task2's startTime should be 10", (int)10, (int)task2.getStartTime());
+		assertEquals("Task1's startTime should be 0", 0, task1.getStartTime());
+		assertEquals("Task2's startTime should be 10", 10, task2.getStartTime());
 	}		
+	
+	@Test
+	public void toMatrixWithoutGeneratingSchedule() {
+		// Set up Tasks
+		HashMap<String, Task> tasks = new HashMap<String, Task>();
+		Task task1 = new Task("aaa", "Task 1", "...", 1);
+		tasks.put("aaa", task1);
+
+		Task task2 = new Task("bbb", "Task 2", "...", 2);
+		tasks.put("bbb", task2);
+		task2.addPredecessor(task1);
+		task1.addSuccessor(task2);
+		
+		Task task3 = new Task("ccc", "Task 3", "...", 1);
+		tasks.put("aaa", task3);
+		task3.addPredecessor(task2);
+		task3.addPredecessor(task1);
+		task2.addSuccessor(task3);
+		task1.addSuccessor(task3);
+		
+		//calculate start times on them...
+		
+		task1.setStartTime(0);
+		task1.setEndTime(1);
+		
+		task2.setStartTime(1);
+		task2.setEndTime(3);
+		
+		task3.setStartTime(3);
+		task3.setEndTime(4);
+		
+		// Create Schedule
+		Schedule tester = new Schedule(new GregorianCalendar(2011, Calendar.JULY, 3));
+		String [][] result = tester.toMatrix();
+		assertEquals("toMatrix() should return null if the schedule has not been generated", true, result == null);
+
+	}
+
+
+	@Test
+	public void toMatrixWithASimpleSchedule() {
+		// Set up Tasks
+		HashMap<String, Task> tasks = new HashMap<String, Task>();
+		Task task1 = new Task("aaa", "Task 1", "...", 1);
+		tasks.put("aaa", task1);
+
+		Task task2 = new Task("bbb", "Task 2", "...", 2);
+		tasks.put("bbb", task2);
+		task2.addPredecessor(task1);
+		task1.addSuccessor(task2);
+		
+		Task task3 = new Task("ccc", "Task 3", "...", 1);
+		tasks.put("ccc", task3);
+		task3.addPredecessor(task2);
+		task3.addPredecessor(task1);
+		task2.addSuccessor(task3);
+		task1.addSuccessor(task3);
+		
+		Task task4 = new Task("ddd", "Task 2a", "...", 1);
+		tasks.put("ddd", task4);
+		task4.addPredecessor(task1);
+		task1.addSuccessor(task4);
+		task4.addSuccessor(task3);
+		task4.addPredecessor(task4);
+		
+		//calculate start times on them...
+		
+		task1.setStartTime(0);
+		task1.setEndTime(1);
+		
+		task2.setStartTime(1);
+		task2.setEndTime(3);
+		
+		task3.setStartTime(3);
+		task3.setEndTime(4);
+		
+		task4.setStartTime(1);
+		task4.setEndTime(2);
+		
+		// Create Schedule
+		Schedule tester = new Schedule(new GregorianCalendar(2015, Calendar.JULY, 30));
+		tester.generateSchedule(tasks);
+
+		String [][] result = tester.toMatrix();
+		
+		assertEquals("result[0][0] should be 2015/6/30", "2015/6/30", result[0][0]);
+		assertEquals("result[1][0] should be 2015/6/31", "2015/6/31", result[1][0]);
+		assertEquals("result[2][0] should be 2015/7/1", "2015/7/1", result[2][0]);
+		assertEquals("result[3][0] should be 2015/7/2", "2015/7/2", result[3][0]);
+
+		assertEquals("result[0][1] should be \"aaa\"", "aaa", result[0][1]);
+		assertEquals("either result[1][1] or result[2][1] should be \"bbb,ddd\" or \"ddd,bbb\"", true, result[1][1].equals("bbb,ddd") || result [2][1].equals("bbb,ddd") || result[1][1].equals("ddd,bbb") || result [2][1].equals("ddd,bbb"));
+		assertEquals("result[3][1] should be \"ccc\"", "ccc", result[3][1]);
+	}
+
+
 
 } 

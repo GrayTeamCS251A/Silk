@@ -36,18 +36,22 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Set;
+import java.util.UUID;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -77,6 +81,8 @@ import Controllers.Schedule.ViewScheduleAsTableController;
 import Controllers.Tasks.AddTaskController;
 import Controllers.Tasks.DeleteTaskController;
 import Controllers.Tasks.EditTaskController;
+import Entities.Deliverable;
+import Entities.DeliverableType;
 import Entities.Project;
 import Entities.Resource;
 import Entities.ResourceType;
@@ -84,7 +90,6 @@ import Entities.Task;
 import graph.Arrow;
 import graph.Graph;
 import graph.GraphUtils;
-import graph.Link;
 import graph.Node;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public class MainUI{
@@ -92,12 +97,10 @@ public class MainUI{
 	private JFrame frame;
 	private JButton btnAddResource;
 	private JButton btnDeleteResource;
-	private JButton btnViewResource;
 	private JButton btnEditResource;
 	private JButton btnAddTask;
 	private JButton btnDeleteTask;
 	private JButton btnEditTask;
-	private JButton btnViewTask;
 	private JButton btnGenerateSchedule;
 	private JButton btnSaveSchedule;
 	private JButton btnTable;
@@ -115,8 +118,8 @@ public class MainUI{
 	private ResUI addRes = new ResUI("Add Resource");
 	private ResUI editRes = new ResUI("Edit Resource");
 	
-	private TaskUI addTask = new TaskUI("Add Task");
-	private TaskUI editTask = new TaskUI("Edit Task");
+	private TaskUI addTask = new TaskUI("Add Task","Use Ctrl+Left Click to highlight desired resources or predecessors");
+	private TaskUI editTask = new TaskUI("Edit Task","Use Ctrl+Left Click to highlight desired resources or predecessors");
 	
 	private ProjectUI newProject = new ProjectUI("New Project");
 	private ProjectUI editProject = new ProjectUI("Edit Project");
@@ -177,10 +180,10 @@ public class MainUI{
 		initSaveAndLoad();
 		initControllerAndView();
 		
-		treeTest();
 		resouceTest();
-		tableTest();
-		graphTest();
+		treeTest();
+		//tableTest();
+		//graphTest();
 	}
 
 	/**
@@ -233,12 +236,8 @@ public class MainUI{
 		btnDeleteResource.setBounds(10, 360, 115, 23);
 		Resource_panel.add(btnDeleteResource);
 		
-		btnViewResource = new JButton("View Resource");
-		btnViewResource.setBounds(149, 326, 128, 23);
-		Resource_panel.add(btnViewResource);
-		
 		btnEditResource = new JButton("Edit Resource");
-		btnEditResource.setBounds(149, 360, 128, 23);
+		btnEditResource.setBounds(149, 326, 128, 23);
 		Resource_panel.add(btnEditResource);
 		
 		JPanel Task_panel = new JPanel();
@@ -258,10 +257,6 @@ public class MainUI{
 		btnAddTask = new JButton("Add Task");
 		btnAddTask.setBounds(10, 326, 105, 23);
 		Task_panel.add(btnAddTask);
-		
-		btnViewTask = new JButton("View Task");
-		btnViewTask.setBounds(172, 360, 105, 23);
-		Task_panel.add(btnViewTask);
 		
 		btnEditTask = new JButton("Edit Task");
 		btnEditTask.setBounds(172, 326, 105, 23);
@@ -299,7 +294,8 @@ public class MainUI{
 		btnTable.setBounds(186, 360, 84, 23);
 		Schedule_panel.add(btnTable);
 		
-		
+		btnTable.setEnabled(false);
+		btnGraph.setEnabled(false);
 	}
 	
 	
@@ -314,6 +310,8 @@ public class MainUI{
 						addRes.getTextType());
 				addRes.Reset();      
 				addRes.setVisible(false);
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
 			}
 						
 		});
@@ -349,18 +347,23 @@ public class MainUI{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				Resource r=(Resource) resourceList.getSelectedValue();
-				editRes.fill(r);
 				editResourceController.executeEditResource(editRes.getTextName(), 
 						r.getResourceID(), 
 						Double.parseDouble(editRes.getTextCost()), 
 						editRes.getTextType());
+				//System.out.println(editRes.getTextName());
 				editRes.setVisible(false);
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
 			}
 						
 		});
 		
 		btnEditResource.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent arg0) {
+				Resource r=(Resource) resourceList.getSelectedValue();
+	        	editRes.Reset();
+	        	editRes.fill(r);  
 	            if (!editRes.isVisible()) {
 	            	editRes.setVisible(true);
 	            }
@@ -397,6 +400,8 @@ public class MainUI{
 					int selectedIndex = resourceList.getSelectedIndex();
 					Resource r=(Resource) resourceList.getSelectedValue();
 					deleteResourceController.executeDeleteResource(r.getResourceID());
+					btnTable.setEnabled(false);
+					btnGraph.setEnabled(false);
 				}
 			}});
 	}
@@ -412,17 +417,28 @@ public class MainUI{
 	                       taskTree.getLastSelectedPathComponent();		
 			    Task t = (Task) node.getUserObject();
 				editTaskController.executeEditTask(editTask.getTaskName(), 
-						t.getTaskID(), 
+						t.getID(), 
 						Integer.parseInt(editTask.getTaskDuration()),
 						editTask.getPredecessorTask(),
-						editTask.getParentTask());
+						editTask.getParentTask(),
+						editTask.getResouces(),
+						editTask.getDescription(),
+						editTask.getDeliverableList());
 				editTask.setVisible(false);
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
+				//System.out.println(t.getParent());
 			}
 						
 		});
 		
 		btnEditTask.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent arg0) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+								taskTree.getLastSelectedPathComponent();		
+				Task t = (Task) node.getUserObject();
+				editTask.Reset();
+				editTask.fillEdit(t,project);
 	            if (!editTask.isVisible()) {
 	            	editTask.setVisible(true);
 	            }
@@ -454,14 +470,28 @@ public class MainUI{
 				addTaskController.executeAddTask(addTask.getTaskName(), 
 						Integer.parseInt(addTask.getTaskDuration()),
 						addTask.getPredecessorTask(),
-						addTask.getParentTask());
+						addTask.getParentTask(),
+						addTask.getResouces(),
+						addTask.getDescription(),
+						addTask.getDeliverableList()
+						);
 				addTask.setVisible(false);
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
 			}
 						
 		});
 		
 		btnAddTask.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent arg0) {
+	        	 DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+							taskTree.getLastSelectedPathComponent();
+	        	 Task selectedTask=new Task();
+	        	 if(node.getUserObject().getClass().equals(String.class)){
+	        		 selectedTask=null;
+	        	 }else
+	        		selectedTask = (Task) node.getUserObject();
+	        	addTask.fillAdd(project,selectedTask);
 	            if (!addTask.isVisible()) {
 	            	addTask.setVisible(true);
 	            }
@@ -498,8 +528,10 @@ public class MainUI{
 		                       taskTree.getLastSelectedPathComponent();		
 				    Task t = (Task) node.getUserObject();
 					TreePath tp = taskTree.getSelectionPath();
-					deleteTaskController.executeDeleteTask(t.getTaskID());
+					deleteTaskController.executeDeleteTask(t.getID());
 					taskTree.removeSelectionPath(tp);
+					btnTable.setEnabled(false);
+					btnGraph.setEnabled(false);
 				}
 			}});
 	}
@@ -510,6 +542,8 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				btnTable.setEnabled(true);
+				btnGraph.setEnabled(true);
 				generateScheduleController.generateSchedule();
 			}});
 		
@@ -554,6 +588,22 @@ public class MainUI{
 				Project p = viewScheduleAsGraphController.getProject();
 				
 				String dataValues[][] = p.getScheduleMatrix();
+				
+				//***Testing***
+//				for (int i = 0; i <  dataValues.length; i++)
+//				{
+//					String tasksString = "";
+//					String taskIDString = dataValues[i][1];
+//					
+//					String[] tasksIDList = taskIDString.split(",");
+//					
+//					for (int t = 0; t < tasksIDList.length; t++)
+//					{
+//						tasksString += project.getTask(tasksIDList[t]).getName() + ",";
+//					}
+//					System.out.println(dataValues[i][0] + ": " + tasksString);
+//				}
+				//***Testing***
 				
 				// Get the Starting task(s)
 				String getTasks = dataValues[0][1];
@@ -624,7 +674,14 @@ public class MainUI{
 				
 				for (Node n: scheduleGraph.getNodes())
 				{
-					n.setLabel(p.getTask(n.getLabel().toString()).getTaskName());
+					if (p.getTask(n.getLabel().toString()).getChildren().isEmpty())
+					{
+						n.setLabel(p.getTask(n.getLabel().toString()).getName());
+					}
+					else
+					{
+						n.setLabel(p.getTask(n.getLabel().toString()).getName() + " o-o");
+					}
 				}
 				
 				displayGraph(scheduleGraph, scheduleScrollPane);				
@@ -635,10 +692,35 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				//JTable table = viewScheduleAsTableController.execute(?);
-				//scheduleScrollPane.setViewportView(table);
+				String columnNames[] = { "Days", "Tasks" };
 				
+				DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+				String[][] dataValues = project.getScheduleMatrix();
 				
+				for (int i = 0; i < dataValues.length; i++)
+				{
+					String[] rowData = new String[2];
+					rowData[0] = dataValues[i][0];
+					
+					String tasksString = "";
+					String taskIDString = dataValues[i][1];
+					
+					String[] tasksIDList = taskIDString.split(",");
+					
+					for (int t = 0; t < tasksIDList.length; t++)
+					{
+						tasksString += project.getTask(tasksIDList[t]).getName() + ",";
+					}
+					
+					rowData[1] = tasksString.substring(0, tasksString.length()-1);
+					model.addRow(rowData);
+				}
+					
+				JTable table = new JTable(model);
+				
+				//displayTable(project.getSchedule().toMatrix(),columnNames,scheduleScrollPane);
+				scheduleScrollPane.setViewportView(table);								
 			}});
 	}
 
@@ -724,6 +806,8 @@ public class MainUI{
 		
 		Edit.addActionListener(new ActionListener() {
 	         public void actionPerformed(ActionEvent arg0) {
+	        	 	editProject.Reset();
+					editProject.fill(project); 
 	            if (!editProject.isVisible()) {
 	            	editProject.setVisible(true);
 	            }
@@ -758,12 +842,13 @@ public class MainUI{
                 int returnVal = saveFile.showSaveDialog(null);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     try {
-                    	String fileName = saveFile.getSelectedFile().getName();
-                    	saveProjectController.executeSaveProject(fileName);
+                    	//String fileName = saveFile.getSelectedFile().getName();
+                    	String dest = saveFile.getSelectedFile().getAbsolutePath();
+                    	saveProjectController.executeSaveProject(dest);
                	
-                    	File src = new File("");  //File returned by executeSaveProject      	
-                    	File dest = new File(saveFile.getSelectedFile().getAbsolutePath());
-                    	Files.copy(src.toPath(),dest.toPath(), REPLACE_EXISTING);
+                    	//File src = new File("");  //File returned by executeSaveProject      	
+                    	//File dest = new File(saveFile.getSelectedFile().getAbsolutePath());
+                    	//Files.copy(src.toPath(),dest.toPath(), REPLACE_EXISTING);
                     	                    	
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -797,8 +882,8 @@ public class MainUI{
 	
 	
 	public static void displayTree(JTree tree, HashMap<String, Task> mapTask){
-		
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Tasks");
+
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
 		
 		helper(root,mapTask);
 					
@@ -811,25 +896,94 @@ public class MainUI{
 		if(mapTask.isEmpty()){
 			return;
 		}
-		
+	
 		for (Task t : mapTask.values())
-		{			
+		{		
+		 if(!(root.getUserObject() instanceof String) || t.getParent() ==null )
+		 {
+
 			DefaultMutableTreeNode aTask = new DefaultMutableTreeNode(t);	  	  
 			root.add(aTask);
-			aTask.add(new DefaultMutableTreeNode("ID:"+t.getTaskID()));
+			aTask.add(new DefaultMutableTreeNode("ID:"+t.getID()));
 			aTask.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
-			aTask.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));	
+			aTask.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));
+			aTask.add(new DefaultMutableTreeNode("Complete:"+t.getPercentCompleted()));	
+
+			if(!t.getDeliverables().isEmpty()){
+				DefaultMutableTreeNode Res = new DefaultMutableTreeNode("Deliverables");	
+				aTask.add(Res);	
+				for(Deliverable d:t.getDeliverables()){
+					Res.add(new DefaultMutableTreeNode(d.toString()));	
+				}
+			}
+			
+			if(!t.getRequiredResources().isEmpty()){
+				DefaultMutableTreeNode Res = new DefaultMutableTreeNode("Resources");	
+				aTask.add(Res);	
+				for(Resource r:t.getRequiredResources().values()){
+					Res.add(new DefaultMutableTreeNode(r));	
+				}
+			}
+			
+			if(!t.getPredecessors().isEmpty()){
+				DefaultMutableTreeNode Pre = new DefaultMutableTreeNode("Predecessors");	
+				aTask.add(Pre);	
+				for(Task task:t.getPredecessors().values()){
+					Pre.add(new DefaultMutableTreeNode(task.getName()));	
+				}
+			}	
+			if(!t.getSuccessors().isEmpty()){
+				DefaultMutableTreeNode Suc = new DefaultMutableTreeNode("Successors");	
+				aTask.add(Suc);	
+				for(Task task:t.getSuccessors().values()){
+					Suc.add(new DefaultMutableTreeNode(task.getName()));	
+				}
+			}
 			
 			for (Task innerTask : t.getChildren().values())
 			{
+				
 				DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(innerTask);
 				aTask.add(newRoot);	
-				newRoot.add(new DefaultMutableTreeNode("ID:"+t.getTaskID()));
-				newRoot.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
-				newRoot.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));	
+				newRoot.add(new DefaultMutableTreeNode("ID:"+innerTask.getID()));
+				newRoot.add(new DefaultMutableTreeNode("Duration:"+innerTask.getDuration()));
+				newRoot.add(new DefaultMutableTreeNode("Description:"+innerTask.getDescription()));
+				newRoot.add(new DefaultMutableTreeNode("Complete:"+innerTask.getPercentCompleted()));	
+				
+				if(!innerTask.getDeliverables().isEmpty()){
+					DefaultMutableTreeNode Res = new DefaultMutableTreeNode("Deliverables");	
+					newRoot.add(Res);	
+					for(Deliverable d:innerTask.getDeliverables()){
+						Res.add(new DefaultMutableTreeNode(d.toString()));	
+					}
+				}
+				
+				if(!innerTask.getRequiredResources().isEmpty()){
+					DefaultMutableTreeNode Res = new DefaultMutableTreeNode("Resources");	
+					newRoot.add(Res);	
+					for(Resource r:innerTask.getRequiredResources().values()){
+						Res.add(new DefaultMutableTreeNode(r));	
+					}
+				}
+
+				if(!innerTask.getPredecessors().isEmpty()){
+					DefaultMutableTreeNode PreC = new DefaultMutableTreeNode("Predecessors");	
+					newRoot.add(PreC);	
+					for(Task task:innerTask.getPredecessors().values()){
+						PreC.add(new DefaultMutableTreeNode(task.getName()));	
+					}
+				}
+				if(!innerTask.getSuccessors().isEmpty()){
+					DefaultMutableTreeNode SucC = new DefaultMutableTreeNode("Successors");	
+					newRoot.add(SucC);	
+					for(Task task:innerTask.getSuccessors().values()){
+						SucC.add(new DefaultMutableTreeNode(task.getName()));	
+					}
+				}
 				helper(newRoot,innerTask.getChildren());							
 			}
-		}	
+		 }	
+		}
 	}
 		
 	public static void displayRes(JList resourceList, HashMap<String,Resource> resouces){
@@ -838,11 +992,12 @@ public class MainUI{
 		resourceList.setModel(model);
 		for (Resource r:resouces.values()){
 			model.addElement(r);
-		}		
+		}	
 	}
 		
-	public static void displayTable(String columnNames[], String dataValues[][],JScrollPane scheduleScrollPane){
+	public static void displayTable(String[][] dataValues,String[] columnNames, JScrollPane scheduleScrollPane){
 		JTable table = new JTable( dataValues, columnNames );
+		
 		scheduleScrollPane.setViewportView(table);
 	}
 	
@@ -914,25 +1069,81 @@ public class MainUI{
 	}
 
 	private void treeTest(){
-		HashMap<String, Task> x= new HashMap<String, Task>();				
-		Task y0=new Task("2","T21","C",2);
-		Task y1=new Task("2","T22","C",2);
-		Task y2=new Task("2","T23","C",2);			
-		x.put("1",new Task("1","T1","A",1));
-		x.put("2",new Task("2","T2","B",2));
-		x.get("1").getChildren().put("y0",y0);
-		x.get("1").getChildren().put("y1",y1);
-		x.get("1").getChildren().put("y2",y2);
-		x.put("3",new Task("2","T3","C",3));
-		x.put("4",new Task("3","T4","D",4));		
-		y2.getChildren().put("3",new Task("3","dd","sf",3));
-		y2.getChildren().put("2",new Task("2","ddasd","sfdsf",3));					
-		x.get("3").getChildren().put("y0",y0);
-		x.get("3").getChildren().put("y1",y1);
-		x.get("3").getChildren().put("y2",y2);	
-		project.setTasks(x);
-		displayTree(taskTree,x);
-	
+//		HashMap<String, Task> x= new HashMap<String, Task>();				
+//		
+//		Task y0=new Task("11","T21kk","C",2);
+//		Task y1=new Task("12","T22","C",2);
+//		Task y2=new Task("13","T23","C",2);	
+//		
+//		Task a=new Task("1","T1","A",1);
+//		Task b=new Task("2","T2","B",2);
+//		Task c=new Task("3","T3","C",3);
+//		Task d=new Task("4","T4","D",4);
+//		
+//		x.put("1",a);
+//		x.put("2",b);
+//		x.put("3",c);
+//		x.put("4",d);		
+//		y2.getChildren().put("131",new Task("131","dd","sf",3));
+//		y2.getChildren().put("132",new Task("132","ddasd","sfdsf",3));	
+//		
+//		
+//		x.get("1").getChildren().put("y0",y0);
+//		x.get("1").getChildren().put("y1",y1);
+//		x.get("1").getChildren().put("y2",y2);
+//		
+//		Task z0=new Task("31","T212","C1",2);
+//		Task z1=new Task("32","T222","C1",2);
+//		Task z2=new Task("33","T232","C1",2);
+//		x.get("3").getChildren().put("z0",z0);
+//		x.get("3").getChildren().put("z1",z1);
+//		x.get("3").getChildren().put("z2",z2);	
+//		
+//		
+//		b.addResource(project.getResource("2"));
+//		b.addPredecessor(a);
+//		b.addSuccessor(c);
+//		b.addDeliverable(new Deliverable("F1",DeliverableType.file));
+//		b.addDeliverable(new Deliverable("F2",DeliverableType.file));
+//		b.addDeliverable(new Deliverable("F3",DeliverableType.file));
+//		
+//
+//		z0.setParent(c);		
+//
+//		
+//		project.setTasks(x);
+		
+		ArrayList<Deliverable> d= new ArrayList<Deliverable>();
+		d.add(new Deliverable("a", DeliverableType.file));
+		Task ttt = new Task(UUID.randomUUID().toString(), "test1", "testing", 2);
+		Task ppp = new Task(UUID.randomUUID().toString(), "test2", "testing2", 3);
+		ppp.addPredecessor(ttt);
+		ttt.addSuccessor(ppp);
+		project.addTask(ttt.getID(), ttt);
+		project.addTask(ppp.getID(), ppp);
+		
+				
+		project.createTaskFromUI("t1", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
+				"....",d);
+		project.createTaskFromUI("t2", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
+				"....",d);
+		project.createTaskFromUI("t3", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
+				"....",d);
+		project.createTaskFromUI("t4", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
+				"....",d);
+		
+		Collection<Task> x=new ArrayList<Task>();
+		x= project.getTasks().values();
+		
+		Task z=new Task();
+		for(Task t:x){
+			z=t;
+		}
+		
+		project.createTaskFromUI("t5", 3, new ArrayList<Task>(), z,new ArrayList<Resource>(), 
+				"....",d);
+			
+		displayTree(taskTree,project.getTasks());
 	}
 
 	private void resouceTest(){
@@ -958,7 +1169,7 @@ public class MainUI{
 			{ "279", "9033"}
 		};
 				
-		displayTable(columnNames,dataValues,scheduleScrollPane);
+		displayTable(dataValues,columnNames,scheduleScrollPane);
 	}
 	
 	

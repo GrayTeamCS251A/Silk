@@ -102,15 +102,24 @@ public class Project extends Observable{
     /**
      * @param info
      */
-    public void createTaskFromUI(String taskName, Integer taskDuration, ArrayList<Task> taskPredecessor, Task taskParent) {
+    public void createTaskFromUI(String taskName, 
+    		Integer taskDuration, 
+    		ArrayList<Task> taskPredecessor, 
+    		Task taskParent, 
+    		ArrayList<Resource> taskResources,
+    		String taskDescription,
+    		ArrayList<Deliverable> taskDeliverable)
+    {
         Task taskToAdd = new Task();
         taskToAdd.setName(taskName);
         
         //Generate Task ID
         String uniqueID = UUID.randomUUID().toString();
         
-        taskToAdd.setTaskID(uniqueID);
-        taskToAdd.setTaskDuration(taskDuration);
+        taskToAdd.setID(uniqueID);
+        taskToAdd.setDuration(taskDuration);
+        taskToAdd.setDescription(taskDescription);
+        
         if (!taskPredecessor.isEmpty()){
         	for (int p = 0; p < taskPredecessor.size(); p++)
         	{
@@ -119,11 +128,28 @@ public class Project extends Observable{
         	}
         }
         if (taskParent != null) {
-            taskToAdd.setTaskParent(taskParent);
-            taskParent.addChildren(taskToAdd);
+            taskToAdd.setParent(taskParent);
+            taskParent.addChild(taskToAdd);
+        }
+        
+        if (!taskResources.isEmpty())
+        {
+        	for (int i = 0; i < taskResources.size(); i++)
+        	{
+        		taskToAdd.addResource(taskResources.get(i));
+        	}
+        }
+        
+//        if (taskDeliverable != null){
+//        	taskToAdd.addDeliverable(taskDeliverable);
+//        }
+        
+        for(Deliverable d:taskDeliverable){
+        	taskToAdd.addDeliverable(d);
         }
         
         tasks.put(uniqueID, taskToAdd);
+        
         setChanged();
         notifyObservers();
     }
@@ -131,8 +157,8 @@ public class Project extends Observable{
     public void createTaskfromLoadProject(String taskName, String taskID, Integer taskDuration) {
         Task taskToAdd = new Task();
         taskToAdd.setName(taskName);
-        taskToAdd.setTaskID(taskID);
-        taskToAdd.setTaskDuration(taskDuration);
+        taskToAdd.setID(taskID);
+        taskToAdd.setDuration(taskDuration);
         
         tasks.put(taskID, taskToAdd);
         setChanged();
@@ -149,7 +175,11 @@ public class Project extends Observable{
 
         resourceToCreate.setResourceID(uniqueID);
         resourceToCreate.setDailyCost(dailyCost);
-        resourceToCreate.setResourceType(r);
+        
+        if (r != null)
+        {
+            resourceToCreate.setResourceType(r);
+        }
         
         resources.put(uniqueID, resourceToCreate);
         setChanged();
@@ -162,7 +192,11 @@ public class Project extends Observable{
 
         resourceToCreate.setResourceID(resourceID);
         resourceToCreate.setDailyCost(dailyCost);
-        resourceToCreate.setResourceType(r);
+        
+        if (r != null)
+        {
+            resourceToCreate.setResourceType(r);
+        }
         
         resources.put(resourceID, resourceToCreate);
         setChanged();
@@ -197,6 +231,7 @@ public class Project extends Observable{
     		if (resourceID.equals(rID)){
     			if (!rName.equals(""))
     			{
+    				resources.get(resourceID).setname(rName);
         			resources.get(resourceID).setDailyCost(dailyCost);
         			resources.get(resourceID).setResourceType(r);
     			}
@@ -206,6 +241,7 @@ public class Project extends Observable{
     			break;
     		}
     	}
+
     }
 
     /**
@@ -241,26 +277,70 @@ public class Project extends Observable{
      * @param taskID 
      * @param info
      */
-    public void editTask(String taskName, String tID, Integer taskDuration, ArrayList<Task> predecessorTask, Task parentTask) {
+    public void editTask(String taskName, 
+    		String tID, 
+    		Integer taskDuration, 
+    		ArrayList<Task> predecessorTask, 
+    		Task parentTask, 
+    		ArrayList<Resource> taskResources,
+    		String taskDescription,
+    		ArrayList<Deliverable> taskDeliverable)
+    {
         // TODO implement here
     	for (String taskID: tasks.keySet()) {
     		if (taskID.equals(tID))
     		{
-    			if (!taskName.equals("")){
-    				tasks.get(taskID).setName(taskName);
+    			tasks.get(taskID).setName(taskName);
+    			
+    			tasks.get(taskID).setDuration(taskDuration);
+    			
+    			//clear Suc/Pred relationship    			
+    			for(Task t:tasks.get(tID).getPredecessors().values()){
+    				if(t.getSuccessors().containsKey(tID)){
+    					t.getSuccessors().remove(tID);
+    				}			
+    			}
+    			tasks.get(tID).getPredecessors().clear();
+    			
+    	 		//re-establish Suc/Pred relationship
+    			for (int p = 0; p < predecessorTask.size(); p++)
+    			{
+        			tasks.get(taskID).addPredecessor(predecessorTask.get(p));
+        			(predecessorTask.get(p)).addSuccessor(tasks.get(taskID));
     			}
     			
-    			tasks.get(taskID).setTaskDuration(taskDuration);
-    			if (!predecessorTask.isEmpty()){
-    				for (int p = 0; p < predecessorTask.size(); p++)
-    				{
-        				tasks.get(taskID).addPredecessor(predecessorTask.get(p));
+    			//Parent/child handler
+    			if (parentTask != null) {
+    				for(Task t:tasks.values()){
+    					if(t.getChildren().containsKey(tID)){
+    						t.getChildren().remove(tID);
+    					}
+    				}
+    				tasks.get(taskID).setParent(parentTask);
+    				parentTask.addChild(tasks.get(taskID));
+    			}  else {
+    				tasks.get(taskID).setParent(null);
+    				for(Task t:tasks.values()){
+    					if(t.getChildren().containsKey(tID)){
+    						t.getChildren().remove(tID);
+    					}
     				}
     			}
-    			if (parentTask != null) {
-    				tasks.get(taskID).setTaskParent(parentTask);
-    			}
     			
+    			if (!taskResources.isEmpty())
+    			{
+    				for (int i = 0; i < taskResources.size(); i++)
+    				{
+    					tasks.get(taskID).addResource(taskResources.get(i));
+    				}
+    			}
+    			tasks.get(taskID).setDescription(taskDescription);
+    			
+    			tasks.get(taskID).emptyDeliverables();
+    	        for(Deliverable d:taskDeliverable){
+    	        	tasks.get(taskID).addDeliverable(d);
+    	        }
+    			 			
     			setChanged();
     			notifyObservers();
     			break;
@@ -281,6 +361,17 @@ public class Project extends Observable{
     public void deleteTask(String tID) {
     	for (String taskID: tasks.keySet()) {
     		if (taskID.equals(tID)) {
+    			Collection<Task> pd = tasks.get(tID).getPredecessors().values();
+    			for (Task t : pd){
+    				t.getSuccessors().remove(tID);   
+    			}
+    			//tasks.get(tID).getPredecessors().clear();
+    			for (Task t : tasks.values()){				
+    				if(t.getChildren().containsKey(tID)){
+    					t.getChildren().remove(tID);
+    				}   				
+    			}
+    			 			
     			tasks.remove(taskID);
     	        setChanged();
     	        notifyObservers();
@@ -369,10 +460,10 @@ public class Project extends Observable{
     	DeliverableType dt = null;
     	
     	switch (deliverableType){
-    		case "DeliverableType.file": dt = DeliverableType.file;
+    		case "file": dt = DeliverableType.file;
     									break;
-    		case "DeliverableType.presentation": dt = DeliverableType.presentation;
-    											break;
+    		case "presentation": dt = DeliverableType.presentation;
+    							break;
     	}
     	
     	d.setDeliverableName(deliverableName);
@@ -391,6 +482,12 @@ public class Project extends Observable{
     
     public String[][] getScheduleMatrix()
     {
-    	return schedule.generateScheduleMatrix(this.tasks);
+    	// careful, this could be null (if schedule isn't current)
+    	return schedule.toMatrix();
+    }
+    
+    public void addTask(String id, Task t)
+    {
+    	tasks.put(id, t);
     }
 }
