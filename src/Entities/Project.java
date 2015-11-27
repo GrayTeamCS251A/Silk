@@ -362,16 +362,32 @@ public class Project extends Observable{
     	for (String taskID: tasks.keySet()) {
     		if (taskID.equals(tID)) {
     			Collection<Task> pd = tasks.get(tID).getPredecessors().values();
-    			for (Task t : pd){
-    				t.getSuccessors().remove(tID);   
+    			//Remove this task from it's predecessors
+    			if (!pd.isEmpty())
+    			{
+					for (Task t : pd){
+						t.getSuccessors().remove(tID);
+					}
     			}
-    			//tasks.get(tID).getPredecessors().clear();
-    			for (Task t : tasks.values()){				
-    				if(t.getChildren().containsKey(tID)){
-    					t.getChildren().remove(tID);
-    				}   				
+    			
+    			//Remove this task from it's successors
+    			if (!tasks.get(taskID).getSuccessors().values().isEmpty())
+    			{
+					for (Task t: tasks.get(taskID).getSuccessors().values())
+					{
+						t.getPredecessors().remove(taskID);
+					}
     			}
-    			 			
+    			
+    			//Remove children tasks in this task
+    			if (!tasks.get(taskID).getChildren().isEmpty())
+    			{
+    				for (String childID: tasks.get(taskID).getChildren().keySet())
+    				{
+    					tasks.remove(childID);
+    				}
+    			}
+    			
     			tasks.remove(taskID);
     	        setChanged();
     	        notifyObservers();
