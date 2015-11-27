@@ -44,12 +44,14 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -586,6 +588,10 @@ public class MainUI{
 				Project p = viewScheduleAsGraphController.getProject();
 				
 				String dataValues[][] = p.getScheduleMatrix();
+				for (int i = 0; i <  dataValues.length; i++)
+				{
+					System.out.println(dataValues[i][0] + ": " + dataValues[i][1]);
+				}
 				
 				// Get the Starting task(s)
 				String getTasks = dataValues[0][1];
@@ -667,8 +673,34 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				String columnNames[] = { "Task","Duration" };
-				displayTable(columnNames,project.getSchedule().toMatrix(),scheduleScrollPane);
+				String columnNames[] = { "Days", "Tasks" };
+				
+				DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+				String[][] dataValues = project.getScheduleMatrix();
+				
+				for (int i = 0; i < dataValues.length; i++)
+				{
+					String[] rowData = new String[2];
+					rowData[0] = dataValues[i][0];
+					
+					String tasksString = "";
+					String taskIDString = dataValues[i][1];
+					
+					String[] tasksIDList = taskIDString.split(",");
+					
+					for (int t = 0; t < tasksIDList.length; t++)
+					{
+						tasksString += project.getTask(tasksIDList[t]).getName() + ",";
+					}
+					
+					rowData[1] = tasksString.substring(0, tasksString.length()-1);
+					model.addRow(rowData);
+				}
+					
+				JTable table = new JTable(model);
+				
+				//displayTable(project.getSchedule().toMatrix(),columnNames,scheduleScrollPane);
 				scheduleScrollPane.setViewportView(table);								
 			}});
 	}
@@ -944,8 +976,9 @@ public class MainUI{
 		}	
 	}
 		
-	public static void displayTable(String columnNames[], String dataValues[][],JScrollPane scheduleScrollPane){
+	public static void displayTable(String[][] dataValues,String[] columnNames, JScrollPane scheduleScrollPane){
 		JTable table = new JTable( dataValues, columnNames );
+		
 		scheduleScrollPane.setViewportView(table);
 	}
 	
@@ -1063,7 +1096,7 @@ public class MainUI{
 		
 		ArrayList<Deliverable> d= new ArrayList<Deliverable>();
 		d.add(new Deliverable("a", DeliverableType.file));
-
+				
 		project.createTaskFromUI("t1", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
 				"....",d);
 		project.createTaskFromUI("t2", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
@@ -1072,7 +1105,6 @@ public class MainUI{
 				"....",d);
 		project.createTaskFromUI("t4", 3, new ArrayList<Task>(), null,new ArrayList<Resource>(), 
 				"....",d);
-		
 		
 		Collection<Task> x=new ArrayList<Task>();
 		x= project.getTasks().values();
@@ -1111,7 +1143,7 @@ public class MainUI{
 			{ "279", "9033"}
 		};
 				
-		displayTable(columnNames,dataValues,scheduleScrollPane);
+		displayTable(dataValues,columnNames,scheduleScrollPane);
 	}
 	
 	
