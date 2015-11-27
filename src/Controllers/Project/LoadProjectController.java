@@ -117,9 +117,9 @@ public class LoadProjectController implements Controller {
 						
 						if (!projectEndTime.equals(""))
 						{
-							Integer endyear = Integer.parseInt(projectEndTime.substring(projectStartTime.indexOf("YEAR=") + 5, projectStartTime.indexOf(",MONTH=")));
-							Integer endmonth = Integer.parseInt(projectEndTime.substring(projectStartTime.indexOf("MONTH=") + 6, projectStartTime.indexOf(",WEEK_OF_YEAR=")));
-							Integer enddayOfMonth = Integer.parseInt(projectEndTime.substring(projectStartTime.indexOf("DAY_OF_MONTH=") + 13, projectStartTime.indexOf(",DAY_OF_YEAR=")));
+							Integer endyear = Integer.parseInt(projectEndTime.substring(projectEndTime.indexOf("YEAR=") + 5, projectEndTime.indexOf(",MONTH=")));
+							Integer endmonth = Integer.parseInt(projectEndTime.substring(projectEndTime.indexOf("MONTH=") + 6, projectEndTime.indexOf(",WEEK_OF_YEAR=")));
+							Integer enddayOfMonth = Integer.parseInt(projectEndTime.substring(projectEndTime.indexOf("DAY_OF_MONTH=") + 13, projectEndTime.indexOf(",DAY_OF_YEAR=")));
 							project.setEndTime(endyear, endmonth, enddayOfMonth);
 						}
 						else
