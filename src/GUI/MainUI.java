@@ -503,7 +503,7 @@ public class MainUI{
 	        	 DefaultMutableTreeNode node = (DefaultMutableTreeNode)
 							taskTree.getLastSelectedPathComponent();
 	        	 Task selectedTask=new Task();
-	        	 if(node.getUserObject().getClass().equals(String.class)){
+	        	 if(node==null||node.getUserObject().getClass().equals(String.class)){
 	        		 selectedTask=null;
 	        	 }else
 	        		selectedTask = (Task) node.getUserObject();
