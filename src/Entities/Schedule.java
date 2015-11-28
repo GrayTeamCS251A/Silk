@@ -55,6 +55,7 @@ public class Schedule extends Observable {
     public Schedule generateSchedule(HashMap<String,Task> tasks) {
     	this.tasks = tasks;
     	this.current = true;
+    	System.out.println("starting on month: " + this.startDate.get(Calendar.MONTH));
 
  
     	// if we have a startTime then great, otherwise we can't proceed 
@@ -164,7 +165,7 @@ public class Schedule extends Observable {
 			date.add(Calendar.DAY_OF_YEAR, day);
 			
 			// figure out date
-			String dateString = date.get(Calendar.YEAR) + "/" + date.get(Calendar.MONTH) + "/" + date.get(Calendar.DAY_OF_MONTH);
+			String dateString = date.get(Calendar.YEAR) + "/" + (date.get(Calendar.MONTH)+1) + "/" + date.get(Calendar.DAY_OF_MONTH);
 			
 			// compile tasks		
 			String taskString = "";

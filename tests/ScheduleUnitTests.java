@@ -144,7 +144,7 @@ public class ScheduleUnitTests {
 		task3.setEndTime(4);
 		
 		// Create Schedule
-		Schedule tester = new Schedule(new GregorianCalendar(2011, Calendar.JULY, 3));
+		Schedule tester = new Schedule(new GregorianCalendar(2011, Calendar.DECEMBER, 3));
 		String [][] result = tester.toMatrix();
 		assertEquals("toMatrix() should return null if the schedule has not been generated", true, result == null);
 
