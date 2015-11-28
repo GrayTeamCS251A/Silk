@@ -183,7 +183,7 @@ public class MainUI{
 		initSaveAndLoad();
 		initControllerAndView();
 
-			
+		
 		Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
 		project.updateInfo("", localCalendar.get(Calendar.YEAR), localCalendar.get(Calendar.MONTH), localCalendar.get(Calendar.DAY_OF_MONTH), "");
 		btnTable.setEnabled(false);
@@ -673,11 +673,12 @@ public class MainUI{
 				// TODO Auto-generated method stub
 				//editProject.fill(project);
 				
-				String startTimeString = newProject.getStartField();
+				String startTimeString = editProject.getStartField();
+				
 				Integer year = 0;
 				Integer month = 0;
 				Integer day = 0;
-
+				
 				if (startTimeString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}"))
 				{
 					String[] splitLine = startTimeString.split("-");
