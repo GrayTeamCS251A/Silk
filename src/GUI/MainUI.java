@@ -113,6 +113,7 @@ public class MainUI{
 	private JList resourceList = new JList();
 	private JTree taskTree = new JTree();
 	private Project project;
+	private Graph scheduleGraph;
 
 
 	private ResUI addRes = new ResUI("Add Resource");
@@ -179,7 +180,13 @@ public class MainUI{
 		initEditProjectAction();
 		initSaveAndLoad();
 		initControllerAndView();
-		project.updateInfo("dd", 1991, 3, 2, "dd");
+		
+		
+		project.updateInfo("New Project", 2015, 1, 1, "Unknown");
+		btnTable.setEnabled(false);
+		btnGraph.setEnabled(false);
+		scheduleScrollPane.setViewportView(new JPanel());	
+		project.getSchedule().invalidate();
 		//resouceTest();
 		//treeTest();
 		//tableTest();
@@ -294,8 +301,6 @@ public class MainUI{
 		btnTable.setBounds(186, 360, 84, 23);
 		Schedule_panel.add(btnTable);
 		
-		btnTable.setEnabled(false);
-		btnGraph.setEnabled(false);
 	}
 	
 	
@@ -312,6 +317,8 @@ public class MainUI{
 				addRes.setVisible(false);
 				btnTable.setEnabled(false);
 				btnGraph.setEnabled(false);
+				scheduleScrollPane.getViewport().setBackground(Color.GRAY);
+				project.getSchedule().invalidate();
 			}
 						
 		});
@@ -353,8 +360,8 @@ public class MainUI{
 						editRes.getTextType());
 				//System.out.println(editRes.getTextName());
 				editRes.setVisible(false);
-				btnTable.setEnabled(false);
-				btnGraph.setEnabled(false);
+//				btnTable.setEnabled(false);
+//				btnGraph.setEnabled(false);
 			}
 						
 		});
@@ -400,8 +407,8 @@ public class MainUI{
 					int selectedIndex = resourceList.getSelectedIndex();
 					Resource r=(Resource) resourceList.getSelectedValue();
 					deleteResourceController.executeDeleteResource(r.getResourceID());
-					btnTable.setEnabled(false);
-					btnGraph.setEnabled(false);
+//					btnTable.setEnabled(false);
+//					btnGraph.setEnabled(false);
 				}
 			}});
 	}
@@ -427,7 +434,10 @@ public class MainUI{
 				editTask.setVisible(false);
 				btnTable.setEnabled(false);
 				btnGraph.setEnabled(false);
-				//System.out.println(t.getParent());
+								
+				scheduleScrollPane.setViewportView(new JPanel());			
+				project.getSchedule().invalidate();
+
 			}
 						
 		});
@@ -478,6 +488,8 @@ public class MainUI{
 				addTask.setVisible(false);
 				btnTable.setEnabled(false);
 				btnGraph.setEnabled(false);
+				scheduleScrollPane.setViewportView(new JPanel());
+				project.getSchedule().invalidate();
 			}
 						
 		});
@@ -532,6 +544,8 @@ public class MainUI{
 					taskTree.removeSelectionPath(tp);
 					btnTable.setEnabled(false);
 					btnGraph.setEnabled(false);
+					scheduleScrollPane.setViewportView(new JPanel());			
+					project.getSchedule().invalidate();
 				}
 			}});
 	}
@@ -543,8 +557,12 @@ public class MainUI{
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				btnTable.setEnabled(true);
-				btnGraph.setEnabled(true);
+				btnGraph.setEnabled(true);		
 				generateScheduleController.generateSchedule();
+				project.getSchedule().isCurrent();
+				scheduleScrollPane.getViewport().setBackground(Color.WHITE);
+				displayTable();
+				scheduleScrollPane.setViewportView(table);
 			}});
 		
 		btnSaveSchedule.addActionListener(new ActionListener(){
@@ -578,148 +596,16 @@ public class MainUI{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				
-				//See JGraph example
-				//JGraph graphView = viewScheduleAsGraphController.execute(??);
-				//scheduleScrollPane.setViewportView(graphView);
-				
-				Graph scheduleGraph = new Graph();
-								
-				Project p = viewScheduleAsGraphController.getProject();
-				
-				String dataValues[][] = p.getScheduleMatrix();
-				
-				//***Testing***
-//				for (int i = 0; i <  dataValues.length; i++)
-//				{
-//					String tasksString = "";
-//					String taskIDString = dataValues[i][1];
-//					
-//					String[] tasksIDList = taskIDString.split(",");
-//					
-//					for (int t = 0; t < tasksIDList.length; t++)
-//					{
-//						tasksString += project.getTask(tasksIDList[t]).getName() + ",";
-//					}
-//					System.out.println(dataValues[i][0] + ": " + tasksString);
-//				}
-				//***Testing***
-				
-				// Get the Starting task(s)
-				String getTasks = dataValues[0][1];
-				String[] taskIDList = getTasks.split(",");
-				
-				//Create the starting node(s)
-				ArrayList<Node> currentNodeList = new ArrayList<Node>();
-				
-				int xindex = 100;
-				int yindex = 100;
-				for (int s = 0; s < taskIDList.length; s++)
-				{
-					Node n = new Node(taskIDList[s]);
-					currentNodeList.add(n);
 					
-					scheduleGraph.add(n, xindex, yindex);
-					yindex += 100;
-				}
-				
-				//convert to ArrayList
-				ArrayList<String> aList = convertToArrayList(taskIDList);
-				
-				//Go through rest of the dataValues
-				for (int i = 1; i < dataValues.length; i++)
-				{
-					getTasks = dataValues[i][1];
-					taskIDList = getTasks.split(",");
-					
-					ArrayList<String> bList = convertToArrayList(taskIDList);
-					ArrayList<String> tempAList = (ArrayList<String>) aList.clone();
-					ArrayList<String> tempBList = (ArrayList<String>) bList.clone();
-					
-					// Remove the Already existing ID in the previous list
-					aList.removeAll(bList);
-					bList.removeAll(tempAList);
-					
-					if (!aList.isEmpty() && !bList.isEmpty())
-					{
-						//Create nodes for the Blist and then hook them with the nodes already created
-						// from the AList
-						xindex += 100;
-						yindex = 100;
-						
-						for (int b = 0; b < bList.size(); b++)
-						{
-							Node n = new Node(bList.get(b));
-							scheduleGraph.add(n, xindex, yindex);
-							
-							for (int y = 0; y < aList.size(); y++)
-							{
-								for (Node checkNode: scheduleGraph.getNodes())
-								{
-									if (aList.get(y).equals(checkNode.getLabel()))
-									{
-										Arrow a = new Arrow(checkNode, n, "");
-										scheduleGraph.add(a);
-										break;
-									}
-								}
-							}
-							
-							yindex += 100;
-						}
-					}
-					
-					aList = tempBList;
-				}
-				
-				for (Node n: scheduleGraph.getNodes())
-				{
-					if (p.getTask(n.getLabel().toString()).getChildren().isEmpty())
-					{
-						n.setLabel(p.getTask(n.getLabel().toString()).getName());
-					}
-					else
-					{
-						n.setLabel(p.getTask(n.getLabel().toString()).getName() + " o-o");
-					}
-				}
-				
-				displayGraph(scheduleGraph, scheduleScrollPane);				
+					displayGraph(scheduleGraph, scheduleScrollPane);				
 			}});
 		
 		btnTable.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				String columnNames[] = { "Days", "Tasks" };
-				
-				DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-
-				String[][] dataValues = project.getScheduleMatrix();
-				
-				for (int i = 0; i < dataValues.length; i++)
-				{
-					String[] rowData = new String[2];
-					rowData[0] = dataValues[i][0];
-					
-					String tasksString = "";
-					String taskIDString = dataValues[i][1];
-					
-					String[] tasksIDList = taskIDString.split(",");
-					
-					for (int t = 0; t < tasksIDList.length; t++)
-					{
-						tasksString += project.getTask(tasksIDList[t]).getName() + ",";
-					}
-					
-					rowData[1] = tasksString.substring(0, tasksString.length()-1);
-					model.addRow(rowData);
-				}
-					
-				JTable table = new JTable(model);
-				
-				//displayTable(project.getSchedule().toMatrix(),columnNames,scheduleScrollPane);
+				// TODO Auto-generated method stub			
+				displayTable();
 				scheduleScrollPane.setViewportView(table);								
 			}});
 	}
@@ -995,14 +881,117 @@ public class MainUI{
 		}	
 	}
 		
-	public static void displayTable(String[][] dataValues,String[] columnNames, JScrollPane scheduleScrollPane){
+	private void displayTable(String[][] dataValues,String[] columnNames, JScrollPane scheduleScrollPane){
 		JTable table = new JTable( dataValues, columnNames );
 		
 		scheduleScrollPane.setViewportView(table);
 	}
 	
-	public static void displayGraph(Graph graph,JScrollPane scheduleScrollPane){
-		JGraph graphView=GraphUtils.makeJGraph(graph);
+	private void displayGraph(Graph scheduleGraph,JScrollPane scheduleScrollPane){				//See JGraph example
+		//JGraph graphView = viewScheduleAsGraphController.execute(??);
+		//scheduleScrollPane.setViewportView(graphView);
+		
+		scheduleGraph = new Graph();
+						
+		Project p = viewScheduleAsGraphController.getProject();
+		
+		String dataValues[][] = p.getScheduleMatrix();
+		
+		//***Testing***
+//		for (int i = 0; i <  dataValues.length; i++)
+//		{
+//			String tasksString = "";
+//			String taskIDString = dataValues[i][1];
+//			
+//			String[] tasksIDList = taskIDString.split(",");
+//			
+//			for (int t = 0; t < tasksIDList.length; t++)
+//			{
+//				tasksString += project.getTask(tasksIDList[t]).getName() + ",";
+//			}
+//			System.out.println(dataValues[i][0] + ": " + tasksString);
+//		}
+		//***Testing***
+		
+		// Get the Starting task(s)
+		String getTasks = dataValues[0][1];
+		String[] taskIDList = getTasks.split(",");
+		
+		//Create the starting node(s)
+		ArrayList<Node> currentNodeList = new ArrayList<Node>();
+		
+		int xindex = 100;
+		int yindex = 100;
+		for (int s = 0; s < taskIDList.length; s++)
+		{
+			Node n = new Node(taskIDList[s]);
+			currentNodeList.add(n);
+			
+			scheduleGraph.add(n, xindex, yindex);
+			yindex += 100;
+		}
+		
+		//convert to ArrayList
+		ArrayList<String> aList = convertToArrayList(taskIDList);
+		
+		//Go through rest of the dataValues
+		for (int i = 1; i < dataValues.length; i++)
+		{
+			getTasks = dataValues[i][1];
+			taskIDList = getTasks.split(",");
+			
+			ArrayList<String> bList = convertToArrayList(taskIDList);
+			ArrayList<String> tempAList = (ArrayList<String>) aList.clone();
+			ArrayList<String> tempBList = (ArrayList<String>) bList.clone();
+			
+			// Remove the Already existing ID in the previous list
+			aList.removeAll(bList);
+			bList.removeAll(tempAList);
+			
+			if (!aList.isEmpty() && !bList.isEmpty())
+			{
+				//Create nodes for the Blist and then hook them with the nodes already created
+				// from the AList
+				xindex += 100;
+				yindex = 100;
+				
+				for (int b = 0; b < bList.size(); b++)
+				{
+					Node n = new Node(bList.get(b));
+					scheduleGraph.add(n, xindex, yindex);
+					
+					for (int y = 0; y < aList.size(); y++)
+					{
+						for (Node checkNode: scheduleGraph.getNodes())
+						{
+							if (aList.get(y).equals(checkNode.getLabel()))
+							{
+								Arrow a = new Arrow(checkNode, n, "");
+								scheduleGraph.add(a);
+								break;
+							}
+						}
+					}
+					
+					yindex += 100;
+				}
+			}
+			
+			aList = tempBList;
+		}
+		
+		for (Node n: scheduleGraph.getNodes())
+		{
+			if (p.getTask(n.getLabel().toString()).getChildren().isEmpty())
+			{
+				n.setLabel(p.getTask(n.getLabel().toString()).getName());
+			}
+			else
+			{
+				n.setLabel(p.getTask(n.getLabel().toString()).getName() + " o-o");
+			}
+		}
+		JGraph graphView=GraphUtils.makeJGraph(scheduleGraph);
 		scheduleScrollPane.setViewportView(graphView);
 	}
 		
@@ -1029,8 +1018,7 @@ public class MainUI{
 		resourcesView =new ResourcesView(project,resourceList);
 		tasksView = new TasksView(project, taskTree);	
 	}
-	
-	
+		
 	public ArrayList<String> convertToArrayList(String[] list)
 	{
 		ArrayList<String> aList = new ArrayList<String>();
@@ -1042,6 +1030,49 @@ public class MainUI{
 		
 		return aList;
 	}
+	
+	private void displayTable(){
+		String columnNames[] = { "Days", "Tasks" };
+		
+		DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+
+		String[][] dataValues = project.getScheduleMatrix();
+		
+		for (int i = 0; i < dataValues.length; i++)
+		{
+			String[] rowData = new String[2];
+			rowData[0] = dataValues[i][0];
+			
+			String tasksString = "";
+			String taskIDString = dataValues[i][1];
+			
+			String[] tasksIDList = taskIDString.split(",");
+			
+			for (int t = 0; t < tasksIDList.length; t++)
+			{
+				tasksString += project.getTask(tasksIDList[t]).getName() + ",";
+			}
+			
+			rowData[1] = tasksString.substring(0, tasksString.length()-1);
+			model.addRow(rowData);
+		}
+			
+		 table = new JTable(model);
+	}
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
