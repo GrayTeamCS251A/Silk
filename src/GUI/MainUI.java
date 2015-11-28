@@ -36,6 +36,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -683,7 +684,7 @@ public class MainUI{
 				Integer month = 0;
 				Integer day = 0;
 				
-				if (startTimeString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}"))
+				if (startTimeString.matches("[0-9]{4}-[0-9]{2}-[0-9]{1}") || startTimeString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}"))
 				{
 					String[] splitLine = startTimeString.split("-");
 					year = Integer.parseInt(splitLine[0]);
