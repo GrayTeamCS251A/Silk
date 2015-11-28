@@ -185,7 +185,7 @@ public class MainUI{
 
 		
 		Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
-		project.updateInfo("", localCalendar.get(Calendar.YEAR), localCalendar.get(Calendar.MONTH) + 1, localCalendar.get(Calendar.DAY_OF_MONTH), "");
+		project.updateInfo("", localCalendar.get(Calendar.YEAR), localCalendar.get(Calendar.MONTH), localCalendar.get(Calendar.DAY_OF_MONTH), "");
 		btnTable.setEnabled(false);
 		btnGraph.setEnabled(false);
 		scheduleScrollPane.setViewportView(new JPanel());	
@@ -687,7 +687,7 @@ public class MainUI{
 				{
 					String[] splitLine = startTimeString.split("-");
 					year = Integer.parseInt(splitLine[0]);
-					month = Integer.parseInt(splitLine[1]);
+					month = Integer.parseInt(splitLine[1]) - 1;
 					day = Integer.parseInt(splitLine[2]);
 				}
 				

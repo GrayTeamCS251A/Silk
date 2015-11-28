@@ -132,7 +132,18 @@ public class ProjectUI extends JDialog {
 	public void fill(Project p) {
 		// TODO Auto-generated method stub
 		nameField.setText(p.getProjectName());
-		startField.setText(p.getStartTime().get(Calendar.YEAR) + "-" + p.getStartTime().get(Calendar.MONTH) + "-" + p.getStartTime().get(Calendar.DAY_OF_MONTH));
+		int month = p.getStartTime().get(Calendar.MONTH) + 1;
+		String monthString = "";
+		if (String.valueOf(month).length() == 1)
+		{
+			monthString = "0"+month;
+		}
+		else
+		{
+			monthString = String.valueOf(month);
+		}
+		
+		startField.setText(p.getStartTime().get(Calendar.YEAR) + "-" + monthString + "-" + p.getStartTime().get(Calendar.DAY_OF_MONTH));
 		authorField.setText(p.getProjectAuthor());				
 	}
 }
