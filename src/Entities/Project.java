@@ -362,16 +362,49 @@ public class Project extends Observable{
     	for (String taskID: tasks.keySet()) {
     		if (taskID.equals(tID)) {
     			Collection<Task> pd = tasks.get(tID).getPredecessors().values();
-    			for (Task t : pd){
-    				t.getSuccessors().remove(tID);   
+    			//Remove this task from it's predecessors
+    			if (!pd.isEmpty())
+    			{
+					for (Task t : pd){
+						t.getSuccessors().remove(tID);
+					}
     			}
-    			//tasks.get(tID).getPredecessors().clear();
-    			for (Task t : tasks.values()){				
-    				if(t.getChildren().containsKey(tID)){
-    					t.getChildren().remove(tID);
-    				}   				
+    			
+    			//Remove this task from it's successors
+    			if (!tasks.get(taskID).getSuccessors().values().isEmpty())
+    			{
+					for (Task t: tasks.get(taskID).getSuccessors().values())
+					{
+						t.getPredecessors().remove(taskID);
+					}
     			}
-    			 			
+    			
+    			//Remove children tasks in this task
+    			if (!tasks.get(taskID).getChildren().isEmpty())
+    			{
+    				for (String childID: tasks.get(taskID).getChildren().keySet())
+    				{
+    					tasks.remove(childID);
+    				}
+    			}
+    			
+    			//Link this tasks predecessor's to this tasks Successors
+    			for (Task t: pd)
+    			{
+    				for (Task successor: tasks.get(taskID).getSuccessors().values())
+    				{
+    					t.addSuccessor(successor);
+    				}
+    			}
+    			
+    			for (Task t: tasks.get(taskID).getSuccessors().values())
+    			{
+    				for (Task predecessor: pd)
+    				{
+    					t.addPredecessor(predecessor);
+    				}
+    			}
+    			
     			tasks.remove(taskID);
     	        setChanged();
     	        notifyObservers();
@@ -406,9 +439,15 @@ public class Project extends Observable{
         
         WritableSheet scheduleSheet = workbook.createSheet("Schedule", 0);
         
+        Label daysLabel = new Label(0, 0, "Day");
+        Label tasksLabel = new Label(1, 0, "Tasks");
+        
+        scheduleSheet.addCell(daysLabel);
+        scheduleSheet.addCell(tasksLabel);
+        
         for (int i = 0; i < dataValue.length; i++)
         {
-            Label dateLabel = new Label(i, 0, dataValue[i][0]);
+            Label dateLabel = new Label(0, i + 1, dataValue[i][0]);
             
             String[] s = dataValue[i][1].split(",");
             String taskNames = "";
@@ -417,7 +456,7 @@ public class Project extends Observable{
             	taskNames += getTask(s[t]) + ",";
             }
                         
-            Label taskLabel = new Label(i, 1, taskNames.substring(0, taskNames.length() - 1));
+            Label taskLabel = new Label(1, i + 1, taskNames.substring(0, taskNames.length() - 1));
             
             scheduleSheet.addCell(dateLabel);
             scheduleSheet.addCell(taskLabel);

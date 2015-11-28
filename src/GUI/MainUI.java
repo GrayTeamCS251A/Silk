@@ -34,6 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,6 +45,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import javax.swing.JScrollPane;
@@ -180,13 +182,15 @@ public class MainUI{
 		initEditProjectAction();
 		initSaveAndLoad();
 		initControllerAndView();
-		
-		
-		project.updateInfo("New Project", 2015, 1, 1, "Unknown");
+
+			
+		Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
+		project.updateInfo("", localCalendar.get(Calendar.YEAR), localCalendar.get(Calendar.MONTH), localCalendar.get(Calendar.DAY_OF_MONTH), "");
 		btnTable.setEnabled(false);
 		btnGraph.setEnabled(false);
 		scheduleScrollPane.setViewportView(new JPanel());	
 		project.getSchedule().invalidate();
+
 		//resouceTest();
 		//treeTest();
 		//tableTest();
