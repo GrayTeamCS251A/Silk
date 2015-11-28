@@ -773,11 +773,9 @@ public class MainUI{
 	
 	
 	public static void displayTree(JTree tree, HashMap<String, Task> mapTask){
-
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
 		
-		helper(root,mapTask);
-					
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");		
+		helper(root,mapTask);					
 		DefaultTreeModel treeModel = new DefaultTreeModel(root);
 		tree.setModel(treeModel);
 		
@@ -792,7 +790,7 @@ public class MainUI{
 		{		
 		 if(!(root.getUserObject() instanceof String) || t.getParent() ==null )
 		 {
-
+			 
 			DefaultMutableTreeNode aTask = new DefaultMutableTreeNode(t);	  	  
 			root.add(aTask);
 			aTask.add(new DefaultMutableTreeNode("ID:"+t.getID()));
@@ -833,7 +831,7 @@ public class MainUI{
 			
 			for (Task innerTask : t.getChildren().values())
 			{
-				
+			
 				DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(innerTask);
 				aTask.add(newRoot);	
 				newRoot.add(new DefaultMutableTreeNode("ID:"+innerTask.getID()));

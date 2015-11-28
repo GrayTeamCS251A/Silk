@@ -320,8 +320,9 @@ public class TaskUI extends JDialog {
 				 	model3.addElement(task);
 			   }
 		  
-
-		   if(parent!=null){
+		   
+			   
+		   if(parent!=null){		
 		   rdbtnNoParent.setSelected(false);   
 		   for(int i=0;i< model3.getSize();i++){
 				   Task projectTask= (Task)model3.getElementAt(i);
