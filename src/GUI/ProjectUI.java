@@ -111,7 +111,6 @@ public class ProjectUI extends JDialog {
 	   }
 	   
 	   public String getStartField(){
-		   System.out.println(startField.getText());
 		   return startField.getText();   
 	   }
 	   

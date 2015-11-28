@@ -529,4 +529,9 @@ public class Project extends Observable{
     {
     	tasks.put(id, t);
     }
+    
+    public void Reflesh(){
+		setChanged();
+		notifyObservers();
+    }
 }

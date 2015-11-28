@@ -320,8 +320,9 @@ public class TaskUI extends JDialog {
 				 	model3.addElement(task);
 			   }
 		  
-
-		   if(parent!=null){
+		   
+			   
+		   if(parent!=null){		
 		   rdbtnNoParent.setSelected(false);   
 		   for(int i=0;i< model3.getSize();i++){
 				   Task projectTask= (Task)model3.getElementAt(i);
@@ -339,13 +340,12 @@ public class TaskUI extends JDialog {
 	   }
 	   
 	   public void fillAdd(Project p, Task selectedTask){
-		   if(selectedTask!=null){			  
-			   DefaultListModel model = new DefaultListModel();
-			   listPred.setModel(model);
-			   for(Task task:selectedTask.getChildren().values()){
+		   DefaultListModel model = new DefaultListModel();
+		   listPred.setModel(model);
+			   for(Task task:commonParent(selectedTask,p)){
 				   model.addElement(task);
 			   }
-		   }
+		   
 		   DefaultListModel model2 = new DefaultListModel();
 		   listRes.setModel(model2);		  
 		   for(Resource resource: p.getResources().values()){
@@ -359,6 +359,8 @@ public class TaskUI extends JDialog {
 		   DeliverableModel.removeAllElements();
 		   textName.setText("");
 		   textDuration.setText("");
+		   txtpnDescription.setText("");
+		   textFieldDeliverable.setText("");
 	   }
 	   
 	   private void fillResAndPre(Task t,Project p){
@@ -443,6 +445,9 @@ public class TaskUI extends JDialog {
 	 
 	   private ArrayList<Task> commonParent(Task t,Project p){
 		   ArrayList<Task> x= new ArrayList<Task>();
+		   if(t==null){
+			   return x;
+		   }
 		   
 		   if(t.getParent()==null){
 			   for(Task task:p.getTasks().values()){

@@ -426,9 +426,9 @@ public class LoadProjectController implements Controller {
     }
 
 	public void executeLoadProject(File projectFile) throws IOException {
-    	project.clear();
-    	
+    	project.clear();   	
     	parse(projectFile);
+    	project.Reflesh();
 	}
 
 }
