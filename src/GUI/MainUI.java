@@ -319,10 +319,10 @@ public class MainUI{
 						addRes.getTextType());
 				addRes.Reset();      
 				addRes.setVisible(false);
-				btnTable.setEnabled(false);
-				btnGraph.setEnabled(false);
-				scheduleScrollPane.getViewport().setBackground(Color.GRAY);
-				project.getSchedule().invalidate();
+//				btnTable.setEnabled(false);
+//				btnGraph.setEnabled(false);
+//				scheduleScrollPane.setViewportView(new JPanel());			
+//				project.getSchedule().invalidate();
 			}
 						
 		});
@@ -366,6 +366,8 @@ public class MainUI{
 				editRes.setVisible(false);
 //				btnTable.setEnabled(false);
 //				btnGraph.setEnabled(false);
+//				scheduleScrollPane.setViewportView(new JPanel());			
+//				project.getSchedule().invalidate();
 			}
 						
 		});
@@ -413,6 +415,8 @@ public class MainUI{
 					deleteResourceController.executeDeleteResource(r.getResourceID());
 //					btnTable.setEnabled(false);
 //					btnGraph.setEnabled(false);
+//					scheduleScrollPane.setViewportView(new JPanel());			
+//					project.getSchedule().invalidate();
 				}
 			}});
 	}
