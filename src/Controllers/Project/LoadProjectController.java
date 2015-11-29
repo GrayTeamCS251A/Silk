@@ -394,6 +394,7 @@ public class LoadProjectController implements Controller {
 						for (int l = 0; l < listOfTaskPredecessorIDs.size(); l++)
 						{
 							project.getTask(taskID).addPredecessor(project.getTask(listOfTaskPredecessorIDs.get(l)));
+							project.getTask(listOfTaskPredecessorIDs.get(l)).addSuccessor(project.getTask(taskID));
 						}
 						
 						//Set the list of deliverables for the task
