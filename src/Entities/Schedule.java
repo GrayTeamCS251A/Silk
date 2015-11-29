@@ -55,8 +55,6 @@ public class Schedule extends Observable {
     public Schedule generateSchedule(HashMap<String,Task> tasks) {
     	this.tasks = tasks;
     	this.current = true;
-    	System.out.println("starting on month: " + this.startDate.get(Calendar.MONTH));
-
  
     	// if we have a startTime then great, otherwise we can't proceed 
     	if (this.startDate != null) {

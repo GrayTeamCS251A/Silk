@@ -66,8 +66,10 @@ public class ScheduleUnitTests {
 		HashMap<String, Task> tasks = new HashMap<String,Task>();
 		tasks.put("1", new Task("1","Task1", "description", 10));
 
+		Schedule result = tester.generateSchedule(tasks);
+		
 		// assert statements
-		assertEquals("generateSchedule should return null if given no startDate", null, tester.generateSchedule(tasks));
+		assertEquals("generateSchedule should return null if given no startDate", null, result);
 	}
 	
 	@Test
