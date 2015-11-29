@@ -798,7 +798,7 @@ public class MainUI{
 			 
 			DefaultMutableTreeNode aTask = new DefaultMutableTreeNode(t);	  	  
 			root.add(aTask);
-			aTask.add(new DefaultMutableTreeNode("ID:"+t.getID()));
+			//aTask.add(new DefaultMutableTreeNode("ID:"+t.getID()));
 			aTask.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
 			aTask.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));
 			aTask.add(new DefaultMutableTreeNode("Complete:"+t.getPercentCompleted()));	
@@ -839,7 +839,7 @@ public class MainUI{
 			
 				DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(innerTask);
 				aTask.add(newRoot);	
-				newRoot.add(new DefaultMutableTreeNode("ID:"+innerTask.getID()));
+				//newRoot.add(new DefaultMutableTreeNode("ID:"+innerTask.getID()));
 				newRoot.add(new DefaultMutableTreeNode("Duration:"+innerTask.getDuration()));
 				newRoot.add(new DefaultMutableTreeNode("Description:"+innerTask.getDescription()));
 				newRoot.add(new DefaultMutableTreeNode("Complete:"+innerTask.getPercentCompleted()));	

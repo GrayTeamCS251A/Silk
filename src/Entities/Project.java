@@ -425,6 +425,7 @@ public class Project extends Observable{
      */
     public void generateSchedule() {
     	schedule.generateSchedule(this.startTime, this.tasks);
+    	this.Reflesh();
     }
     
     /**
