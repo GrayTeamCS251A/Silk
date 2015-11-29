@@ -189,14 +189,28 @@ public class Task extends Observable {
     
     
     /**
-     * Calculate the starTime and endTime for the collection of tasks
+     * Calculate the starTime and endTime for the collection of tasks. Takes into account resources and does not allow two tasks with shared resources run at the same time. It's not very "smart", though, and won't optimize the order of the tasks at all.
      * @param children tasks
      * @param startTime start time for this collection of tasks to start at
      */
 	public void startTimeChild(HashMap<String, Task> children, int startTime){
 		Queue<Task> queue = new LinkedList<Task>();
 
+		// make a resource list for each resource
+		HashMap<String, List<Task>> resourceLists = new HashMap<String, List<Task>>();
+
+		// loop through children
 		for (Task child: children.values()){
+			// add children to the resource list
+			for (Resource resource : child.getRequiredResources().values()) {
+				// check if the resource exists in our Resource List
+				if (!resourceLists.containsKey(resource.getResourceID())) {
+					// if not, add it
+					resourceLists.put(resource.getResourceID(), new LinkedList<Task>());
+				}
+			}
+	
+			// if it's a starting Task, add it to the queue
 			if(child.getPredecessors().isEmpty()){
 				// put into queue
 				queue.add(child);
@@ -208,20 +222,49 @@ public class Task extends Observable {
 		}
 		
 		// Loop through queue, as we go we'll
-		// 1. calculate the startTime of the task
+		// 0. calculate the startTime of the task
+		// 1. add it to the resource list(s) / deal with resources
+		//   1a. assign start time of task
 		// 2. deal with any children
 		// 3. calculate duration and endTime
 		// 4. put any successors on the queue
 		
+		System.out.println("starting queue:");
+		
 		while (!queue.isEmpty()) {
 			Task child = queue.remove();
-
-			// 1. calculate the startTime of the task
+			
+			System.out.println(child); 
+			
+			int idealStartTime = -1; // the startTime that would be ideal, if resources weren't an issue
+			// 0. calculate the startTime of the task
 			if (child.getPredecessors().isEmpty()) {
-				child.setStartTime(startTime);
+				idealStartTime = startTime;
 			} else {
-				child.setStartTime(maxEndTime(child.getPredecessors().values()));
+				idealStartTime = maxEndTime(child.getPredecessors().values());
 			}
+
+			int realisticStartTime = idealStartTime; // the startTime that must be done, because of resource conflicts
+			
+			// 1. add to resource list(s) / deal with resources
+			for (Resource resource : child.getRequiredResources().values()) {
+				// check to see if there's a task using this resource. if so, our startTime must be after their endTime
+				for (Task task : resourceLists.get(resource.getResourceID())) {
+					realisticStartTime = (task.getEndTime() < realisticStartTime) ? realisticStartTime : task.getEndTime();
+				}
+				
+				// add this child to that list
+				if (!resourceLists.get(resource.getResourceID()).contains(resource)) {
+					resourceLists.get(resource.getResourceID()).add(child);
+				}
+				
+				// see what else is on there..
+				System.out.println(" " + resource.getname() + ": " + resourceLists.get(resource.getResourceID()));
+			}
+			
+			// 1b. Assign the startTime of a task
+			child.setStartTime(realisticStartTime);
+
 			
 			// 2. deal with any children
 			if (!child.getChildren().isEmpty()) {

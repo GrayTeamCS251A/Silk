@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Silk>
+<ProjectInfo>
+<ProjectName/>
+<ProjectAuthor/>
+<ProjectStartTime>java.util.GregorianCalendar[time=?,areFieldsSet=false,areAllFieldsSet=false,lenient=true,zone=sun.util.calendar.ZoneInfo[id="America/Los_Angeles",offset=-28800000,dstSavings=3600000,useDaylight=true,transitions=185,lastRule=java.util.SimpleTimeZone[id=America/Los_Angeles,offset=-28800000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=3,startMonth=2,startDay=8,startDayOfWeek=1,startTime=7200000,startTimeMode=0,endMode=3,endMonth=10,endDay=1,endDayOfWeek=1,endTime=7200000,endTimeMode=0]],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=?,YEAR=2015,MONTH=10,WEEK_OF_YEAR=?,WEEK_OF_MONTH=?,DAY_OF_MONTH=29,DAY_OF_YEAR=?,DAY_OF_WEEK=?,DAY_OF_WEEK_IN_MONTH=?,AM_PM=0,HOUR=0,HOUR_OF_DAY=0,MINUTE=0,SECOND=0,MILLISECOND=?,ZONE_OFFSET=?,DST_OFFSET=?]</ProjectStartTime>
+<ProjectEndTime>java.util.GregorianCalendar[time=1448831844437,areFieldsSet=true,areAllFieldsSet=true,lenient=true,zone=sun.util.calendar.ZoneInfo[id="America/Los_Angeles",offset=-28800000,dstSavings=3600000,useDaylight=true,transitions=185,lastRule=java.util.SimpleTimeZone[id=America/Los_Angeles,offset=-28800000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=3,startMonth=2,startDay=8,startDayOfWeek=1,startTime=7200000,startTimeMode=0,endMode=3,endMonth=10,endDay=1,endDayOfWeek=1,endTime=7200000,endTimeMode=0]],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=1,YEAR=2015,MONTH=10,WEEK_OF_YEAR=49,WEEK_OF_MONTH=5,DAY_OF_MONTH=29,DAY_OF_YEAR=333,DAY_OF_WEEK=1,DAY_OF_WEEK_IN_MONTH=5,AM_PM=1,HOUR=1,HOUR_OF_DAY=13,MINUTE=17,SECOND=24,MILLISECOND=437,ZONE_OFFSET=-28800000,DST_OFFSET=0]</ProjectEndTime>
+</ProjectInfo>
+<ProjectResources>
+<Resource id="652a3304-7bbb-4e47-affe-1e94096c9f4e">
+<ResourceName>Resource 3</ResourceName>
+<ResourceDailyCost>30.0</ResourceDailyCost>
+<ResourceType>material</ResourceType>
+</Resource>
+<Resource id="612328c6-d849-4e0b-b5dd-7842bed38d76">
+<ResourceName>Resource 1</ResourceName>
+<ResourceDailyCost>10.0</ResourceDailyCost>
+<ResourceType>labor</ResourceType>
+</Resource>
+<Resource id="b2c9b9a7-bb5e-4903-afbb-3fdda9b4f645">
+<ResourceName>Resource 2</ResourceName>
+<ResourceDailyCost>20.0</ResourceDailyCost>
+<ResourceType>equipment</ResourceType>
+</Resource>
+</ProjectResources>
+<ProjectTasks>
+<Task id="12ec150a-484a-4b46-b944-91e9e5d329e7">
+<TaskName>Build Controllers</TaskName>
+<TaskDescription>no description</TaskDescription>
+<TaskDuration>10</TaskDuration>
+<TaskStartTime>30</TaskStartTime>
+<TaskEndTime>40</TaskEndTime>
+<TaskPercentCompleted>0.0</TaskPercentCompleted>
+<TaskParentTask>e29f9064-162b-4b1a-ac93-a23034f2eb1d</TaskParentTask>
+<TaskPredecessors/>
+<TaskDeliverables/>
+<TaskResources>
+<TaskResource id="652a3304-7bbb-4e47-affe-1e94096c9f4e">Resource 3</TaskResource>
+<TaskResource id="b2c9b9a7-bb5e-4903-afbb-3fdda9b4f645">Resource 2</TaskResource>
+</TaskResources>
+<TaskChildren/>
+</Task>
+<Task id="0f689c58-3d8c-4e3c-9f30-869420f72801">
+<TaskName>Test</TaskName>
+<TaskDescription/>
+<TaskDuration>10</TaskDuration>
+<TaskStartTime>50</TaskStartTime>
+<TaskEndTime>60</TaskEndTime>
+<TaskPercentCompleted>0.0</TaskPercentCompleted>
+<TaskParentTask/>
+<TaskPredecessors>
+<TaskPredecessor id="e29f9064-162b-4b1a-ac93-a23034f2eb1d">Build UI</TaskPredecessor>
+</TaskPredecessors>
+<TaskDeliverables/>
+<TaskResources>
+<TaskResource id="652a3304-7bbb-4e47-affe-1e94096c9f4e">Resource 3</TaskResource>
+<TaskResource id="b2c9b9a7-bb5e-4903-afbb-3fdda9b4f645">Resource 2</TaskResource>
+</TaskResources>
+<TaskChildren/>
+</Task>
+<Task id="dae16f5d-d555-4e65-ac84-cde5a4c87f05">
+<TaskName>Build Model</TaskName>
+<TaskDescription>no description</TaskDescription>
+<TaskDuration>20</TaskDuration>
+<TaskStartTime>10</TaskStartTime>
+<TaskEndTime>30</TaskEndTime>
+<TaskPercentCompleted>0.0</TaskPercentCompleted>
+<TaskParentTask/>
+<TaskPredecessors/>
+<TaskDeliverables/>
+<TaskResources>
+<TaskResource id="612328c6-d849-4e0b-b5dd-7842bed38d76">Resource 1</TaskResource>
+<TaskResource id="b2c9b9a7-bb5e-4903-afbb-3fdda9b4f645">Resource 2</TaskResource>
+</TaskResources>
+<TaskChildren/>
+</Task>
+<Task id="a9c59be8-a8ff-4b73-8088-5c8da63379ec">
+<TaskName>Build Views</TaskName>
+<TaskDescription>Build all the views.</TaskDescription>
+<TaskDuration>10</TaskDuration>
+<TaskStartTime>40</TaskStartTime>
+<TaskEndTime>50</TaskEndTime>
+<TaskPercentCompleted>0.0</TaskPercentCompleted>
+<TaskParentTask>e29f9064-162b-4b1a-ac93-a23034f2eb1d</TaskParentTask>
+<TaskPredecessors/>
+<TaskDeliverables/>
+<TaskResources>
+<TaskResource id="612328c6-d849-4e0b-b5dd-7842bed38d76">Resource 1</TaskResource>
+<TaskResource id="b2c9b9a7-bb5e-4903-afbb-3fdda9b4f645">Resource 2</TaskResource>
+</TaskResources>
+<TaskChildren/>
+</Task>
+<Task id="e29f9064-162b-4b1a-ac93-a23034f2eb1d">
+<TaskName>Build UI</TaskName>
+<TaskDescription>build the ui</TaskDescription>
+<TaskDuration>20</TaskDuration>
+<TaskStartTime>30</TaskStartTime>
+<TaskEndTime>50</TaskEndTime>
+<TaskPercentCompleted>0.0</TaskPercentCompleted>
+<TaskParentTask/>
+<TaskPredecessors>
+<TaskPredecessor id="dae16f5d-d555-4e65-ac84-cde5a4c87f05">Build Model</TaskPredecessor>
+</TaskPredecessors>
+<TaskDeliverables/>
+<TaskResources/>
+<TaskChildren>
+<TaskChild id="12ec150a-484a-4b46-b944-91e9e5d329e7">Build Controllers</TaskChild>
+<TaskChild id="a9c59be8-a8ff-4b73-8088-5c8da63379ec">Build Views</TaskChild>
+</TaskChildren>
+</Task>
+</ProjectTasks>
+</Silk>

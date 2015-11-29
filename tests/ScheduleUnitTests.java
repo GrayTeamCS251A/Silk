@@ -9,6 +9,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import Entities.Resource;
+import Entities.ResourceType;
 import Entities.Schedule;
 import Entities.Task;
 
@@ -197,16 +199,88 @@ public class ScheduleUnitTests {
 
 		String [][] result = tester.toMatrix();
 		
-		assertEquals("result[0][0] should be 2015/6/30", "2015/6/30", result[0][0]);
-		assertEquals("result[1][0] should be 2015/6/31", "2015/6/31", result[1][0]);
-		assertEquals("result[2][0] should be 2015/7/1", "2015/7/1", result[2][0]);
-		assertEquals("result[3][0] should be 2015/7/2", "2015/7/2", result[3][0]);
+		assertEquals("result[0][0] should be 2015/7/30", "2015/7/30", result[0][0]);
+		assertEquals("result[1][0] should be 2015/7/31", "2015/7/31", result[1][0]);
+		assertEquals("result[2][0] should be 2015/8/1", "2015/8/1", result[2][0]);
+		assertEquals("result[3][0] should be 2015/8/2", "2015/8/2", result[3][0]);
 
 		assertEquals("result[0][1] should be \"aaa\"", "aaa", result[0][1]);
 		assertEquals("either result[1][1] or result[2][1] should be \"bbb,ddd\" or \"ddd,bbb\"", true, result[1][1].equals("bbb,ddd") || result [2][1].equals("bbb,ddd") || result[1][1].equals("ddd,bbb") || result [2][1].equals("ddd,bbb"));
 		assertEquals("result[3][1] should be \"ccc\"", "ccc", result[3][1]);
 	}
 
+	@Test
+	public void generateScheduleWithTasksThatShareAResource() {
+
+		// create Schedule object
+		Schedule tester = new Schedule();
+
+		// create resource
+		Resource resource1 = new Resource("rrr", "Resource 1", 10.50, ResourceType.labor);
+		
+		// create various Task objects
+		HashMap<String, Task> tasks = new HashMap<String,Task>();
+		
+		Task childTask1 = new Task("111","Child Task 1", "...", 10);
+		childTask1.addResource(resource1);
+		tasks.put("111", childTask1);
+
+		Task childTask2 = new Task("222","Child Task 2", "...", 10);
+		childTask2.addResource(resource1);
+		tasks.put("222", childTask2);
+		
+		Task parentTask = new Task("ppp","Parent Task", "...", 0);
+		tasks.put("PPP", parentTask);
+				
+		parentTask.addChild(childTask1);
+		childTask1.setParent(parentTask);
+		
+		parentTask.addChild(childTask2);
+		childTask2.setParent(parentTask);
+		
+		// generate schedule
+		tester.generateSchedule(new GregorianCalendar(), tasks);
+			
+		// assert statements
+		assertEquals("The combined duration should be 20 (= 10 + 10)", 20, parentTask.getDuration());
+	}
+
+	
+	@Test
+	public void generateScheduleWithProjectZZZ() {
+
+		// create Schedule object
+		Schedule tester = new Schedule();
+
+		// create resource
+		Resource resource1 = new Resource("rrr", "Resource 1", 10.50, ResourceType.labor);
+		
+		// create various Task objects
+		HashMap<String, Task> tasks = new HashMap<String,Task>();
+		
+		Task childTask1 = new Task("111","Child Task 1", "...", 10);
+		childTask1.addResource(resource1);
+		tasks.put("111", childTask1);
+
+		Task childTask2 = new Task("222","Child Task 2", "...", 10);
+		childTask2.addResource(resource1);
+		tasks.put("222", childTask2);
+		
+		Task parentTask = new Task("ppp","Parent Task", "...", 0);
+		tasks.put("PPP", parentTask);
+				
+		parentTask.addChild(childTask1);
+		childTask1.setParent(parentTask);
+		
+		parentTask.addChild(childTask2);
+		childTask2.setParent(parentTask);
+		
+		// generate schedule
+		tester.generateSchedule(new GregorianCalendar(), tasks);
+			
+		// assert statements
+		assertEquals("The combined duration should be 20 (= 10 + 10)", 20, parentTask.getDuration());
+	}
 
 
 } 
