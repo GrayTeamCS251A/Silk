@@ -201,6 +201,8 @@ public class Task extends Observable {
 
 		// loop through children
 		for (Task child: children.values()){
+			System.out.println("pre-processing: " + child);
+			
 			// add children to the resource list
 			for (Resource resource : child.getRequiredResources().values()) {
 				// check if the resource exists in our Resource List
@@ -264,6 +266,7 @@ public class Task extends Observable {
 			
 			// 1b. Assign the startTime of a task
 			child.setStartTime(realisticStartTime);
+			System.out.println(" startTime: " + realisticStartTime);
 
 			
 			// 2. deal with any children

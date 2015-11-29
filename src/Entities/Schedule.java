@@ -62,7 +62,12 @@ public class Schedule extends Observable {
     		Task superTask = new Task();
     		
     		// assign the tasks as the children of our super task
-    		superTask.setChildren(tasks);
+    		// but only asign the right tasks
+    		for (Task task : tasks.values()) {
+    			if (task.getParent() == null) {
+    				superTask.addChild(task);
+    			}
+    		}
 
     		// calculate the start times
     		superTask.calculateStartTimes(0);

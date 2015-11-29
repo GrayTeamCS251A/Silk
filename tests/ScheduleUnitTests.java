@@ -254,34 +254,53 @@ public class ScheduleUnitTests {
 		// create Schedule object
 		Schedule tester = new Schedule();
 
-		// create resource
-		Resource resource1 = new Resource("rrr", "Resource 1", 10.50, ResourceType.labor);
+		// create resources
+		Resource resource1 = new Resource("r1", "Resource 1", 10.50, ResourceType.labor);
+		Resource resource2 = new Resource("r2", "Resource 2", 7.99, ResourceType.material);
+		Resource resource3 = new Resource("r3", "Resource 3", 5, ResourceType.equipment);
 		
 		// create various Task objects
 		HashMap<String, Task> tasks = new HashMap<String,Task>();
 		
-		Task childTask1 = new Task("111","Child Task 1", "...", 10);
-		childTask1.addResource(resource1);
-		tasks.put("111", childTask1);
-
-		Task childTask2 = new Task("222","Child Task 2", "...", 10);
-		childTask2.addResource(resource1);
-		tasks.put("222", childTask2);
+		Task task1 = new Task("111","Build Model", "...", 20);
+		task1.addResource(resource1);
+		task1.addResource(resource2);
 		
-		Task parentTask = new Task("ppp","Parent Task", "...", 0);
-		tasks.put("PPP", parentTask);
-				
-		parentTask.addChild(childTask1);
-		childTask1.setParent(parentTask);
+		Task task2 = new Task("222","Build UI", "...", 0);
+		task2.addPredecessor(task1);
+		task1.addSuccessor(task2);
 		
-		parentTask.addChild(childTask2);
-		childTask2.setParent(parentTask);
+		Task task3 = new Task("333","Build Controllers", "...", 10);
+		task3.addResource(resource2);
+		task3.addResource(resource3);
+		task3.setParent(task2);
+		task2.addChild(task3);
+		
+		Task task4 = new Task("444","Build Views", "...", 10);
+		task4.addResource(resource1);
+		task4.addResource(resource2);
+		task4.setParent(task2);
+		task2.addChild(task4);
+		
+		Task task5 = new Task("555","Test", "...", 10);
+		task5.addPredecessor(task2);
+		task2.addSuccessor(task5);
+		
+		tasks.put("111", task1);
+		tasks.put("222", task2);
+		tasks.put("333", task3);
+		tasks.put("444", task4);
+		tasks.put("555", task5);
 		
 		// generate schedule
-		tester.generateSchedule(new GregorianCalendar(), tasks);
+		Schedule result = tester.generateSchedule(new GregorianCalendar(2011, Calendar.JULY, 3), tasks);
+		String[][] matrix = tester.toMatrix();
+		System.out.println("---> " + matrix[0][0]);
 			
 		// assert statements
-		assertEquals("The combined duration should be 20 (= 10 + 10)", 20, parentTask.getDuration());
+		assertEquals("generateSchedule() shouldn't return null", false, result == null);
+		assertEquals("generateSchedule() shouldn't return null", "2011/7/3", tester.toMatrix()[0][0]);
+		assertEquals("The combined duration of \"Build UI\" should be 20 (= 10 + 10)", 20, task2.getDuration());
 	}
 
 
