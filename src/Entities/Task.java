@@ -201,6 +201,8 @@ public class Task extends Observable {
 
 		// loop through children
 		for (Task child: children.values()){
+			System.out.println("pre-processing: " + child);
+			
 			// add children to the resource list
 			for (Resource resource : child.getRequiredResources().values()) {
 				// check if the resource exists in our Resource List
@@ -232,12 +234,14 @@ public class Task extends Observable {
 		System.out.println("starting queue:");
 		
 		while (!queue.isEmpty()) {
+			System.out.println("pop");
 			Task child = queue.remove();
 			
 			System.out.println(child); 
 			
 			int idealStartTime = -1; // the startTime that would be ideal, if resources weren't an issue
 			// 0. calculate the startTime of the task
+			System.out.println(" 0");
 			if (child.getPredecessors().isEmpty()) {
 				idealStartTime = startTime;
 			} else {
@@ -247,6 +251,7 @@ public class Task extends Observable {
 			int realisticStartTime = idealStartTime; // the startTime that must be done, because of resource conflicts
 			
 			// 1. add to resource list(s) / deal with resources
+			System.out.println(" 1");
 			for (Resource resource : child.getRequiredResources().values()) {
 				// check to see if there's a task using this resource. if so, our startTime must be after their endTime
 				for (Task task : resourceLists.get(resource.getResourceID())) {
@@ -263,23 +268,30 @@ public class Task extends Observable {
 			}
 			
 			// 1b. Assign the startTime of a task
+			System.out.println("  1b");
 			child.setStartTime(realisticStartTime);
+			System.out.println(" startTime: " + realisticStartTime);
 
 			
 			// 2. deal with any children
+			System.out.println(" 2");
 			if (!child.getChildren().isEmpty()) {
 				startTimeChild(child.getChildren(), child.getStartTime());
 			}
 
-			// set this child's duration & endTime
+			// 3. set this child's duration & endTime
+			System.out.println(" 3");
 			child.setDuration(Math.max(child.getDuration(), maxEndTime(child.getChildren().values())-child.getStartTime()));
 			child.setEndTime(child.getStartTime() + child.getDuration());
 			
 			// 4. put their successors in the queue
+			System.out.println(" 4");
 			for (Task successor : child.getSuccessors().values()) {
 				queue.add(successor);
 			}
 		}
+		
+		System.out.println("--->ending");
     }
 		
   
