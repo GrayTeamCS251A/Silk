@@ -320,10 +320,10 @@ public class MainUI{
 						addRes.getTextType());
 				addRes.Reset();      
 				addRes.setVisible(false);
-//				btnTable.setEnabled(false);
-//				btnGraph.setEnabled(false);
-//				scheduleScrollPane.setViewportView(new JPanel());			
-//				project.getSchedule().invalidate();
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
+				scheduleScrollPane.setViewportView(new JPanel());			
+				project.getSchedule().invalidate();
 			}
 						
 		});
@@ -365,10 +365,10 @@ public class MainUI{
 						editRes.getTextType());
 				//System.out.println(editRes.getTextName());
 				editRes.setVisible(false);
-//				btnTable.setEnabled(false);
-//				btnGraph.setEnabled(false);
-//				scheduleScrollPane.setViewportView(new JPanel());			
-//				project.getSchedule().invalidate();
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
+				scheduleScrollPane.setViewportView(new JPanel());			
+				project.getSchedule().invalidate();
 			}
 						
 		});
@@ -414,10 +414,10 @@ public class MainUI{
 					int selectedIndex = resourceList.getSelectedIndex();
 					Resource r=(Resource) resourceList.getSelectedValue();
 					deleteResourceController.executeDeleteResource(r.getResourceID());
-//					btnTable.setEnabled(false);
-//					btnGraph.setEnabled(false);
-//					scheduleScrollPane.setViewportView(new JPanel());			
-//					project.getSchedule().invalidate();
+					btnTable.setEnabled(false);
+					btnGraph.setEnabled(false);
+					scheduleScrollPane.setViewportView(new JPanel());			
+					project.getSchedule().invalidate();
 				}
 			}});
 	}
@@ -640,7 +640,10 @@ public class MainUI{
 				newProjectController.executeNewProject(newProject.getNameField(), 
 						year, month, day, 
 						newProject.getAuthorField());
-				//newProject.Reset();      
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
+				scheduleScrollPane.setViewportView(new JPanel());			
+				project.getSchedule().invalidate();      
 				newProject.setVisible(false);
 			}
 						
@@ -770,6 +773,10 @@ public class MainUI{
 	                        ex.printStackTrace();
 	                    }
 	                }
+					btnTable.setEnabled(false);
+					btnGraph.setEnabled(false);
+					scheduleScrollPane.setViewportView(new JPanel());			
+					project.getSchedule().invalidate();  
 			}					
 		});
 				
