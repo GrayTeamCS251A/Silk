@@ -237,8 +237,8 @@ public class MainUI{
 		Resource_panel.add(btnAddResource);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setBounds(10, 11, 267, 304);
 		Resource_panel.add(scrollPane);
 		
@@ -259,8 +259,8 @@ public class MainUI{
 		Task_panel.setLayout(null);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane_1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane_1.setBounds(10, 11, 267, 304);
 		Task_panel.add(scrollPane_1);
 		
@@ -285,8 +285,8 @@ public class MainUI{
 		Schedule_panel.setLayout(null);
 		
 		scheduleScrollPane = new JScrollPane();
-		scheduleScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		scheduleScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scheduleScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scheduleScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scheduleScrollPane.setBounds(10, 11, 345, 304);
 		Schedule_panel.add(scheduleScrollPane);
 		
@@ -935,8 +935,8 @@ public class MainUI{
 		//Create the starting node(s)
 		ArrayList<Node> currentNodeList = new ArrayList<Node>();
 		
-		int xindex = 100;
-		int yindex = 100;
+		int xindex = 30;
+		int yindex = 30;
 		for (int s = 0; s < taskIDList.length; s++)
 		{
 			Node n = new Node(taskIDList[s]);
@@ -967,8 +967,8 @@ public class MainUI{
 			{
 				//Create nodes for the Blist and then hook them with the nodes already created
 				// from the AList
-				xindex += 100;
-				yindex = 100;
+				xindex += 170;
+				yindex = 30;
 				
 				for (int b = 0; b < bList.size(); b++)
 				{

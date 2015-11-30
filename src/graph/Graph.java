@@ -24,11 +24,11 @@ public class Graph extends DefaultGraphModel {
 	/**
 	The default height of a node
 	*/
-	public static double NODE_HEIGHT = 20;
+	public static double NODE_HEIGHT = 30;
 	/**
 	The default width of a node
 	*/
-	public static double NODE_WIDTH = 40;
+	public static double NODE_WIDTH = 100;
 
 	private Set<Node> nodes
 		= new HashSet<Node>();
