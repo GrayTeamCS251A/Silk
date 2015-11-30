@@ -342,7 +342,7 @@ public class TaskUI extends JDialog {
 	   public void fillAdd(Project p, Task selectedTask){
 		   DefaultListModel model = new DefaultListModel();
 		   listPred.setModel(model);
-			   for(Task task:commonParent(selectedTask,p)){
+			   for(Task task:commonParentAdd(selectedTask,p)){
 				   model.addElement(task);
 			   }
 		   
@@ -446,6 +446,11 @@ public class TaskUI extends JDialog {
 	   private ArrayList<Task> commonParent(Task t,Project p){
 		   ArrayList<Task> x= new ArrayList<Task>();
 		   if(t==null){
+			   for(Task task:p.getTasks().values()){
+				   if(task.getParent()==null){
+					   x.add(task);
+				   }
+			   }
 			   return x;
 		   }
 		   
@@ -466,4 +471,35 @@ public class TaskUI extends JDialog {
 		   
 		   return x;
 	   }
+	   
+
+	   private ArrayList<Task> commonParentAdd(Task t,Project p){
+		   ArrayList<Task> x= new ArrayList<Task>();
+		   if(t==null){
+			   for(Task task:p.getTasks().values()){
+				   if(task.getParent()==null){
+					   x.add(task);
+				   }
+			   }
+			   return x;
+		   }
+		   
+		   //if(t.getParent()==null){
+			   for(Task task:t.getChildren().values()){
+				   if(!task.getID().equals(t.getID())){
+					   x.add(task);
+				   }
+			   }
+			   //return x;
+		  // }
+		   
+//		   String id=t.getParent().getID();
+//		   for(Task task:p.getTask(id).getChildren().values()){
+//			   if(!task.getID().equals(t.getID()))
+//				   x.add(task);
+//		   }
+		   
+		   return x;
+	   }
+   
 }
