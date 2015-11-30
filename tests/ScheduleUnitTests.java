@@ -9,6 +9,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import Entities.Resource;
+import Entities.ResourceType;
 import Entities.Schedule;
 import Entities.Task;
 
@@ -64,8 +66,10 @@ public class ScheduleUnitTests {
 		HashMap<String, Task> tasks = new HashMap<String,Task>();
 		tasks.put("1", new Task("1","Task1", "description", 10));
 
+		Schedule result = tester.generateSchedule(tasks);
+		
 		// assert statements
-		assertEquals("generateSchedule should return null if given no startDate", null, tester.generateSchedule(tasks));
+		assertEquals("generateSchedule should return null if given no startDate", null, result);
 	}
 	
 	@Test
@@ -197,16 +201,107 @@ public class ScheduleUnitTests {
 
 		String [][] result = tester.toMatrix();
 		
-		assertEquals("result[0][0] should be 2015/6/30", "2015/6/30", result[0][0]);
-		assertEquals("result[1][0] should be 2015/6/31", "2015/6/31", result[1][0]);
-		assertEquals("result[2][0] should be 2015/7/1", "2015/7/1", result[2][0]);
-		assertEquals("result[3][0] should be 2015/7/2", "2015/7/2", result[3][0]);
+		assertEquals("result[0][0] should be 2015/7/30", "2015/7/30", result[0][0]);
+		assertEquals("result[1][0] should be 2015/7/31", "2015/7/31", result[1][0]);
+		assertEquals("result[2][0] should be 2015/8/1", "2015/8/1", result[2][0]);
+		assertEquals("result[3][0] should be 2015/8/2", "2015/8/2", result[3][0]);
 
 		assertEquals("result[0][1] should be \"aaa\"", "aaa", result[0][1]);
 		assertEquals("either result[1][1] or result[2][1] should be \"bbb,ddd\" or \"ddd,bbb\"", true, result[1][1].equals("bbb,ddd") || result [2][1].equals("bbb,ddd") || result[1][1].equals("ddd,bbb") || result [2][1].equals("ddd,bbb"));
 		assertEquals("result[3][1] should be \"ccc\"", "ccc", result[3][1]);
 	}
 
+	@Test
+	public void generateScheduleWithTasksThatShareAResource() {
+
+		// create Schedule object
+		Schedule tester = new Schedule();
+
+		// create resource
+		Resource resource1 = new Resource("rrr", "Resource 1", 10.50, ResourceType.labor);
+		
+		// create various Task objects
+		HashMap<String, Task> tasks = new HashMap<String,Task>();
+		
+		Task childTask1 = new Task("111","Child Task 1", "...", 10);
+		childTask1.addResource(resource1);
+		tasks.put("111", childTask1);
+
+		Task childTask2 = new Task("222","Child Task 2", "...", 10);
+		childTask2.addResource(resource1);
+		tasks.put("222", childTask2);
+		
+		Task parentTask = new Task("ppp","Parent Task", "...", 0);
+		tasks.put("PPP", parentTask);
+				
+		parentTask.addChild(childTask1);
+		childTask1.setParent(parentTask);
+		
+		parentTask.addChild(childTask2);
+		childTask2.setParent(parentTask);
+		
+		// generate schedule
+		tester.generateSchedule(new GregorianCalendar(), tasks);
+			
+		// assert statements
+		assertEquals("The combined duration should be 20 (= 10 + 10)", 20, parentTask.getDuration());
+	}
+
+	
+	@Test
+	public void generateScheduleWithProjectZZZ() {
+
+		// create Schedule object
+		Schedule tester = new Schedule();
+
+		// create resources
+		Resource resource1 = new Resource("r1", "Resource 1", 10.50, ResourceType.labor);
+		Resource resource2 = new Resource("r2", "Resource 2", 7.99, ResourceType.material);
+		Resource resource3 = new Resource("r3", "Resource 3", 5, ResourceType.equipment);
+		
+		// create various Task objects
+		HashMap<String, Task> tasks = new HashMap<String,Task>();
+		
+		Task task1 = new Task("111","Build Model", "...", 20);
+		task1.addResource(resource1);
+		task1.addResource(resource2);
+		
+		Task task2 = new Task("222","Build UI", "...", 0);
+		task2.addPredecessor(task1);
+		task1.addSuccessor(task2);
+		
+		Task task3 = new Task("333","Build Controllers", "...", 10);
+		task3.addResource(resource2);
+		task3.addResource(resource3);
+		task3.setParent(task2);
+		task2.addChild(task3);
+		
+		Task task4 = new Task("444","Build Views", "...", 10);
+		task4.addResource(resource1);
+		task4.addResource(resource2);
+		task4.setParent(task2);
+		task2.addChild(task4);
+		
+		Task task5 = new Task("555","Test", "...", 10);
+		task5.addPredecessor(task2);
+		task2.addSuccessor(task5);
+		
+		tasks.put("111", task1);
+		tasks.put("222", task2);
+		tasks.put("333", task3);
+		tasks.put("444", task4);
+		tasks.put("555", task5);
+		
+		// generate schedule
+		Schedule result = tester.generateSchedule(new GregorianCalendar(2011, Calendar.JULY, 3), tasks);
+		String[][] matrix = tester.toMatrix();
+		System.out.println("---> " + matrix[0][0]);
+			
+		// assert statements
+		assertEquals("generateSchedule() shouldn't return null", false, result == null);
+		assertEquals("generateSchedule() shouldn't return null", "2011/7/3", tester.toMatrix()[0][0]);
+		assertEquals("The combined duration of \"Build UI\" should be 20 (= 10 + 10)", 20, task2.getDuration());
+	}
 
 
 } 

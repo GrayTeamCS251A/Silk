@@ -55,8 +55,6 @@ public class Schedule extends Observable {
     public Schedule generateSchedule(HashMap<String,Task> tasks) {
     	this.tasks = tasks;
     	this.current = true;
-    	System.out.println("starting on month: " + this.startDate.get(Calendar.MONTH));
-
  
     	// if we have a startTime then great, otherwise we can't proceed 
     	if (this.startDate != null) {
@@ -64,7 +62,12 @@ public class Schedule extends Observable {
     		Task superTask = new Task();
     		
     		// assign the tasks as the children of our super task
-    		superTask.setChildren(tasks);
+    		// but only asign the right tasks
+    		for (Task task : tasks.values()) {
+    			if (task.getParent() == null) {
+    				superTask.addChild(task);
+    			}
+    		}
 
     		// calculate the start times
     		superTask.calculateStartTimes(0);
@@ -75,9 +78,6 @@ public class Schedule extends Observable {
     	}
  
     }
-
-    
-    
     
     /**
      * @return whether the Schedule is current.
@@ -122,6 +122,7 @@ public class Schedule extends Observable {
 	public String[][] toMatrix(boolean showChildren)
 	{
 		if (!this.current || this.tasks == null) {
+			System.out.println(" NULL BECAUSE NOT CURRENT or no tasks");
 			return null;
 		}
 
@@ -153,7 +154,11 @@ public class Schedule extends Observable {
 		
 		// increment by 1 because we're actually counting total days
 		totalDays ++;
-	
+		if (totalDays < 1) { 
+			System.out.println("PROBLEM: totalDays are < 1");
+		}
+		
+		
 		// we assume that a successful run of the scheduler leaves no "empty" days 
 		
 		// convert hash map to a String[][], and make sure it's in order

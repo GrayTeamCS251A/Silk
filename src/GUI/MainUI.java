@@ -36,6 +36,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -185,7 +186,7 @@ public class MainUI{
 
 		
 		Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
-		project.updateInfo("", localCalendar.get(Calendar.YEAR), localCalendar.get(Calendar.MONTH) + 1, localCalendar.get(Calendar.DAY_OF_MONTH), "");
+		project.updateInfo("", localCalendar.get(Calendar.YEAR), localCalendar.get(Calendar.MONTH), localCalendar.get(Calendar.DAY_OF_MONTH), "");
 		btnTable.setEnabled(false);
 		btnGraph.setEnabled(false);
 		scheduleScrollPane.setViewportView(new JPanel());	
@@ -319,10 +320,10 @@ public class MainUI{
 						addRes.getTextType());
 				addRes.Reset();      
 				addRes.setVisible(false);
-//				btnTable.setEnabled(false);
-//				btnGraph.setEnabled(false);
-//				scheduleScrollPane.setViewportView(new JPanel());			
-//				project.getSchedule().invalidate();
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
+				scheduleScrollPane.setViewportView(new JPanel());			
+				project.getSchedule().invalidate();
 			}
 						
 		});
@@ -364,10 +365,10 @@ public class MainUI{
 						editRes.getTextType());
 				//System.out.println(editRes.getTextName());
 				editRes.setVisible(false);
-//				btnTable.setEnabled(false);
-//				btnGraph.setEnabled(false);
-//				scheduleScrollPane.setViewportView(new JPanel());			
-//				project.getSchedule().invalidate();
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
+				scheduleScrollPane.setViewportView(new JPanel());			
+				project.getSchedule().invalidate();
 			}
 						
 		});
@@ -413,10 +414,10 @@ public class MainUI{
 					int selectedIndex = resourceList.getSelectedIndex();
 					Resource r=(Resource) resourceList.getSelectedValue();
 					deleteResourceController.executeDeleteResource(r.getResourceID());
-//					btnTable.setEnabled(false);
-//					btnGraph.setEnabled(false);
-//					scheduleScrollPane.setViewportView(new JPanel());			
-//					project.getSchedule().invalidate();
+					btnTable.setEnabled(false);
+					btnGraph.setEnabled(false);
+					scheduleScrollPane.setViewportView(new JPanel());			
+					project.getSchedule().invalidate();
 				}
 			}});
 	}
@@ -639,7 +640,10 @@ public class MainUI{
 				newProjectController.executeNewProject(newProject.getNameField(), 
 						year, month, day, 
 						newProject.getAuthorField());
-				//newProject.Reset();      
+				btnTable.setEnabled(false);
+				btnGraph.setEnabled(false);
+				scheduleScrollPane.setViewportView(new JPanel());			
+				project.getSchedule().invalidate();      
 				newProject.setVisible(false);
 			}
 						
@@ -683,11 +687,11 @@ public class MainUI{
 				Integer month = 0;
 				Integer day = 0;
 				
-				if (startTimeString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}"))
+				if (startTimeString.matches("[0-9]{4}-[0-9]{2}-[0-9]{1}") || startTimeString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}"))
 				{
 					String[] splitLine = startTimeString.split("-");
 					year = Integer.parseInt(splitLine[0]);
-					month = Integer.parseInt(splitLine[1]);
+					month = Integer.parseInt(splitLine[1]) - 1;
 					day = Integer.parseInt(splitLine[2]);
 				}
 				
@@ -769,6 +773,10 @@ public class MainUI{
 	                        ex.printStackTrace();
 	                    }
 	                }
+					btnTable.setEnabled(false);
+					btnGraph.setEnabled(false);
+					scheduleScrollPane.setViewportView(new JPanel());			
+					project.getSchedule().invalidate();  
 			}					
 		});
 				
@@ -797,7 +805,7 @@ public class MainUI{
 			 
 			DefaultMutableTreeNode aTask = new DefaultMutableTreeNode(t);	  	  
 			root.add(aTask);
-			aTask.add(new DefaultMutableTreeNode("ID:"+t.getID()));
+			//aTask.add(new DefaultMutableTreeNode("ID:"+t.getID()));
 			aTask.add(new DefaultMutableTreeNode("Duration:"+t.getDuration()));
 			aTask.add(new DefaultMutableTreeNode("Description:"+t.getDescription()));
 			aTask.add(new DefaultMutableTreeNode("Complete:"+t.getPercentCompleted()));	
@@ -838,7 +846,7 @@ public class MainUI{
 			
 				DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(innerTask);
 				aTask.add(newRoot);	
-				newRoot.add(new DefaultMutableTreeNode("ID:"+innerTask.getID()));
+				//newRoot.add(new DefaultMutableTreeNode("ID:"+innerTask.getID()));
 				newRoot.add(new DefaultMutableTreeNode("Duration:"+innerTask.getDuration()));
 				newRoot.add(new DefaultMutableTreeNode("Description:"+innerTask.getDescription()));
 				newRoot.add(new DefaultMutableTreeNode("Complete:"+innerTask.getPercentCompleted()));	

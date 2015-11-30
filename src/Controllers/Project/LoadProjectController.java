@@ -102,34 +102,41 @@ public class LoadProjectController implements Controller {
 							}
 						}
 						
+						//Work on getting the year for start time to display correctly on the edit project ui
+						
 						if (!projectStartTime.equals(""))
 						{
-							Integer year = Integer.parseInt(projectStartTime.substring(projectStartTime.indexOf("YEAR=") + 5, projectStartTime.indexOf(",MONTH=")));
+							Integer year = Integer.parseInt(projectStartTime.substring(projectStartTime.indexOf(",YEAR=") + 6, projectStartTime.indexOf(",MONTH=")));
 							Integer month = Integer.parseInt(projectStartTime.substring(projectStartTime.indexOf("MONTH=") + 6, projectStartTime.indexOf(",WEEK_OF_YEAR=")));
 							Integer dayOfMonth = Integer.parseInt(projectStartTime.substring(projectStartTime.indexOf("DAY_OF_MONTH=") + 13, projectStartTime.indexOf(",DAY_OF_YEAR=")));
+														
 							project.updateInfo(projectName, year, month, dayOfMonth, projectAuthor);
 						}
 						else
 						{
-							project.updateInfo(projectName, 0, 0, 0, projectAuthor);
+							Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
+							project.updateInfo(projectName, localCalendar.get(Calendar.YEAR), localCalendar.get(Calendar.MONTH), localCalendar.get(Calendar.DAY_OF_MONTH), projectAuthor);
 						}
 						
 						
 						if (!projectEndTime.equals(""))
 						{
-							Integer endyear = Integer.parseInt(projectEndTime.substring(projectEndTime.indexOf("YEAR=") + 5, projectEndTime.indexOf(",MONTH=")));
+							Integer endyear = Integer.parseInt(projectEndTime.substring(projectEndTime.indexOf(",YEAR=") + 6, projectEndTime.indexOf(",MONTH=")));
 							Integer endmonth = Integer.parseInt(projectEndTime.substring(projectEndTime.indexOf("MONTH=") + 6, projectEndTime.indexOf(",WEEK_OF_YEAR=")));
 							Integer enddayOfMonth = Integer.parseInt(projectEndTime.substring(projectEndTime.indexOf("DAY_OF_MONTH=") + 13, projectEndTime.indexOf(",DAY_OF_YEAR=")));
 							project.setEndTime(endyear, endmonth, enddayOfMonth);
 						}
 						else
 						{
-							project.setEndTime(0, 0, 0);
+							Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
+							project.setEndTime(localCalendar.get(Calendar.YEAR), localCalendar.get(Calendar.MONTH), localCalendar.get(Calendar.DAY_OF_MONTH));
 						}
 					}
 					
 					//Empty XML - Basically new Project
-					project.updateInfo("", 0, 0, 0, "");
+					//Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
+					//System.out.println("project Udate 2");
+					//project.updateInfo("", localCalendar.get(Calendar.YEAR), localCalendar.get(Calendar.MONTH), localCalendar.get(Calendar.DAY_OF_MONTH), "");
 				}
 				
 				//**************************
@@ -387,6 +394,7 @@ public class LoadProjectController implements Controller {
 						for (int l = 0; l < listOfTaskPredecessorIDs.size(); l++)
 						{
 							project.getTask(taskID).addPredecessor(project.getTask(listOfTaskPredecessorIDs.get(l)));
+							project.getTask(listOfTaskPredecessorIDs.get(l)).addSuccessor(project.getTask(taskID));
 						}
 						
 						//Set the list of deliverables for the task
@@ -420,7 +428,8 @@ public class LoadProjectController implements Controller {
     	}
     	else{
     		//Empty File clear existing project space
-    		project.updateInfo("", 0, 0, 0, "");
+    		Calendar localCalendar = Calendar.getInstance(TimeZone.getDefault());
+			project.updateInfo("", localCalendar.get(Calendar.YEAR), localCalendar.get(Calendar.MONTH), localCalendar.get(Calendar.DAY_OF_MONTH), "");
     		
     	}
     }
