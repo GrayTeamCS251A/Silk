@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Silk>
+<ProjectInfo>
+<ProjectName>New Project</ProjectName>
+<ProjectAuthor>Mark</ProjectAuthor>
+<ProjectStartTime>java.util.GregorianCalendar[time=?,areFieldsSet=false,areAllFieldsSet=false,lenient=true,zone=sun.util.calendar.ZoneInfo[id="America/Los_Angeles",offset=-28800000,dstSavings=3600000,useDaylight=true,transitions=185,lastRule=java.util.SimpleTimeZone[id=America/Los_Angeles,offset=-28800000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=3,startMonth=2,startDay=8,startDayOfWeek=1,startTime=7200000,startTimeMode=0,endMode=3,endMonth=10,endDay=1,endDayOfWeek=1,endTime=7200000,endTimeMode=0]],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=?,YEAR=2015,MONTH=11,WEEK_OF_YEAR=?,WEEK_OF_MONTH=?,DAY_OF_MONTH=30,DAY_OF_YEAR=?,DAY_OF_WEEK=?,DAY_OF_WEEK_IN_MONTH=?,AM_PM=0,HOUR=0,HOUR_OF_DAY=0,MINUTE=0,SECOND=0,MILLISECOND=?,ZONE_OFFSET=?,DST_OFFSET=?]</ProjectStartTime>
+<ProjectEndTime>java.util.GregorianCalendar[time=1448870755401,areFieldsSet=true,areAllFieldsSet=true,lenient=true,zone=sun.util.calendar.ZoneInfo[id="America/Los_Angeles",offset=-28800000,dstSavings=3600000,useDaylight=true,transitions=185,lastRule=java.util.SimpleTimeZone[id=America/Los_Angeles,offset=-28800000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=3,startMonth=2,startDay=8,startDayOfWeek=1,startTime=7200000,startTimeMode=0,endMode=3,endMonth=10,endDay=1,endDayOfWeek=1,endTime=7200000,endTimeMode=0]],firstDayOfWeek=1,minimalDaysInFirstWeek=1,ERA=1,YEAR=2015,MONTH=10,WEEK_OF_YEAR=49,WEEK_OF_MONTH=5,DAY_OF_MONTH=30,DAY_OF_YEAR=334,DAY_OF_WEEK=2,DAY_OF_WEEK_IN_MONTH=5,AM_PM=0,HOUR=0,HOUR_OF_DAY=0,MINUTE=5,SECOND=55,MILLISECOND=401,ZONE_OFFSET=-28800000,DST_OFFSET=0]</ProjectEndTime>
+</ProjectInfo>
+<ProjectResources/>
+<ProjectTasks>
+<Task id="d5c1140f-a63f-4245-bf4c-f4f67452d4c5">
+<TaskName>Task 1</TaskName>
+<TaskDescription/>
+<TaskDuration>3</TaskDuration>
+<TaskStartTime>0</TaskStartTime>
+<TaskEndTime>3</TaskEndTime>
+<TaskPercentCompleted>0.0</TaskPercentCompleted>
+<TaskParentTask/>
+<TaskPredecessors/>
+<TaskDeliverables/>
+<TaskResources/>
+<TaskChildren/>
+</Task>
+<Task id="a9a43330-7a53-4a7b-90fe-bd30e138c927">
+<TaskName>Task 2B</TaskName>
+<TaskDescription/>
+<TaskDuration>3</TaskDuration>
+<TaskStartTime>3</TaskStartTime>
+<TaskEndTime>6</TaskEndTime>
+<TaskPercentCompleted>0.0</TaskPercentCompleted>
+<TaskParentTask/>
+<TaskPredecessors>
+<TaskPredecessor id="d5c1140f-a63f-4245-bf4c-f4f67452d4c5">Task 1</TaskPredecessor>
+</TaskPredecessors>
+<TaskDeliverables/>
+<TaskResources/>
+<TaskChildren/>
+</Task>
+<Task id="0d378659-5f70-439d-94e4-2d5678dfb529">
+<TaskName>Task 3</TaskName>
+<TaskDescription/>
+<TaskDuration>2</TaskDuration>
+<TaskStartTime>7</TaskStartTime>
+<TaskEndTime>9</TaskEndTime>
+<TaskPercentCompleted>0.0</TaskPercentCompleted>
+<TaskParentTask/>
+<TaskPredecessors>
+<TaskPredecessor id="a9a43330-7a53-4a7b-90fe-bd30e138c927">Task 2B</TaskPredecessor>
+<TaskPredecessor id="75df7cde-f78a-40b2-98ce-c6e7f9c775d5">Task 2A</TaskPredecessor>
+</TaskPredecessors>
+<TaskDeliverables/>
+<TaskResources/>
+<TaskChildren/>
+</Task>
+<Task id="75df7cde-f78a-40b2-98ce-c6e7f9c775d5">
+<TaskName>Task 2A</TaskName>
+<TaskDescription/>
+<TaskDuration>4</TaskDuration>
+<TaskStartTime>3</TaskStartTime>
+<TaskEndTime>7</TaskEndTime>
+<TaskPercentCompleted>0.0</TaskPercentCompleted>
+<TaskParentTask/>
+<TaskPredecessors>
+<TaskPredecessor id="d5c1140f-a63f-4245-bf4c-f4f67452d4c5">Task 1</TaskPredecessor>
+</TaskPredecessors>
+<TaskDeliverables/>
+<TaskResources/>
+<TaskChildren/>
+</Task>
+</ProjectTasks>
+</Silk>
