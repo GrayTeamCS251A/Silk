@@ -316,7 +316,7 @@ public class TaskUI extends JDialog {
 		   DefaultComboBoxModel model3 = new DefaultComboBoxModel();
 		   comboBoxParent.setModel( model3);
 			   for(Task task: findAllTask(p)){
-				   if(task.getID()!=t.getID())
+				   if(task.getID()!=t.getID()&&!findAllChildren(t).containsKey(task.getID()))
 				 	model3.addElement(task);
 			   }
 		  
@@ -428,21 +428,31 @@ public class TaskUI extends JDialog {
 		 return x;
 	 }
 
-	   		
-	   private void findAllTaskHelper(Task task,ArrayList<Task> x)
-		   	{	
-
+	   
+	   private HashMap<String, Task> findAllChildren(Task t)
+	   {  
+		 HashMap<String, Task> x= new HashMap<String, Task>();
+		 findAllChildrenHelper(t,x);
+		 return x;
+	   }
+   		
+	   private void findAllChildrenHelper(Task t,HashMap<String, Task> x)
+	   {	
+		 
+		   for(Task task:t.getChildren().values())
+		   {
 				 if(!task.getChildren().isEmpty())
 				 {
-					for(Task t:task.getChildren().values()) {
-						x.add(t);
-						findAllTaskHelper(t, x);
+					 for(Task innerTask:task.getChildren().values()){
+						 x.put(innerTask.getID(),innerTask);
+						 findAllChildrenHelper(innerTask, x);
 					 }
-				 }			   
-			   
-		   	}	   	
-
-	 
+				 }
+				
+				 x.put(task.getID(),task);
+		   }			
+	   }		
+	   
 	   private ArrayList<Task> commonParent(Task t,Project p){
 		   ArrayList<Task> x= new ArrayList<Task>();
 		   if(t==null){
@@ -472,7 +482,6 @@ public class TaskUI extends JDialog {
 		   return x;
 	   }
 	   
-
 	   private ArrayList<Task> commonParentAdd(Task t,Project p){
 		   ArrayList<Task> x= new ArrayList<Task>();
 		   if(t==null){
@@ -484,21 +493,11 @@ public class TaskUI extends JDialog {
 			   return x;
 		   }
 		   
-		   //if(t.getParent()==null){
 			   for(Task task:t.getChildren().values()){
 				   if(!task.getID().equals(t.getID())){
 					   x.add(task);
 				   }
 			   }
-			   //return x;
-		  // }
-		   
-//		   String id=t.getParent().getID();
-//		   for(Task task:p.getTask(id).getChildren().values()){
-//			   if(!task.getID().equals(t.getID()))
-//				   x.add(task);
-//		   }
-		   
 		   return x;
 	   }
    
