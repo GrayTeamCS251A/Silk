@@ -251,11 +251,17 @@ public class Project extends Observable{
     	for (String resourceID: resources.keySet()) {
     		if (resourceID.equals(rID)) {
     			resources.remove(resourceID);
+    	    	for(Task t:tasks.values()){
+    	    		if(t.getRequiredResources().containsKey(rID)){
+    	    			t.getRequiredResources().remove(rID);
+    	    		} 			
+    	    	}
     	        setChanged();
     	        notifyObservers();
     			break;
     		}
     	}
+    	
     }
 
     /**
@@ -327,13 +333,14 @@ public class Project extends Observable{
     				}
     			}
     			
-    			if (!taskResources.isEmpty())
-    			{
+    			
+    			//reset and fill resource
+    			tasks.get(taskID).getRequiredResources().clear();
     				for (int i = 0; i < taskResources.size(); i++)
     				{
     					tasks.get(taskID).addResource(taskResources.get(i));
     				}
-    			}
+    		
     			tasks.get(taskID).setDescription(taskDescription);
     			
     			tasks.get(taskID).emptyDeliverables();
